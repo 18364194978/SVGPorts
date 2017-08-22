@@ -1,0 +1,14 @@
+{
+  "name": "jquery.wheelmenu",
+  "homepage": "https://github.com/peachananr/wheel-menu",
+  "_release": "10afa18a18",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "10afa18a1801c888d01b53377ea7ed633a0a0325"
+  },
+  "_source": "https://github.com/peachananr/wheel-menu.git",
+  "_target": "*",
+  "_originalSource": "jquery.wheelmenu",
+  "_direct": true
+}

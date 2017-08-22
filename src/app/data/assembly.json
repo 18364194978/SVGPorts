@@ -1,0 +1,48 @@
+{
+    "main-cabinet": {
+        "inPorts": [],
+        "outPorts": ["b1", "b2"],
+        "childequipments": [{
+            "name": "2n-1[PL2201A]\nXXXX线路合并单元A",
+            "inPorts": ["B01-1LCRX1", "B01-1LCRX2", "B01-1LCRX3", "B01-1LCRX4", "B01-1LCRX5", "B01-1LCRX6"],
+            "outPorts": ["B01-1LCRXu1", "B01-1LCRXu2"]
+        }, {
+            "name": "2n-1[PL2201A]\nXXXX线路合并单元A",
+            "inPorts": ["B01-1LCRX1", "B01-1LCRX2", "B01-1LCRX3", "B01-1LCRX4", "B01-1LCRX5", "B01-1LCRX6"],
+            "outPorts": ["B01-1LCRXu1", "B01-1LCRXu2"]
+        }],
+        "name": "XXX测控柜"
+    },
+    "link-cabinet": [{
+        "inPorts": ["h1", "h2"],
+        "outPorts": [],
+        "childequipments": [{
+            "name": "2n-1[PL2201A]\nXXXX线路合并单元A",
+            "inPorts": ["B01-1LCRX1", "B01-1LCRX2"],
+            "outPorts": []
+        }],
+        "name": "XXX屏柜"
+    }, {
+        "inPorts": ["c1", "c2"],
+        "outPorts": [],
+        "childequipments": [{
+            "name": "2n-1[PL2201A]\nXXXX线路合并单元A",
+            "inPorts": ["B01-1LCRX1", "B01-1LCRX2"],
+            "outPorts": []
+        }],
+        "name": "XXX屏柜"
+    }, {
+        "inPorts": ["t1", "t2"],
+        "outPorts": [],
+        "childequipments": [{
+            "name": "2n-1[PL2201A]\nXXXX线路合并单元A",
+            "inPorts": ["B01-1LCRX1", "B01-1LCRX2"],
+            "outPorts": []
+        }],
+        "name": "XXX屏柜"
+    }],
+    "link-relation": {
+        "inner-join":[],
+        "out-join":{}
+    }
+}

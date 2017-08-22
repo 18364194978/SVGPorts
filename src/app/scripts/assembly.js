@@ -36,6 +36,12 @@
 			var dddata = {
 				Connection: [{
 					PhylinkId: "111",
+					Gport:[
+					{
+						Guid:'gp_1',
+						toPortId:'111B'
+					}
+					],
 					Port1: {
 						DeviceId: "1111",
 						PortId: "111B",
@@ -46,9 +52,15 @@
 						PortId: "211",
 						Type: "tx"
 					},
-					ProjectOpticalcableGuid:'6661'
+					ProjectOpticalcableGuid: '6661'
 				}, {
 					PhylinkId: "112",
+					Gport:[
+					{
+						Guid:'gp_2',
+						toPortId:'212'
+					}
+					],
 					Port1: {
 						DeviceId: "1111",
 						PortId: "112B",
@@ -59,9 +71,18 @@
 						PortId: "212",
 						Type: "rx"
 					},
-					ProjectOpticalcableGuid:'6662'
+					ProjectOpticalcableGuid: '6662'
 				}, {
 					PhylinkId: "114",
+					Gport:[
+					{
+						Guid:'gp_3',
+						toPortId:'113B'
+					},{
+						Guid:'gp_4',
+						toPortId:'311'
+					}
+					],
 					Port1: {
 						DeviceId: "1111",
 						PortId: "113B",
@@ -72,47 +93,66 @@
 						PortId: "311",
 						Type: "rx"
 					},
-					ProjectOpticalcableGuid:'6664'
+					ProjectOpticalcableGuid: '6664'
 				}],
 				main_device: {
 					deviceGuid: "11",
 					deviceName: "线路保护",
 					ProdevShortname: "PL2201A",
-					ports: [[{
-						Guid: "11B",
-						ProdevName: "B01",
-						Type: "Card"
-					}, {
-						Guid: "111B",
-						ProdevName: "B01-01 LC",
-						Type: "RX"
-					}, {
-						Guid: "112B",
-						ProdevName: "B01-02 LC",
-						Type: "TX"
-					}, {
-						Guid: "113B",
-						ProdevName: "B01-03 LC",
-						Type: "RX"
-					}, {
-						Guid: "114B",
-						ProdevName: "B01-04 LC",
-						Type: "TX"
-					}]
-					,[
+					Gport:[
 					{
-						Guid: "12B",
-						ProdevName: "B02",
-						Type: "Card"
-					}, {
-						Guid: "121B",
-						ProdevName: "B02-012 LC",
-						Type: "TX"
+						Guid:'gp_1',
+						toPortId:'111B'
 					},{
-						Guid: "122B",
-						ProdevName: "B02-012 LC",
-						Type: "RX"
-					}]
+						Guid:'gp_3',
+						toPortId:'113B'
+					},{
+						Guid:'gp_4',
+						toPortId:'211'
+					},{
+						Guid:'gp_5',
+						toPortId:'212'
+					},{
+						Guid:'gp_6',
+						toPortId:'311'
+					}
+					],
+					ports: [
+						[{
+							Guid: "11B",
+							ProdevName: "B01",
+							Type: "Card",
+							// GGPort:
+						}, {
+							Guid: "111B",
+							ProdevName: "B01-01 LC",
+							Type: "RX"
+						}, {
+							Guid: "112B",
+							ProdevName: "B01-02 LC",
+							Type: "TX"
+						}, {
+							Guid: "113B",
+							ProdevName: "B01-03 LC",
+							Type: "RX"
+						}, {
+							Guid: "114B",
+							ProdevName: "B01-04 LC",
+							Type: "TX"
+						}],
+						[{
+							Guid: "12B",
+							ProdevName: "B02",
+							Type: "Card"
+						}, {
+							Guid: "121B",
+							ProdevName: "B02-012 LC",
+							Type: "TX"
+						}, {
+							Guid: "122B",
+							ProdevName: "B02-012 LC",
+							Type: "RX"
+						}]
 					]
 				},
 				other_device: [{
@@ -148,7 +188,8 @@
 						devices: [],
 						noLinkDevices: [],
 						leftLink: [],
-						rightLink: []
+						rightLink: [],
+						GPorts:[]
 					};
 					var data = $.parseJSON(obj.json_info);
 					data.main = dddata;
@@ -159,116 +200,119 @@
 						return unwd.PhylinkId;
 					});
 					$.each(data.main.Connection, function(index, item) {
-						mainPanel.rightLink.push(item);
-						// if (item.Port1.DeviceId === undefined) {
-						// 	if (item.Port1.NetswitchId) {
-						// 		item.Port1.DeviceId = item.Port1.NetswitchId;
-						// 		item.Port1.NetswitchId = undefined;
-						// 	}
-						// }
-						// if (item.Port2.DeviceId === undefined) {
-						// 	if (item.Port2.NetswitchId) {
-						// 		item.Port2.DeviceId = item.Port2.NetswitchId;
-						// 		item.Port2.NetswitchId = undefined;
-						// 	}
+						// mainPanel.rightLink.push(item);
+						if (item.Port1.DeviceId === undefined) {
+							if (item.Port1.NetswitchId) {
+								item.Port1.DeviceId = item.Port1.NetswitchId;
+								item.Port1.NetswitchId = undefined;
+							}
+						}
+						if (item.Port2.DeviceId === undefined) {
+							if (item.Port2.NetswitchId) {
+								item.Port2.DeviceId = item.Port2.NetswitchId;
+								item.Port2.NetswitchId = undefined;
+							}
 
-						// }
-						// if (item.Port1.PanelId === item.Port2.PanelId) {
-						// 	if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
-						// 		if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
-						// 			mainPanel.leftLink.push(item);
-						// 		} else {
-						// 			mainPanel.rightLink.push(item);
-						// 		}
-						// 	} else {
-						// 		mainPanel.leftLink.push(item);
-						// 	}
-						// } else {
-						// 	mainPanel.rightLink.push(item);
-						// }
+						}
+						if (item.Port1.DeviceId === item.Port2.DeviceId) {
+							if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
+								if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
+									mainPanel.leftLink.push(item);
+								} else {
+									mainPanel.rightLink.push(item);
+								}
+							} else {
+								mainPanel.leftLink.push(item);
+							}
+						} else {
+							mainPanel.rightLink.push(item);
+						}
 
-						// if (item.Port1.DeviceId === undefined) {
+						// if (item.Port1.PortId === undefined) {
 						// 	haveLinkDevice.push(item.Port2.NetswitchId);
 						// } else {
-						// 	haveLinkDevice.push(item.Port1.DeviceId);
+						// 	haveLinkDevice.push(item.Port1.PortId);
 						// }
-						// if (item.Port2.DeviceId === undefined) {
+						// if (item.Port2.PortId === undefined) {
 						// 	haveLinkDevice.push(item.Port2.NetswitchId);
 						// } else {
-						// 	haveLinkDevice.push(item.Port2.DeviceId);
+						// 	haveLinkDevice.push(item.Port2.PortId);
 						// }
 
 					});
+					console.log(haveLinkDevice, 'haveLinkDevice');
 					$.each(data.main.main_device.ports, function(index, item) {
-						var shebei = {
-							devicesInfo: {},
-							port: {
-								leftPort: [],
-								rightPort: [],
-								noLinkPort: []
+						$.each(item, function(index2, item2) {
+							var shebei = {
+								devicesInfo: {},
+								port: {
+									leftPort: [],
+									rightPort: [],
+									noLinkPort: []
+								}
+							};
+							shebei.devicesInfo = item2;
+							for (var fcopy in item2) {
+								shebei.devicesInfo[fcopy] = item2[fcopy];
 							}
-						};
-						shebei.devicesInfo = item;
-						for (var fcopy in item) {
-							shebei.devicesInfo[fcopy] = item[fcopy];
-						}
-						if (item.ports !== null) {
-							$.each(item.ports, function(indexpp, itemPort) {
-								var type = 0;
-								$.each(data.Connection, function(indexLink, itemLink) {
-									if (itemLink.Port1.PanelId === itemLink.Port2.PanelId && itemLink.Port1.PanelId === data.main_panel.PanelGuid) {
-										if (itemPort.Guid === itemLink.Port1.PortId || itemPort.Guid === itemLink.Port2.PortId) {
-											if (itemLink.Port1.DeviceId === undefined || itemLink.Port2.DeviceId === undefined) {
+							if (item2.ports !== null) {
+								$.each(item.ports, function(indexpp, itemPort) {
+									var type = 0;
+									$.each(data.Connection, function(indexLink, itemLink) {
+										if (itemLink.Port1.PanelId === itemLink.Port2.PanelId && itemLink.Port1.PanelId === data.main_panel.PanelGuid) {
+											if (itemPort.Guid === itemLink.Port1.PortId || itemPort.Guid === itemLink.Port2.PortId) {
+												if (itemLink.Port1.DeviceId === undefined || itemLink.Port2.DeviceId === undefined) {
 
-												if (itemLink.Port1.NetswitchId !== undefined || itemLink.Port2.NetswitchId !== undefined) {
-													type = 1;
-													itemPort.zllink = itemLink;
+													if (itemLink.Port1.NetswitchId !== undefined || itemLink.Port2.NetswitchId !== undefined) {
+														type = 1;
+														itemPort.zllink = itemLink;
+														return false;
+													}
+													type = 2;
+													itemPort.phylink = itemLink;
 													return false;
 												}
+												type = 1;
+												itemPort.zllink = itemLink;
+												return false;
+											}
+										} else {
+											if (itemPort.Guid === itemLink.Port1.PortId || itemPort.Guid === itemLink.Port2.PortId) {
 												type = 2;
 												itemPort.phylink = itemLink;
 												return false;
 											}
-											type = 1;
-											itemPort.zllink = itemLink;
-											return false;
 										}
-									} else {
-										if (itemPort.Guid === itemLink.Port1.PortId || itemPort.Guid === itemLink.Port2.PortId) {
-											type = 2;
-											itemPort.phylink = itemLink;
-											return false;
-										}
+									});
+
+									switch (type) {
+										case 1:
+											{
+												shebei.port.leftPort.push(itemPort);
+												break;
+											}
+										case 2:
+											{
+												itemPort.isclick = 1;
+												shebei.port.rightPort.push(itemPort);
+												break;
+											}
+										default:
+											{
+												//shebei.port.noLinkPort.push(itemPort);
+												break;
+											}
 									}
+
 								});
-
-								switch (type) {
-									case 1:
-										{
-											shebei.port.leftPort.push(itemPort);
-											break;
-										}
-									case 2:
-										{
-											itemPort.isclick = 1;
-											shebei.port.rightPort.push(itemPort);
-											break;
-										}
-									default:
-										{
-											//shebei.port.noLinkPort.push(itemPort);
-											break;
-										}
-								}
-
-							});
-						}
-						if ($.inArray(item.Guid, haveLinkDevice) !== -1) {
-							console.log('1111');
-							mainPanel.devices.push(shebei);
-						} else {
-							mainPanel.noLinkDevices.push(item);
-						}
+							}
+							if ($.inArray(item2.Guid, haveLinkDevice) !== -1) {
+								console.log('1111');
+								mainPanel.devices.push(shebei);
+							} else {
+								mainPanel.noLinkDevices.push(item2);
+							}
+						});
 					});
 					if (data.other_panel !== null) {
 						$.each(data.other_panel, function(indexother, dataotherpanel) {
@@ -512,7 +556,8 @@
 						window.zjdOuther = outherZjPanel;
 						window.zjdMain = mainZjPanel;
 					}
-					console.log(mainPanel,'mainpanel');
+					mainPanel.GPorts=data.main.main_device.Gport;
+					console.log(mainPanel, 'mainpanel');
 					$this.creatModel(data, mainPanel, paper);
 				}
 			});
@@ -544,7 +589,8 @@
 				outPorts: [],
 				devDatas: data.main.main_device,
 				childequipments: finddata.devices,
-				devicesNolink: finddata.noLinkDevices,
+				// devicesNolink: finddata.noLinkDevices,
+				devicesNolink: finddata,
 				paper: paper,
 				mainpanel: true,
 				attrs: {
@@ -601,7 +647,7 @@
 						this.devices = [];
 					}
 				});
-				if (data.main.other_device !== null) { 
+				if (data.main.other_device !== null) {
 					for (var i = 0; i < data.main.other_device.length; i++) {
 						if (data.main.other_device[i].ports.length === 0) {
 							continue;
@@ -628,22 +674,22 @@
 								// 'text.title-class': {
 								// 	text: data.main.other_panel[i].PanelName
 								// }
-								'text.title-class':{
-									text:"PL2201A智能终端"
+								'text.title-class': {
+									text: "PL2201A智能终端"
 								}
 							}
 						});
 						$(".icdContain").text("PL2201A智能终端");
 						OtherHeight = ot.findView(paper.paper).$el[0];
-						OtherY += viewE(OtherHeight).bbox(true).height + 10;//两个other_panel之间的纵向间距
+						OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
 					}
 				}
-				
+
 				$('#thb').hide();
 				window.tbgraph.clear();
 				window.assemblyZlink = [];
 				$.each(window.nowAssemblylink, function(index, item) {
-					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item);
+					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item);//此处为画出连接线
 				});
 				if (window.zjdMain.length !== 0) {
 					let po1Position = leftCabiner.attributes.position;
@@ -705,7 +751,7 @@
 				}
 				let directionGport = false;
 				$.each(window.zjdOuther, function(indexzjd, itemzjd) {
-					console.log(itemzjd,'itemzjd');
+					console.log(itemzjd, 'itemzjd');
 					let port1Dev = window.paper.graph.getCell(itemzjd.mainPortId);
 					let port2Dev = window.paper.graph.getCell(itemzjd.outherPortId);
 					console.log(window.zjdOuther, port1Dev.attributes.type, port2Dev.attributes.type);

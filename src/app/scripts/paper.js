@@ -76,20 +76,38 @@ window.ddd = [];
         padding: 50
       });
       if (this.options.isAutoW) {
-        paperScroller.$el.css({ width: $(window).width(), height: $(window).height() });
+        paperScroller.$el.css({
+          width: $(window).width(),
+          height: $(window).height()
+        });
         paperScroller.center();
         paperScroller.centerContent();
-        paperScroller.$el.css({ width: $(window).width(), height: $(window).height(), overflow: 'hidden', 'background-image': 'url("' + getGridBackgroundImage(this.options.gridSize * this.options.scaleX, this.options.gridSize * this.options.scaleY) + '")' }).appendTo($this.$element);
+        paperScroller.$el.css({
+          width: $(window).width(),
+          height: $(window).height(),
+          overflow: 'hidden',
+          'background-image': 'url("' + getGridBackgroundImage(this.options.gridSize * this.options.scaleX, this.options.gridSize * this.options.scaleY) + '")'
+        }).appendTo($this.$element);
         $(window).resize(function() {
           paperScroller.center();
           paperScroller.centerContent();
-          paperScroller.$el.css({ width: $(this).width(), height: $(this).height() });
+          paperScroller.$el.css({
+            width: $(this).width(),
+            height: $(this).height()
+          });
         });
       } else {
-        paperScroller.$el.css({ width: ScrollerAutoWidth, height: '100%' });
+        paperScroller.$el.css({
+          width: ScrollerAutoWidth,
+          height: '100%'
+        });
         paperScroller.center();
         paperScroller.centerContent();
-        paperScroller.$el.css({ width: ScrollerAutoWidth, height: '100%', overflow: 'hidden' }).appendTo($this.$element);
+        paperScroller.$el.css({
+          width: ScrollerAutoWidth,
+          height: '100%',
+          overflow: 'hidden'
+        }).appendTo($this.$element);
       }
 
       LocalPaper.on('blank:pointerdown', paperScroller.startPanning);
@@ -101,9 +119,13 @@ window.ddd = [];
       paperScroller.$el.on('mousewheel', function(event, delta, deltaX, deltaY) {
 
         if (delta > 0) {
-          paperScroller.zoom(0.07, { max: 2 });
+          paperScroller.zoom(0.07, {
+            max: 2
+          });
         } else {
-          paperScroller.zoom(-0.07, { min: 0.1 });
+          paperScroller.zoom(-0.07, {
+            min: 0.1
+          });
         }
         if (window.NowSeletcCell !== undefined) {
           window.NowSeletcCell.unhighlight();
@@ -329,7 +351,9 @@ window.ddd = [];
         }
         if ((evt.ctrlKey || evt.metaKey) && (cellView.model instanceof joint.dia.Link)) {
           if (window.selectiondView !== undefined) {
-            if (_.findWhere(window.selectiondView, { id: cellView.id }) === undefined) {
+            if (_.findWhere(window.selectiondView, {
+                id: cellView.id
+              }) === undefined) {
               cellView.model.attributes.labels[0].attrs.text.fill = '#ff0000';
               cellView.update();
               window.selectiondView.push(cellView);
@@ -389,7 +413,9 @@ window.ddd = [];
                     ></div>
                     `.trim());
               $('.showPortzz').off('click').on('click', function(e) {
-                window.zlPortArry = _.without(window.zlPortArry, { PhylinkId: $(this).attr('data-id') });
+                window.zlPortArry = _.without(window.zlPortArry, {
+                  PhylinkId: $(this).attr('data-id')
+                });
                 $(this).remove();
                 e.stopPropagation();
               });
@@ -417,7 +443,9 @@ window.ddd = [];
                   }
                 }
               }
-              if (_.findWhere(window.zjdlikOut, { PhylinkId: cellView.model.attributes.devDatas.phylink.PhylinkId })) {
+              if (_.findWhere(window.zjdlikOut, {
+                  PhylinkId: cellView.model.attributes.devDatas.phylink.PhylinkId
+                })) {
                 if (cellView.model.attributes.devDatas.phylink.Port1.PortId === cellView.model.id || cellView.model.attributes.devDatas.phylink.Port2.PortId === cellView.model.id) {
                   window.zlPortArry.push(cellView.model.attributes.devDatas.phylink.PhylinkId);
                 } else {
@@ -584,15 +612,24 @@ window.ddd = [];
       if (opts === undefined || opts === '') {
         var ScrollerAutoWidth = this.$element.width();
         var ScrollerAutoHeight = this.$element.height();
-        this.paper.$el.css({ width: ScrollerAutoWidth, height: ScrollerAutoHeight });
-        this.paperScroller.$el.css({ width: ScrollerAutoWidth, height: ScrollerAutoHeight });
+        this.paper.$el.css({
+          width: ScrollerAutoWidth,
+          height: ScrollerAutoHeight
+        });
+        this.paperScroller.$el.css({
+          width: ScrollerAutoWidth,
+          height: ScrollerAutoHeight
+        });
       }
 
     },
     resizePaperScroller: function() {
       this.paperScroller.center();
       this.paperScroller.centerContent();
-      this.paperScroller.$el.css({ width: $(window).width(), height: $(window).height() });
+      this.paperScroller.$el.css({
+        width: $(window).width(),
+        height: $(window).height()
+      });
     },
     autoSize: function(element, minwidth, minheight) {
       var view = this.paper.findViewByModel(element);
@@ -627,25 +664,52 @@ window.ddd = [];
 
       var veElementS = this.paper.findViewByModel(sourcePort).model.attributes;
       var veElementT = this.paper.findViewByModel(targetPort).model.attributes;
-      var vertices = [{ x: veElementS.position.x + 120, y: veElementS.position.y + 40 }, { x: veElementT.position.x - 60, y: veElementT.position.y + 40 }];
+      var vertices = [{
+        x: veElementS.position.x + 120,
+        y: veElementS.position.y + 40
+      }, {
+        x: veElementT.position.x - 60,
+        y: veElementT.position.y + 40
+      }];
       switch (posions) {
         case 'left':
           itemdatal.left = 1;
-          vertices = [{ x: veElementS.position.x - this.leftLinkVertices, y: veElementS.position.y + 40 }, { x: veElementT.position.x - this.leftLinkVertices, y: veElementT.position.y + 40 }];
+          vertices = [{
+            x: veElementS.position.x - this.leftLinkVertices,
+            y: veElementS.position.y + 40
+          }, {
+            x: veElementT.position.x - this.leftLinkVertices,
+            y: veElementT.position.y + 40
+          }];
           break;
         case 'right':
-          vertices = [{ x: veElementS.position.x + 120, y: veElementS.position.y + 40 }, { x: veElementT.position.x - 60, y: veElementT.position.y + 40 }];
+          vertices = [{
+            x: veElementS.position.x + 120,
+            y: veElementS.position.y + 40
+          }, {
+            x: veElementT.position.x - 60,
+            y: veElementT.position.y + 40
+          }];
           break;
       }
       this.leftLinkVertices += 40;
       var link = new joint.shapes.devs.PhyLink({
         id: itemdatal.PhylinkId,
         devDatas: itemdatal,
-        source: { id: sourcePort, selector: 'circle' },
-        target: { id: targetPort, selector: 'circle' },
+        source: {
+          id: sourcePort,
+          selector: 'circle'
+        },
+        target: {
+          id: targetPort,
+          selector: 'circle'
+        },
         // vertices: vertices,//此处控制连接线两端是否弯折，若是直线则屏蔽即可。看一下具体逻辑
         attrs: {
-          '.connection': { stroke: '#7bb4dc', 'stroke-width': 4 }
+          '.connection': {
+            stroke: '#7bb4dc',
+            'stroke-width': 4
+          }
         }
       });
       link.addTo(this.graph);

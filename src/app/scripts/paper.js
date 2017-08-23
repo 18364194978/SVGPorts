@@ -69,6 +69,7 @@ window.ddd = [];
         perpendicularLinks: true,
         interactive: false
       });
+      window.ppp = LocalPaper;
       this.paper = LocalPaper;
       var paperScroller = new joint.ui.PaperScroller({
         paper: LocalPaper,
@@ -650,6 +651,7 @@ window.ddd = [];
       element.resize(wd, hi);
     },
     conNect: function(sourcePort, targetPort, type, posions, itemdatal) {
+
       let issourcefind = this.paper.findViewByModel(sourcePort);
       let istargetfind = this.paper.findViewByModel(targetPort);
       if (issourcefind === undefined) {
@@ -693,6 +695,7 @@ window.ddd = [];
           break;
       }
       this.leftLinkVertices += 40;
+
       var link = new joint.shapes.devs.PhyLink({
         id: itemdatal.PhylinkId,
         devDatas: itemdatal,
@@ -713,6 +716,54 @@ window.ddd = [];
         }
       });
       link.addTo(this.graph);
+      for (var i = 0; i < window.a.length; i++) {
+        // window.a[i].addTo(this.graph);
+      }
+      console.log(window.a);
+    },
+    conNect2: function() {
+      for (var i = 0; i < window.a.length; i++) {
+        var getX = window.a[i].attributes.position.x;
+        var getY = window.a[i].attributes.position.y+3;
+        var getId = window.a[i].id;
+        console.log(getY,getY,getId,'getIdgetIdgetId');
+        let getGport = new joint.shapes.basic.GPPort({
+          portRemove: 1,
+          id: getId,
+          // projectOpticalcableGuid: projectOpticalcableGuid,
+          position: {
+            x: getX,
+            y: getY
+          },
+          size: {
+            width: 10,
+            height: 10
+          },
+          attrs: {
+            text: {
+              // text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
+              text: getId,
+              'font-size': 9,
+              stroke: '',
+              fill: '#306796',
+              'ref-y': -10
+            },
+            rect: {
+              width: 13,
+              height: 13,
+              rx: 13,
+              ry: 13,
+              fill: '#306796'
+            }
+          }
+        });
+        getGport.addTo(this.graph);
+        // getGport.translate(4000, 4115);
+      }
+      console.log(this.paper.findViewByModel('gp_1'), 'sourcePort');
+    },
+    LineConnect:function(data){//该函数处理光缆连接
+
     }
   };
   $.fn.createPaper = function(options) {

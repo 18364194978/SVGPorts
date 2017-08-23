@@ -171,26 +171,26 @@
 							LinkId: "113", //所在线路的id
 							Port1: "113B", //所在线路始发port1的id
 							Port2: "311" //所在线路始发port2的id
-						}],
-						[{
-							Guid: 'l_121', //自身的id，根据其来连接线
-							LinkConnectId: "l_12", //所在光缆的id
-							LinkId: "111", //所在线路的id
-							Port1: "111B", //所在线路始发port1的id
-							Port2: "211" //所在线路始发port2的id
-						}, {
-							Guid: 'l_122', //自身的id，根据其来连接线
-							LinkConnectId: "l_12", //所在光缆的id
-							LinkId: "112", //所在线路的id
-							Port1: "112B", //所在线路始发port1的id
-							Port2: "212" //所在线路始发port2的id
-						}, {
-							Guid: 'l_123', //自身的id，根据其来连接线
-							LinkConnectId: "l_12", //所在光缆的id
-							LinkId: "113", //所在线路的id
-							Port1: "113B", //所在线路始发port1的id
-							Port2: "311" //所在线路始发port2的id
 						}]
+						// ,[{//暂时屏蔽数据
+						// 	Guid: 'l_121', //自身的id，根据其来连接线
+						// 	LinkConnectId: "l_12", //所在光缆的id
+						// 	LinkId: "111", //所在线路的id
+						// 	Port1: "111B", //所在线路始发port1的id
+						// 	Port2: "211" //所在线路始发port2的id
+						// }, {
+						// 	Guid: 'l_122', //自身的id，根据其来连接线
+						// 	LinkConnectId: "l_12", //所在光缆的id
+						// 	LinkId: "112", //所在线路的id
+						// 	Port1: "112B", //所在线路始发port1的id
+						// 	Port2: "212" //所在线路始发port2的id
+						// }, {
+						// 	Guid: 'l_123', //自身的id，根据其来连接线
+						// 	LinkConnectId: "l_12", //所在光缆的id
+						// 	LinkId: "113", //所在线路的id
+						// 	Port1: "113B", //所在线路始发port1的id
+						// 	Port2: "311" //所在线路始发port2的id
+						// }]
 					],
 					ports: [
 						[{
@@ -995,7 +995,9 @@
 								height: 13,
 								rx: 13,
 								ry: 13,
-								fill: '#306796'
+								fill: 'white',
+								stroke:'red',
+								'stroke-dasharray':'3,4'
 							}
 						}
 					});

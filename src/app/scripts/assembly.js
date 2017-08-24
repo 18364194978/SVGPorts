@@ -35,7 +35,7 @@
 			});
 			var dddata = {
 				LineConnect: [{
-					LinkConnectId: "l_11", //整条光缆的信息
+					LinkConnectId: "LG_11", //整条光缆的信息
 					Guid: '456', //此条短线的id
 					Port1: {
 						LinkId: "111", //所在线的id
@@ -46,7 +46,7 @@
 						PortId: "l_112"
 					}
 				}, {
-					LinkConnectId: "l_11", //整条光缆的信息
+					LinkConnectId: "LG_11", //整条光缆的信息
 					Guid: '457', //此条短线的id
 					Port1: {
 						LinkId: "112", //所在线的id
@@ -58,7 +58,7 @@
 					}
 
 				}, {
-					LinkConnectId: "l_12", //整条光缆的信息
+					LinkConnectId: "LG_12", //整条光缆的信息
 					Guid: '458', //此条短线的id
 					Port1: {
 						LinkId: "111", //所在线的id
@@ -69,7 +69,7 @@
 						PortId: "l_122"
 					}
 				}, {
-					LinkConnectId: "l_12", //整条光缆的信息
+					LinkConnectId: "LG_12", //整条光缆的信息
 					Guid: '459', //此条短线的id
 					Port1: {
 						LinkId: "112", //所在线的id
@@ -176,25 +176,25 @@
 							Port1: "113B", //所在线路始发port1的id
 							Port2: "311" //所在线路始发port2的id
 						}]
-						// ,[{//暂时屏蔽数据
-						// 	Guid: 'l_121', //自身的id，根据其来连接线
-						// 	LinkConnectId: "l_12", //所在光缆的id
-						// 	LinkId: "111", //所在线路的id
-						// 	Port1: "111B", //所在线路始发port1的id
-						// 	Port2: "211" //所在线路始发port2的id
-						// }, {
-						// 	Guid: 'l_122', //自身的id，根据其来连接线
-						// 	LinkConnectId: "l_12", //所在光缆的id
-						// 	LinkId: "112", //所在线路的id
-						// 	Port1: "112B", //所在线路始发port1的id
-						// 	Port2: "212" //所在线路始发port2的id
-						// }, {
-						// 	Guid: 'l_123', //自身的id，根据其来连接线
-						// 	LinkConnectId: "l_12", //所在光缆的id
-						// 	LinkId: "113", //所在线路的id
-						// 	Port1: "113B", //所在线路始发port1的id
-						// 	Port2: "311" //所在线路始发port2的id
-						// }]
+						,[{//暂时屏蔽数据
+							Guid: 'l_121', //自身的id，根据其来连接线
+							LinkConnectId: "l_12", //所在光缆的id
+							LinkId: "111", //所在线路的id
+							Port1: "111B", //所在线路始发port1的id
+							Port2: "211" //所在线路始发port2的id
+						}, {
+							Guid: 'l_122', //自身的id，根据其来连接线
+							LinkConnectId: "l_12", //所在光缆的id
+							LinkId: "112", //所在线路的id
+							Port1: "112B", //所在线路始发port1的id
+							Port2: "212" //所在线路始发port2的id
+						}, {
+							Guid: 'l_123', //自身的id，根据其来连接线
+							LinkConnectId: "l_12", //所在光缆的id
+							LinkId: "113", //所在线路的id
+							Port1: "113B", //所在线路始发port1的id
+							Port2: "311" //所在线路始发port2的id
+						}]
 					],
 					ports: [
 						[{
@@ -235,6 +235,23 @@
 					]
 				},
 				other_device: [{
+					Gport: [{ //此处返回跟main_pannel一样的Gport即可
+						Guid: 'gp_1',
+						toPortId: '111B'
+					}, {
+						Guid: 'gp_3',
+						toPortId: '113B'
+					}, {
+						Guid: 'gp_4',
+						toPortId: '211'
+					}, {
+						Guid: 'gp_5',
+						toPortId: '212'
+					}, {
+						Guid: 'gp_6',
+						toPortId: '311'
+					}],
+					derection: 'left',
 					deiviceGuid: "21",
 					deviceName: "智能终端",
 					ProdevShortname: "ML2201A",
@@ -248,6 +265,23 @@
 						Type: "RX"
 					}]
 				}, {
+					Gport: [{ //此处返回跟main_pannel一样的Gport即可
+						Guid: 'gp_1',
+						toPortId: '111B'
+					}, {
+						Guid: 'gp_3',
+						toPortId: '113B'
+					}, {
+						Guid: 'gp_4',
+						toPortId: '211'
+					}, {
+						Guid: 'gp_5',
+						toPortId: '212'
+					}, {
+						Guid: 'gp_6',
+						toPortId: '311'
+					}],
+					derection: 'left',
 					deiviceGuid: "31",
 					deviceName: "合并单元",
 					ProdevShortname: "IL2201A",
@@ -774,6 +808,58 @@
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
 				window.paper.conNect2();
+				if (data.main.other_device.length !== 0) {
+					var portGuid = [];
+					$.each(data.main.other_device, function(index, item) {
+						$.each(item.ports, function(index2, item2) {
+							portGuid.push({
+								'derection': item.derection,
+								'Guid': item2.Guid
+							});
+						});
+					});
+					$.each(portGuid, function(index, item) {
+						$.each(data.main.other_device[0].Gport, function(index2, item2) {
+							if (item2.toPortId === item.Guid) {
+								if (item.derection === 'left') {
+									let getX = window.ppp.findViewByModel(item.Guid).model.attributes.position.x - 50;
+									let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 7;
+									let getGport = new joint.shapes.basic.GPPort({
+										portRemove: 1,
+										id: item2.Guid,
+										// projectOpticalcableGuid: projectOpticalcableGuid,
+										position: {
+											x: getX,
+											y: getY
+										},
+										size: {
+											width: 10,
+											height: 10
+										},
+										attrs: {
+											text: {
+												// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
+												text: item2.Guid,
+												'font-size': 9,
+												stroke: '',
+												fill: '#306796',
+												'ref-y': -10
+											},
+											rect: {
+												width: 13,
+												height: 13,
+												rx: 13,
+												ry: 13,
+												fill: '#306796'
+											}
+										}
+									});
+									getGport.addTo(window.paper.graph);
+								}
+							}
+						});
+					});
+				}
 				$('#thb').hide();
 				window.tbgraph.clear();
 				window.assemblyZlink = [];
@@ -972,9 +1058,9 @@
 			$('.infosig-group').show();
 			$('.infosig-group').find('button').trigger('click');
 			paper.resizePaperScroller();
-			$.each(finddata.LPorts, function(index, item) {
+			$.each(finddata.LPorts, function(index, item) { //光缆的port点
 				$.each(item, function(index2, item2) {
-					var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x + 240;
+					var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x + 280 +(index-1)*45;
 					var getY = window.ppp.findViewByModel(item2.Port1).model.attributes.position.y + 7;
 					var LinePorts = new joint.shapes.basic.LPPort({
 						portRemove: 1,
@@ -1008,12 +1094,18 @@
 						}
 					});
 					LinePorts.addTo(window.paper.graph);
-				})
-			})
-			console.log(window.ppp.findViewByModel('l_113'), 'sourcePort');
-			$.each(finddata.LineConnect, function(index, item) {
-				console.log(item, 'item');
-				window.paper.LineConnect(item);
+				});
+			});
+			var getLinkConnectId = [];
+			$.each(finddata.LineConnect, function(index, item) { //光缆port点的连接线
+				var vie = 0;
+				if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
+					getLinkConnectId.push(item.LinkConnectId);
+					vie = 1;
+					window.paper.LineConnect(item, vie);
+				} else {
+					window.paper.LineConnect(item, vie);
+				}
 			})
 		}
 	}];

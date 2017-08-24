@@ -106,7 +106,7 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
-  joint.shapes.basic.LPPort = joint.shapes.basic.Generic.extend({
+  joint.shapes.basic.LPPort = joint.shapes.basic.Generic.extend({//光缆的port点
     markup: ['<g class="rotatable" fill="none">',
     '<g class="scalable"></g>',
     // '<text class="port-label"/>',//此处为文字展示，先屏蔽

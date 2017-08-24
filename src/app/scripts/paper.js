@@ -716,24 +716,21 @@ window.ddd = [];
         }
       });
       link.addTo(this.graph);
-      for (var i = 0; i < window.a.length; i++) {
-        // window.a[i].addTo(this.graph);
-      }
-      console.log(window.a);
     },
-    LineConnect: function(data) { //该函数处理光缆连接
+    LineConnect: function(data,vie) { //该函数处理光缆连接
       let camo = new joint.dia.Link({
         markup: [
           '<path class="connection" stroke="black" d="M 0 0 0 0"/>',
           '<path class="marker-source" fill="black" stroke="black" d="M 0 0 0 0"/>',
-          // '<path class="marker-target" fill="black" stroke="black" d="M 0 0 0 0"/>',//此处为箭头展示，先屏蔽
+          '<path class="marker-target" fill="black" stroke="black" d="M 0 0 0 0"/>',
+          // '<text class="port-label"/>',
           '<path class="connection-wrap" d="M 0 0 0 0"/>',
           '<g class="labels"/>',
           '<g class="marker-vertices"/>',
           '<g class="marker-arrowheads"/>',
           '<g class="link-tools"/>'
         ].join(''),
-        toolMarkup: [
+        toolMarkup: [ //以下几处是屏蔽joint.link自己定义的彩色箭头
           '<g class="link-tool">',
           '</g>'
         ].join(''),
@@ -750,7 +747,7 @@ window.ddd = [];
         ].join(''),
         vertexMarkup: 'none',
         id: data.Guid,
-        // sigshowinfo: sigdata.ProjectSigdesc,
+        // sigshowinfo: '11111',//此处为鼠标放置在线上时展示名称，否则隐藏
         source: {
           id: data.Port1.PortId,
           // selector: selects
@@ -761,23 +758,23 @@ window.ddd = [];
         },
         // vertices: vertices,
         attrs: {
-          '.marker-target': {
-            fill: '#306796',
-            stroke: null,
-            d: 'M 10 0 L 0 5 L 10 10 z'
-          },
+          // '.marker-target': {//此处为构造箭头
+          //   fill: '#306796',
+          //   stroke: null,
+          //   d: 'M 10 0 L 0 5 L 10 10 z'
+          // },
           '.connection': {
             stroke: 'red',
             // opacity: 0.3,
             'stroke-width': 1.3,
             'stroke-dasharray': '4 3'
-          }
+          },
         },
         // router: routers,
         portRemove: 1,
         labels: [{
           position: {
-            distance: .4
+            distance: .7
           },
           attrs: {
             rect: {
@@ -788,9 +785,12 @@ window.ddd = [];
               ry: 5
             },
             text: {
-              text: '11',
+              text: data.LinkConnectId,
               fill: '#ff0000',
-              opacity: 0,
+              opacity: vie,
+              // 'transform': 'rotate(90deg)',
+              // transform:'rotate(90deg)',
+              'font-size':9,
               'font-variant': 'small-caps'
             }
           }
@@ -835,9 +835,7 @@ window.ddd = [];
           }
         });
         getGport.addTo(this.graph);
-        // getGport.translate(4000, 4115);
       }
-      // console.log(this.paper.findViewByModel('l_111'), 'sourcePort');
     }
 
   };

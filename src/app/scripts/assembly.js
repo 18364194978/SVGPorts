@@ -36,46 +36,50 @@
 			var dddata = {
 				LineConnect: [{
 					LinkConnectId: "l_11", //整条光缆的信息
-					Ports: [{
-						Port1: {
-							LinkId: "111", //所在线的id
-							PortId: "l_111" //光缆圆圈的id
-						},
-						Port2: {
-							LinkId: "112",
-							PortId: "l_112"
-						}
-					}, {
-						Port1: {
-							LinkId: "112", //所在线的id
-							PortId: "l_112" //光缆圆圈的id
-						},
-						Port2: {
-							LinkId: "113",
-							PortId: "l_113"
-						}
-					}]
+					Guid: '456', //此条短线的id
+					Port1: {
+						LinkId: "111", //所在线的id
+						PortId: "l_111" //光缆圆圈的id
+					},
+					Port2: {
+						LinkId: "112",
+						PortId: "l_112"
+					}
+				}, {
+					LinkConnectId: "l_11", //整条光缆的信息
+					Guid: '457', //此条短线的id
+					Port1: {
+						LinkId: "112", //所在线的id
+						PortId: "l_112" //光缆圆圈的id
+					},
+					Port2: {
+						LinkId: "113",
+						PortId: "l_113"
+					}
+
 				}, {
 					LinkConnectId: "l_12", //整条光缆的信息
-					Ports: [{
-						Port1: {
-							LinkId: "111", //所在线的id
-							PortId: "l_121" //光缆圆圈的id
-						},
-						Port2: {
-							LinkId: "112",
-							PortId: "l_122"
-						}
-					}, {
-						Port1: {
-							LinkId: "112", //所在线的id
-							PortId: "l_122" //光缆圆圈的id
-						},
-						Port2: {
-							LinkId: "113",
-							PortId: "l_123"
-						}
-					}]
+					Guid: '458', //此条短线的id
+					Port1: {
+						LinkId: "111", //所在线的id
+						PortId: "l_121" //光缆圆圈的id
+					},
+					Port2: {
+						LinkId: "112",
+						PortId: "l_122"
+					}
+				}, {
+					LinkConnectId: "l_12", //整条光缆的信息
+					Guid: '459', //此条短线的id
+					Port1: {
+						LinkId: "112", //所在线的id
+						PortId: "l_122" //光缆圆圈的id
+					},
+					Port2: {
+						LinkId: "113",
+						PortId: "l_123"
+					}
+
 				}],
 				Connection: [{
 					PhylinkId: "111",
@@ -264,7 +268,8 @@
 						noLinkDevices: [],
 						leftLink: [],
 						rightLink: [],
-						GPorts: []
+						GPorts: [],
+						LineConnect: []
 					};
 					var data = $.parseJSON(obj.json_info);
 					data.main = dddata;
@@ -632,6 +637,7 @@
 					}
 					mainPanel.GPorts = data.main.main_device.Gport;
 					mainPanel.LPorts = data.main.main_device.Lport;
+					mainPanel.LineConnect = data.main.LineConnect;
 					console.log(mainPanel, 'mainpanel');
 					$this.creatModel(data, mainPanel, paper);
 				}
@@ -969,7 +975,7 @@
 			$.each(finddata.LPorts, function(index, item) {
 				$.each(item, function(index2, item2) {
 					var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x + 240;
-					var getY = window.ppp.findViewByModel(item2.Port1).model.attributes.position.y+7;
+					var getY = window.ppp.findViewByModel(item2.Port1).model.attributes.position.y + 7;
 					var LinePorts = new joint.shapes.basic.LPPort({
 						portRemove: 1,
 						id: item2.Guid,
@@ -996,47 +1002,19 @@
 								rx: 13,
 								ry: 13,
 								fill: 'white',
-								stroke:'red',
-								'stroke-dasharray':'3,4'
+								stroke: 'red',
+								'stroke-dasharray': '3,4'
 							}
 						}
 					});
 					LinePorts.addTo(window.paper.graph);
 				})
 			})
-			// console.log(window.ppp.findViewByModel('gp_1'), 'sssssourcePort');
-			// var XX = window.ppp.findViewByModel('gp_1').model.attributes.position.x + 50;
-			// var YY = window.ppp.findViewByModel('gp_1').model.attributes.position.y;
-			// var LinePorts = new joint.shapes.basic.LPPort({
-			// 	portRemove: 1,
-			// 	id: 'cccc',
-			// 	// projectOpticalcableGuid: projectOpticalcableGuid,
-			// 	position: {
-			// 		x: XX,
-			// 		y: YY
-			// 	},
-			// 	size: {
-			// 		width: 10,
-			// 		height: 10
-			// 	},
-			// 	attrs: {
-			// 		text: {
-			// 			text: 'aaaaaaaa',
-			// 			'font-size': 9,
-			// 			stroke: '',
-			// 			fill: '#306796',
-			// 			'ref-y': -10
-			// 		},
-			// 		rect: {
-			// 			width: 13,
-			// 			height: 13,
-			// 			rx: 13,
-			// 			ry: 13,
-			// 			fill: '#306796'
-			// 		}
-			// 	}
-			// });
-			// LinePorts.addTo(window.paper.graph);
+			console.log(window.ppp.findViewByModel('l_113'), 'sourcePort');
+			$.each(finddata.LineConnect, function(index, item) {
+				console.log(item, 'item');
+				window.paper.LineConnect(item);
+			})
 		}
 	}];
 })(window.jQuery, window.joint, window._, window.parent.window, window.V, window.GFC);

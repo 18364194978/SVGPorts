@@ -721,12 +721,89 @@ window.ddd = [];
       }
       console.log(window.a);
     },
+    LineConnect: function(data) { //该函数处理光缆连接
+      let camo = new joint.dia.Link({
+        markup: [
+          '<path class="connection" stroke="black" d="M 0 0 0 0"/>',
+          '<path class="marker-source" fill="black" stroke="black" d="M 0 0 0 0"/>',
+          // '<path class="marker-target" fill="black" stroke="black" d="M 0 0 0 0"/>',//此处为箭头展示，先屏蔽
+          '<path class="connection-wrap" d="M 0 0 0 0"/>',
+          '<g class="labels"/>',
+          '<g class="marker-vertices"/>',
+          '<g class="marker-arrowheads"/>',
+          '<g class="link-tools"/>'
+        ].join(''),
+        toolMarkup: [
+          '<g class="link-tool">',
+          '</g>'
+        ].join(''),
+        labelMarkup: [
+          '<g class="label">',
+          '<rect />',
+          '<text />',
+          '<circle />',
+          '</g>'
+        ].join(''),
+        arrowheadMarkup: [
+          '<g class="marker-arrowhead-group marker-arrowhead-group-<%= end %>">',
+          '</g>'
+        ].join(''),
+        vertexMarkup: 'none',
+        id: data.Guid,
+        // sigshowinfo: sigdata.ProjectSigdesc,
+        source: {
+          id: data.Port1.PortId,
+          // selector: selects
+        },
+        target: {
+          id: data.Port2.PortId,
+          // selector: selectt
+        },
+        // vertices: vertices,
+        attrs: {
+          '.marker-target': {
+            fill: '#306796',
+            stroke: null,
+            d: 'M 10 0 L 0 5 L 10 10 z'
+          },
+          '.connection': {
+            stroke: 'red',
+            // opacity: 0.3,
+            'stroke-width': 1.3,
+            'stroke-dasharray': '4 3'
+          }
+        },
+        // router: routers,
+        portRemove: 1,
+        labels: [{
+          position: {
+            distance: .4
+          },
+          attrs: {
+            rect: {
+              stroke: null,
+              'stroke-width': 0,
+              opacity: 0,
+              rx: 5,
+              ry: 5
+            },
+            text: {
+              text: '11',
+              fill: '#ff0000',
+              opacity: 0,
+              'font-variant': 'small-caps'
+            }
+          }
+        }]
+      });
+      camo.addTo(this.graph);
+    },
     conNect2: function() {
       for (var i = 0; i < window.a.length; i++) {
         var getX = window.a[i].attributes.position.x;
-        var getY = window.a[i].attributes.position.y+3;
+        var getY = window.a[i].attributes.position.y + 3;
         var getId = window.a[i].id;
-        console.log(getY,getY,getId,'getIdgetIdgetId');
+        console.log(getY, getY, getId, 'getIdgetIdgetId');
         let getGport = new joint.shapes.basic.GPPort({
           portRemove: 1,
           id: getId,
@@ -760,11 +837,9 @@ window.ddd = [];
         getGport.addTo(this.graph);
         // getGport.translate(4000, 4115);
       }
-      console.log(this.paper.findViewByModel('gp_1'), 'sourcePort');
-    },
-    LineConnect:function(data){//该函数处理光缆连接
-
+      // console.log(this.paper.findViewByModel('l_111'), 'sourcePort');
     }
+
   };
   $.fn.createPaper = function(options) {
     var creatCv = new PaperClass(this, options);

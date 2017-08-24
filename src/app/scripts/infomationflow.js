@@ -855,7 +855,7 @@
                   '.connection': { stroke: '#306796', opacity: 0.3, 'stroke-width': 3, 'stroke-dasharray': '5 2' }
                 }
               });
-              camo.addTo(paper.graph);
+              // camo.addTo(paper.graph);
             });
           };
           var runToPaper = function(runArrys) {

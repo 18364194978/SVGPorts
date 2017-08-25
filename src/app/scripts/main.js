@@ -131,15 +131,24 @@
       window.assembly[0].show(window.paper, panelId);
       this.nowId = panelId;
     },
+    // initGoose: function(iedID) {
+    //   if (iedID === '' || iedID === undefined) {
+    //     throw '你必须传入屏柜id';
+    //   }
+    //   documentInit();
+    //   ROOF.svgGooseApi = window;
+    //   var goose = new joint.dia.Goose();
+    //   goose.init(window.paper, iedID);
+    //   return goose;
+    // },
     initGoose: function(iedID) {
       if (iedID === '' || iedID === undefined) {
         throw '你必须传入屏柜id';
       }
       documentInit();
-      ROOF.svgGooseApi = window;
-      var goose = new joint.dia.Goose();
-      goose.init(window.paper, iedID);
-      return goose;
+      ROOF.svgHardApi = window;
+      window.assemblys[0].show(window.paper, iedID);
+      this.nowId = iedID;
     },
     initDitchs: function(ditchsID) {
       if (ditchsID === '' || ditchsID === undefined) {

@@ -548,8 +548,7 @@
 				'g.title-class': {
 					x: 0,
 					y: 0,
-					transform: 'translate(0,0)'
-
+					// transform: 'translate('+45%+','+50%+')'
 				},
 				'rect.title-class': {
 					fill: '#5B9BD5',
@@ -559,7 +558,7 @@
 
 				},
 				'text.title-class': { //此处控制外部svg的title的相对位置等
-					fill: 'red',
+					fill: '#4F88BB',
 					text: 'jigui',
 					'font-size': 16,
 					'ref-x': .3,

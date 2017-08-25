@@ -81,12 +81,8 @@
 					}
 
 				}],
-				Connection: [{
-					PhylinkId: "111",
-					Gport: [{
-						Guid: 'gp_1',
-						toPortId: '111B'
-					}],
+				Connection: [{//端口连接线信息
+					PhylinkId: "111",//端口连接线id
 					Port1: {
 						DeviceId: "1111",
 						PortId: "111B",
@@ -97,7 +93,7 @@
 						PortId: "211",
 						Type: "tx"
 					},
-					ProjectOpticalcableGuid: '6661'
+					ProjectOpticalcableGuid: '6661'//暂时无用
 				}, {
 					PhylinkId: "112",
 					Gport: [{
@@ -136,13 +132,13 @@
 					},
 					ProjectOpticalcableGuid: '6664'
 				}],
-				main_device: {
+				main_device: {//主装置信息
 					deviceGuid: "11",
 					deviceName: "线路保护",
 					ProdevShortname: "PL2201A",
-					Gport: [{
+					Gport: [{//光配端子信息
 						Guid: 'gp_1',
-						toPortId: '111B'
+						toPortId: '111B'//光配对应的port的id
 					}, {
 						Guid: 'gp_3',
 						toPortId: '113B'
@@ -156,9 +152,9 @@
 						Guid: 'gp_6',
 						toPortId: '311'
 					}],
-					Lport: [
+					Lport: [//光缆端子信息
 						[{
-							Guid: 'l_111', //自身的id，根据其来连接线
+							Guid: 'l_111', //自身的id
 							LinkConnectId: "l_11", //所在光缆的id
 							LinkId: "111", //所在线路的id
 							Port1: "111B", //所在线路始发port1的id
@@ -175,8 +171,8 @@
 							LinkId: "113", //所在线路的id
 							Port1: "113B", //所在线路始发port1的id
 							Port2: "311" //所在线路始发port2的id
-						}]
-						,[{//暂时屏蔽数据
+						}],
+						[{ //暂时屏蔽数据
 							Guid: 'l_121', //自身的id，根据其来连接线
 							LinkConnectId: "l_12", //所在光缆的id
 							LinkId: "111", //所在线路的id
@@ -196,11 +192,11 @@
 							Port2: "311" //所在线路始发port2的id
 						}]
 					],
-					ports: [
+					ports: [//主装置内部端口信息
 						[{
 							Guid: "11B",
 							ProdevName: "B01",
-							Type: "Card",
+							Type: "Card",//板卡信息
 							// GGPort:
 						}, {
 							Guid: "111B",
@@ -234,7 +230,7 @@
 						}]
 					]
 				},
-				other_device: [{
+				other_device: [{//其他装置信息
 					Gport: [{ //此处返回跟main_pannel一样的Gport即可
 						Guid: 'gp_1',
 						toPortId: '111B'
@@ -251,7 +247,7 @@
 						Guid: 'gp_6',
 						toPortId: '311'
 					}],
-					derection: 'left',
+					derection: 'left',//其他装置位于主装置左侧left，右侧right
 					deiviceGuid: "21",
 					deviceName: "智能终端",
 					ProdevShortname: "ML2201A",
@@ -771,6 +767,8 @@
 						if (data.main.other_device[i].ports.length === 0) {
 							continue;
 						}
+						let portsLen = data.main.other_device[i].ports.length;
+						let titlePosition = (portsLen-1)*20;
 						let ot = new joint.shapes.devs.CabinetT({
 							z: window.assemblyz += 1,
 							id: data.main.other_device[i].deviceGuid,
@@ -795,7 +793,12 @@
 								// }
 								'text.title-class': {
 									text: "PL2201A智能终端"
-								}
+								},
+								'g.title-class': {
+									x: 0,
+									y: 0,
+									transform: 'translate(45,'+titlePosition+')'
+								},
 							}
 						});
 						$(".icdContain").text("PL2201A智能终端");
@@ -1060,7 +1063,7 @@
 			paper.resizePaperScroller();
 			$.each(finddata.LPorts, function(index, item) { //光缆的port点
 				$.each(item, function(index2, item2) {
-					var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x + 280 +(index-1)*45;
+					var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x + 280 + (index - 1) * 45;
 					var getY = window.ppp.findViewByModel(item2.Port1).model.attributes.position.y + 7;
 					var LinePorts = new joint.shapes.basic.LPPort({
 						portRemove: 1,

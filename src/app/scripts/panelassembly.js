@@ -53,37 +53,36 @@
 					console.log(data);
 					var haveLinkDevice = [];
 					data.main_panel.isZ = 1;
-					$.each(data.main.Connection, function(index, item) {
-						// mainPanel.rightLink.push(item);
-						if (item.Port1.DeviceId === undefined) {
-							if (item.Port1.NetswitchId) {
-								item.Port1.DeviceId = item.Port1.NetswitchId;
-								item.Port1.NetswitchId = undefined;
-							}
-						}
-						if (item.Port2.DeviceId === undefined) {
-							if (item.Port2.NetswitchId) {
-								item.Port2.DeviceId = item.Port2.NetswitchId;
-								item.Port2.NetswitchId = undefined;
-							}
+					// $.each(data.main.Connection, function(index, item) {//ping
+					// 	// mainPanel.rightLink.push(item);
+					// 	if (item.Port1.DeviceId === undefined) {
+					// 		if (item.Port1.NetswitchId) {
+					// 			item.Port1.DeviceId = item.Port1.NetswitchId;
+					// 			item.Port1.NetswitchId = undefined;
+					// 		}
+					// 	}
+					// 	if (item.Port2.DeviceId === undefined) {
+					// 		if (item.Port2.NetswitchId) {
+					// 			item.Port2.DeviceId = item.Port2.NetswitchId;
+					// 			item.Port2.NetswitchId = undefined;
+					// 		}
 
-						}
-						if (item.Port1.DeviceId === item.Port2.DeviceId) {
-							if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
-								if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
-									mainPanel.leftLink.push(item);
-								} else {
-									mainPanel.rightLink.push(item);
-								}
-							} else {
-								mainPanel.leftLink.push(item);
-							}
-						} else {
-							mainPanel.rightLink.push(item);
-						}
-					});
-					$.each(data.main.main_device.ports, function(index, item) {
-						$.each(item, function(index2, item2) {
+					// 	}
+					// 	if (item.Port1.DeviceId === item.Port2.DeviceId) {
+					// 		if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
+					// 			if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
+					// 				mainPanel.leftLink.push(item);
+					// 			} else {
+					// 				mainPanel.rightLink.push(item);
+					// 			}
+					// 		} else {
+					// 			mainPanel.leftLink.push(item);
+					// 		}
+					// 	} else {
+					// 		mainPanel.rightLink.push(item);
+					// 	}
+					// });
+					$.each(data.main.main_panel.devices, function(index, item) {
 							var shebei = {
 								devicesInfo: {},
 								port: {
@@ -92,22 +91,46 @@
 									noLinkPort: []
 								}
 							};
-							shebei.devicesInfo = item2;
-							for (var fcopy in item2) {
-								shebei.devicesInfo[fcopy] = item2[fcopy];
+							shebei.devicesInfo = item;
+							if (item.ports !== null){
+								$.each(item.ports,function(indexpp,itemPort){//此处对port进行处理，暂时未添加处理逻辑
+									var type = 0;
+								    shebei.port.rightPort.push(itemPort);
+								});
+								// switch (type) {//ping
+								// 	case 1:
+								// 		{
+								// 			shebei.port.leftPort.push(itemPort);
+								// 			break;
+								// 		}
+								// 	case 2:
+								// 		{
+								// 			itemPort.isclick = 1;
+								// 			shebei.port.rightPort.push(itemPort);
+								// 			break;
+								// 		}
+								// 	default:
+								// 		{
+								// 			//shebei.port.noLinkPort.push(itemPort);
+								// 			break;
+								// 		}
+								// }
+							}
+							for (var fcopy in item) {
+								shebei.devicesInfo[fcopy] = item[fcopy];
 							}
 							
-							if ($.inArray(item2.Guid, haveLinkDevice) !== -1) {
-								console.log('1111');
-								mainPanel.devices.push(shebei);
-							} else {
-								mainPanel.noLinkDevices.push(item2);
-							}
-						});
+							// if ($.inArray(item2.Guid, haveLinkDevice) !== -1) {//ping
+							// 	console.log('1111');
+							// 	mainPanel.devices.push(shebei);
+							// } else {
+							// 	mainPanel.noLinkDevices.push(item2);
+							// }
+							mainPanel.devices.push(shebei);
 					});
-					mainPanel.GPorts = data.main.main_device.Gport;
-					mainPanel.LPorts = data.main.main_device.Lport;
-					mainPanel.LineConnect = data.main.LineConnect;
+					// mainPanel.GPorts = data.main.main_device.Gport;//ping
+					// mainPanel.LPorts = data.main.main_device.Lport;//ping
+					// mainPanel.LineConnect = data.main.LineConnect;//ping
 					console.log(mainPanel, 'mainpanel');
 					$this.creatModel(data, mainPanel, paper);
 				}
@@ -127,7 +150,7 @@
 			});
 			var leftCabiner = new joint.shapes.devs.Cabinet({
 				z: window.assemblyz += 1,
-				id: data.main.main_device.deviceGuid,
+				id: data.main.main_panel.panelGuid,
 				position: {
 					x: 50 + 4000 - 100,
 					y: 4000
@@ -138,7 +161,7 @@
 				},
 				inPorts: [],
 				outPorts: [],
-				devDatas: data.main.main_device,
+				devDatas: data.main.main_panel,
 				childequipments: finddata.devices,
 				// devicesNolink: finddata.noLinkDevices,
 				devicesNolink: finddata,
@@ -146,14 +169,15 @@
 				mainpanel: true,
 				attrs: {
 					'text.title-class': {
-						text: data.main.main_device.deviceName
+						text: data.main.main_panel.panelName
 					},
-					'text.title-class2': {
-						text: data.main.main_device.ProdevShortname
-					}
+					// 'text.title-class2': {//ping
+					// 	text: data.main.main_device.ProdevShortname
+					// }
 				}
 			});
 			GFC.noUseF(leftCabiner);
+			console.log(window.ppp.findViewByModel('11'),'dddddddddd');
 			window.globalAssembly = function() {
 				window.assemblyZlink = [];
 				window.assemblyz = window.gszz;
@@ -173,106 +197,106 @@
 				//let MainHeight = 515;
 				let OtherHeight = 200;
 				let OtherY = 4110;
-				if (data.main.other_device !== null) {
-					for (var i = 0; i < data.main.other_device.length; i++) {
-						if (data.main.other_device[i].ports.length === 0) {
-							continue;
-						}
-						let portsLen = data.main.other_device[i].ports.length;
-						let titlePosition = (portsLen-1)*20;
-						let ot = new joint.shapes.devs.CabinetT({
-							z: window.assemblyz += 1,
-							id: data.main.other_device[i].deviceGuid,
-							portRemove: 1,
-							position: {
-								x: OtherX,
-								y: OtherY
-							},
-							size: {
-								width: WidthG,
-								height: OtherHeight
-							},
-							inPorts: [],
-							outPorts: [],
-							devDatas: data.main.other_device[i],
-							childequipments: data.main.other_device[i].ports,
-							paper: paper,
-							mainpanel: false,
-							attrs: {
-								// 'text.title-class': {
-								// 	text: data.main.other_panel[i].PanelName
-								// }
-								'text.title-class': {
-									text: "PL2201A智能终端"
-								},
-								'g.title-class': {
-									x: 0,
-									y: 0,
-									transform: 'translate(45,'+titlePosition+')'
-								},
-							}
-						});
-						$(".icdContain").text("PL2201A智能终端");
-						OtherHeight = ot.findView(paper.paper).$el[0];
-						OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
-					}
-				}
+				// if (data.main.other_device !== null) {//ping
+				// 	for (var i = 0; i < data.main.other_device.length; i++) {
+				// 		if (data.main.other_device[i].ports.length === 0) {
+				// 			continue;
+				// 		}
+				// 		let portsLen = data.main.other_device[i].ports.length;
+				// 		let titlePosition = (portsLen-1)*20;
+				// 		let ot = new joint.shapes.devs.CabinetT({
+				// 			z: window.assemblyz += 1,
+				// 			id: data.main.other_device[i].deviceGuid,
+				// 			portRemove: 1,
+				// 			position: {
+				// 				x: OtherX,
+				// 				y: OtherY
+				// 			},
+				// 			size: {
+				// 				width: WidthG,
+				// 				height: OtherHeight
+				// 			},
+				// 			inPorts: [],
+				// 			outPorts: [],
+				// 			devDatas: data.main.other_device[i],
+				// 			childequipments: data.main.other_device[i].ports,
+				// 			paper: paper,
+				// 			mainpanel: false,
+				// 			attrs: {
+				// 				// 'text.title-class': {
+				// 				// 	text: data.main.other_panel[i].PanelName
+				// 				// }
+				// 				'text.title-class': {
+				// 					text: "PL2201A智能终端"
+				// 				},
+				// 				'g.title-class': {
+				// 					x: 0,
+				// 					y: 0,
+				// 					transform: 'translate(45,'+titlePosition+')'
+				// 				},
+				// 			}
+				// 		});
+				// 		$(".icdContain").text("PL2201A智能终端");
+				// 		OtherHeight = ot.findView(paper.paper).$el[0];
+				// 		OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
+				// 	}
+				// }
 				$.each(window.nowAssemblylink, function(index, item) {
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
-				window.paper.conNect2();
-				if (data.main.other_device.length !== 0) {//遍历添加other_device的光配点
-					var portGuid = [];
-					$.each(data.main.other_device, function(index, item) {
-						$.each(item.ports, function(index2, item2) {
-							portGuid.push({
-								'derection': item.derection,
-								'Guid': item2.Guid
-							});
-						});
-					});
-					$.each(portGuid, function(index, item) {
-						$.each(data.main.other_device[0].Gport, function(index2, item2) {
-							if (item2.toPortId === item.Guid) {
-								if (item.derection === 'left') {
-									let getX = window.ppp.findViewByModel(item.Guid).model.attributes.position.x - 50;
-									let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 7;
-									let getGport = new joint.shapes.basic.GPPort({
-										portRemove: 1,
-										id: item2.Guid,
-										// projectOpticalcableGuid: projectOpticalcableGuid,
-										position: {
-											x: getX,
-											y: getY
-										},
-										size: {
-											width: 10,
-											height: 10
-										},
-										attrs: {
-											text: {
-												// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
-												text: item2.Guid,
-												'font-size': 9,
-												stroke: '',
-												fill: '#306796',
-												'ref-y': -10
-											},
-											rect: {
-												width: 13,
-												height: 13,
-												rx: 13,
-												ry: 13,
-												fill: '#306796'
-											}
-										}
-									});
-									getGport.addTo(window.paper.graph);
-								}
-							}
-						});
-					});
-				}
+				// window.paper.conNect2();//ping
+				// if (data.main.other_device.length !== 0) {//遍历添加other_device的光配点ping
+				// 	var portGuid = [];
+				// 	$.each(data.main.other_device, function(index, item) {
+				// 		$.each(item.ports, function(index2, item2) {
+				// 			portGuid.push({
+				// 				'derection': item.derection,
+				// 				'Guid': item2.Guid
+				// 			});
+				// 		});
+				// 	});
+				// 	$.each(portGuid, function(index, item) {
+				// 		$.each(data.main.other_device[0].Gport, function(index2, item2) {
+				// 			if (item2.toPortId === item.Guid) {
+				// 				if (item.derection === 'left') {
+				// 					let getX = window.ppp.findViewByModel(item.Guid).model.attributes.position.x - 50;
+				// 					let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 7;
+				// 					let getGport = new joint.shapes.basic.GPPort({
+				// 						portRemove: 1,
+				// 						id: item2.Guid,
+				// 						// projectOpticalcableGuid: projectOpticalcableGuid,
+				// 						position: {
+				// 							x: getX,
+				// 							y: getY
+				// 						},
+				// 						size: {
+				// 							width: 10,
+				// 							height: 10
+				// 						},
+				// 						attrs: {
+				// 							text: {
+				// 								// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
+				// 								text: item2.Guid,
+				// 								'font-size': 9,
+				// 								stroke: '',
+				// 								fill: '#306796',
+				// 								'ref-y': -10
+				// 							},
+				// 							rect: {
+				// 								width: 13,
+				// 								height: 13,
+				// 								rx: 13,
+				// 								ry: 13,
+				// 								fill: '#306796'
+				// 							}
+				// 						}
+				// 					});
+				// 					getGport.addTo(window.paper.graph);
+				// 				}
+				// 			}
+				// 		});
+				// 	});
+				// }
 				$('#thb').hide();
 				window.tbgraph.clear();
 				window.assemblyZlink = [];

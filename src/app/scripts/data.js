@@ -97,12 +97,13 @@ window.ddddata = {
 		},
 		ProjectOpticalcableGuid: '6664'
 	}],
-	main_panel: [{
+	main_panel: {
 		panelGuid: "panel_1",
 		panelName: "屏柜_1",
 		devices: [{ //主装置信息
-			deviceGuid: "11",
-			deviceName: "线路保护1",
+			DevType:"IED",
+			Guid: "11",
+			ProdevName: "线路保护1",
 			ProdevShortname: "PL2201A",
 			Lport: [ //光缆端子信息
 				[{
@@ -135,17 +136,18 @@ window.ddddata = {
 			ports: [ //主装置内部端口信息
 				{
 					Guid: "111",
-					ProdevName: "B01-01 LC",
+					ProbsName: "B01-01 LC",
 					Type: "RX"
 				}, {
 					Guid: "112",
-					ProdevName: "B01-02 LC",
+					ProbsName: "B01-02 LC",
 					Type: "TX"
 				}
 			]
 		},{ //主装置信息
-			deviceGuid: "12",
-			deviceName: "线路保护2",
+			DevType:"IED",
+			Guid: "12",
+			ProdevName: "线路保护2",
 			ProdevShortname: "PL2202A",
 			Lport: [ //光缆端子信息
 				[{
@@ -178,16 +180,16 @@ window.ddddata = {
 			ports: [ //主装置内部端口信息
 				 {
 					Guid: "121",
-					ProdevName: "B01-01 LC",
+					ProbsName: "B01-01 LC",
 					Type: "RX"
 				}, {
 					Guid: "122",
-					ProdevName: "B01-02 LC",
+					ProbsName: "B01-02 LC",
 					Type: "TX"
 				}
 			]
 		}]
-	}],
+	},
 	other_panel:[],
 	main_device: { //主装置信息
 		deviceGuid: "11",

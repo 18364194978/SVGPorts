@@ -879,7 +879,7 @@
         rotatable.attr('transform', rotation || '');
       }
       let pp = this.model.attributes.panelData;
-      conso;e.log('pp',pp);
+      // console.log('pp',pp);
       let panelPort = pp.ports;
       let phlink = this.model.attributes.devDatas.phylink;
       if (panelPort !== null && phlink !== undefined) {

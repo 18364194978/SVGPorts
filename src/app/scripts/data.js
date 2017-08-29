@@ -101,7 +101,7 @@ window.ddddata = {
 		panelGuid: "panel_1",
 		panelName: "屏柜_1",
 		devices: [{ //主装置信息
-			DevType:"IED",
+			DevType: "IED",
 			Guid: "11",
 			ProdevName: "线路保护1",
 			ProdevShortname: "PL2201A",
@@ -144,8 +144,8 @@ window.ddddata = {
 					Type: "TX"
 				}
 			]
-		},{ //主装置信息
-			DevType:"IED",
+		}, { //主装置信息
+			DevType: "IED",
 			Guid: "12",
 			ProdevName: "线路保护2",
 			ProdevShortname: "PL2202A",
@@ -178,7 +178,7 @@ window.ddddata = {
 				}]
 			],
 			ports: [ //主装置内部端口信息
-				 {
+				{
 					Guid: "121",
 					ProbsName: "B01-01 LC",
 					Type: "RX"
@@ -190,107 +190,103 @@ window.ddddata = {
 			]
 		}]
 	},
-	other_panel:[],
-	main_device: { //主装置信息
-		deviceGuid: "11",
-		deviceName: "线路保护",
-		ProdevShortname: "PL2201A",
-		Gport: [ //光配端子信息
-			{
-				Guid: 'gp_1',
-				toPortId: '111B' //光配对应的port的id
-			}, {
-				Guid: 'gp_3',
-				toPortId: '113B'
-			}, {
-				Guid: 'gp_4',
-				toPortId: '211'
-			}, {
-				Guid: 'gp_5',
-				toPortId: '212'
-			}, {
-				Guid: 'gp_6',
-				toPortId: '311'
-			}
-		],
-		Lport: [ //光缆端子信息
-			[{
-				Guid: 'l_111', //自身的id
-				LinkConnectId: "l_11", //所在光缆的id
-				LinkId: "111", //所在线路的id
-				Port1: "111B", //所在线路始发port1的id
-				Port2: "211" //所在线路始发port2的id
-			}, {
-				Guid: 'l_112', //自身的id，根据其来连接线
-				LinkConnectId: "l_11", //所在光缆的id
-				LinkId: "112", //所在线路的id
-				Port1: "112B", //所在线路始发port1的id
-				Port2: "212" //所在线路始发port2的id
-			}, {
-				Guid: 'l_113', //自身的id，根据其来连接线
-				LinkConnectId: "l_11", //所在光缆的id
-				LinkId: "113", //所在线路的id
-				Port1: "113B", //所在线路始发port1的id
-				Port2: "311" //所在线路始发port2的id
-			}],
-			[{ //暂时屏蔽数据
-				Guid: 'l_121', //自身的id，根据其来连接线
-				LinkConnectId: "l_12", //所在光缆的id
-				LinkId: "111", //所在线路的id
-				Port1: "111B", //所在线路始发port1的id
-				Port2: "211" //所在线路始发port2的id
-			}, {
-				Guid: 'l_122', //自身的id，根据其来连接线
-				LinkConnectId: "l_12", //所在光缆的id
-				LinkId: "112", //所在线路的id
-				Port1: "112B", //所在线路始发port1的id
-				Port2: "212" //所在线路始发port2的id
-			}, {
-				Guid: 'l_123', //自身的id，根据其来连接线
-				LinkConnectId: "l_12", //所在光缆的id
-				LinkId: "113", //所在线路的id
-				Port1: "113B", //所在线路始发port1的id
-				Port2: "311" //所在线路始发port2的id
-			}]
-		],
-		ports: [ //主装置内部端口信息
-			[{
-				Guid: "11B",
-				ProdevName: "B01",
-				Type: "Card", //板卡信息
-				// GGPort:
-			}, {
-				Guid: "111B",
-				ProdevName: "B01-01 LC",
-				Type: "RX"
-			}, {
-				Guid: "112B",
-				ProdevName: "B01-02 LC",
-				Type: "TX"
-			}, {
-				Guid: "113B",
-				ProdevName: "B01-03 LC",
-				Type: "RX"
-			}, {
-				Guid: "114B",
-				ProdevName: "B01-04 LC",
-				Type: "TX"
-			}],
-			[{
-				Guid: "12B",
-				ProdevName: "B02",
-				Type: "Card"
-			}, {
-				Guid: "121B",
-				ProdevName: "B02-012 LC",
-				Type: "TX"
-			}, {
-				Guid: "122B",
-				ProdevName: "B02-012 LC",
-				Type: "RX"
-			}]
-		]
-	},
+	other_panel: [{
+		panelGuid: "panel_2",
+		panelName: "屏柜_2",
+		devices: [{ //主装置信息
+			DevType: "IED",
+			Guid: "13",
+			ProdevName: "线路保护3",
+			ProdevShortname: "PL2203A",
+			Lport: [ //光缆端子信息
+				[{
+					Guid: 'l_111', //自身的id
+					LinkConnectId: "l_11", //所在光缆的id
+					LinkId: "111", //所在线路的id
+					Port1: "111", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}, {
+					Guid: 'l_112', //自身的id，根据其来连接线
+					LinkConnectId: "l_11", //所在光缆的id
+					LinkId: "112", //所在线路的id
+					Port1: "112", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}],
+				[{ //暂时屏蔽数据
+					Guid: 'l_121', //自身的id，根据其来连接线
+					LinkConnectId: "l_12", //所在光缆的id
+					LinkId: "111", //所在线路的id
+					Port1: "111", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}, {
+					Guid: 'l_122', //自身的id，根据其来连接线
+					LinkConnectId: "l_12", //所在光缆的id
+					LinkId: "112", //所在线路的id
+					Port1: "112", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}]
+			],
+			ports: [ //主装置内部端口信息
+				{
+					Guid: "131",
+					ProbsName: "B01-01 LC",
+					Type: "RX"
+				}, {
+					Guid: "132",
+					ProbsName: "B01-02 LC",
+					Type: "TX"
+				}
+			]
+		}]
+	}, {
+		panelGuid: "panel_3",
+		panelName: "屏柜_3",
+		devices: [{ //主装置信息
+			DevType: "IED",
+			Guid: "14",
+			ProdevName: "线路保护4",
+			ProdevShortname: "PL2204A",
+			Lport: [ //光缆端子信息
+				[{
+					Guid: 'l_111', //自身的id
+					LinkConnectId: "l_11", //所在光缆的id
+					LinkId: "111", //所在线路的id
+					Port1: "111", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}, {
+					Guid: 'l_112', //自身的id，根据其来连接线
+					LinkConnectId: "l_11", //所在光缆的id
+					LinkId: "112", //所在线路的id
+					Port1: "112", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}],
+				[{ //暂时屏蔽数据
+					Guid: 'l_121', //自身的id，根据其来连接线
+					LinkConnectId: "l_12", //所在光缆的id
+					LinkId: "111", //所在线路的id
+					Port1: "111", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}, {
+					Guid: 'l_122', //自身的id，根据其来连接线
+					LinkConnectId: "l_12", //所在光缆的id
+					LinkId: "112", //所在线路的id
+					Port1: "112", //所在线路始发port1的id
+					Port2: "未定义" //所在线路始发port2的id
+				}]
+			],
+			ports: [ //主装置内部端口信息
+				{
+					Guid: "141",
+					ProbsName: "B01-01 LC",
+					Type: "RX"
+				}, {
+					Guid: "142",
+					ProbsName: "B01-02 LC",
+					Type: "TX"
+				}
+			]
+		}]
+	}],
 	other_device: [{ //其他装置信息
 		Gport: [{ //此处返回跟main_pannel一样的Gport即可
 			Guid: 'gp_1',

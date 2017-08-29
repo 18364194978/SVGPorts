@@ -148,7 +148,7 @@
 			$.each(finddata.noLinkDevices, function(nolindex, noldata) {
 				noldata.ports = [];
 			});
-			var leftCabiner = new joint.shapes.devs.Cabinet({
+			var leftCabiner = new joint.shapes.devs.CabinetP({
 				z: window.assemblyz += 1,
 				id: data.main.main_panel.panelGuid,
 				position: {
@@ -177,7 +177,6 @@
 				}
 			});
 			GFC.noUseF(leftCabiner);
-			console.log(window.ppp.findViewByModel('11'),'dddddddddd');
 			window.globalAssembly = function() {
 				window.assemblyZlink = [];
 				window.assemblyz = window.gszz;
@@ -192,55 +191,53 @@
 					}
 				});
 				$('#thb').show();
-				let OtherX = 590 + 4000 + 150;
+				let OtherX = 740 + 2500;
 				let WidthG = 393;
 				//let MainHeight = 515;
 				let OtherHeight = 200;
 				let OtherY = 4110;
-				// if (data.main.other_device !== null) {//ping
-				// 	for (var i = 0; i < data.main.other_device.length; i++) {
-				// 		if (data.main.other_device[i].ports.length === 0) {
-				// 			continue;
-				// 		}
-				// 		let portsLen = data.main.other_device[i].ports.length;
-				// 		let titlePosition = (portsLen-1)*20;
-				// 		let ot = new joint.shapes.devs.CabinetT({
-				// 			z: window.assemblyz += 1,
-				// 			id: data.main.other_device[i].deviceGuid,
-				// 			portRemove: 1,
-				// 			position: {
-				// 				x: OtherX,
-				// 				y: OtherY
-				// 			},
-				// 			size: {
-				// 				width: WidthG,
-				// 				height: OtherHeight
-				// 			},
-				// 			inPorts: [],
-				// 			outPorts: [],
-				// 			devDatas: data.main.other_device[i],
-				// 			childequipments: data.main.other_device[i].ports,
-				// 			paper: paper,
-				// 			mainpanel: false,
-				// 			attrs: {
-				// 				// 'text.title-class': {
-				// 				// 	text: data.main.other_panel[i].PanelName
-				// 				// }
-				// 				'text.title-class': {
-				// 					text: "PL2201A智能终端"
-				// 				},
-				// 				'g.title-class': {
-				// 					x: 0,
-				// 					y: 0,
-				// 					transform: 'translate(45,'+titlePosition+')'
-				// 				},
-				// 			}
-				// 		});
-				// 		$(".icdContain").text("PL2201A智能终端");
-				// 		OtherHeight = ot.findView(paper.paper).$el[0];
-				// 		OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
-				// 	}
-				// }
+				if (data.main.other_panel !== null) {
+					for (var i = 0; i < data.main.other_panel.length; i++) {
+						console.log('***********',data.main.other_panel[i].panelName)
+						if (data.main.other_panel[i].length === 0) {
+							continue;
+						}
+						let ot = new joint.shapes.devs.CabinetTP({
+							z: window.assemblyz += 1,
+							id: data.main.other_panel[i].panelGuid,
+							portRemove: 1,
+							position: {
+								x: OtherX,
+								y: OtherY
+							},
+							size: {
+								width: WidthG,
+								height: OtherHeight
+							},
+							inPorts: [],
+							outPorts: [],
+							devDatas: data.main.other_panel[i],
+							childequipments: data.main.other_panel[i].devices,
+							paper: paper,
+							mainpanel: false,
+							attrs: {
+								'text.title-class': {
+									text: data.main.other_panel[i].panelName
+								},
+								// 'text.title-class': {
+								// 	text: "PL2201A智能终端"
+								// },
+								'g.title-class': {
+									x: 0,
+									y: 0,
+									// transform: 'translate(45,'+titlePosition+')'
+								}
+							}
+						});
+						OtherHeight = ot.findView(paper.paper).$el[0];
+						OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
+					}
+				}
 				$.each(window.nowAssemblylink, function(index, item) {
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});

@@ -799,6 +799,7 @@ window.ddd = [];
       camo.addTo(this.graph);
     },
     conNect2: function() {
+      if(window.a){
       for (var i = 0; i < window.a.length; i++) {
         var getX = window.a[i].attributes.position.x;
         var getY = window.a[i].attributes.position.y + 3;
@@ -836,6 +837,7 @@ window.ddd = [];
         });
         getGport.addTo(this.graph);
       }
+    }
     }
 
   };

@@ -87,7 +87,7 @@
 			} else {
 				porNumber = element.attributes.outPorts.length;
 			}
-			var portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 40;
+			var portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber +8;
 			if (portHeight > element.attributes.attrs.rect.height) {//此处是加硬接线端口时，显示内部svg的最小高度，现在没有硬接线端口所以解除限制
 				element.attributes.attrs.rect.height = portHeight;
 				element.attributes.size.height = portHeight;
@@ -97,7 +97,6 @@
 		getPortAttrs: function(portName, index, total, selector, type) { //此处为展示硬接线port与线的方法，后期用到可以研究下，此时可以先屏蔽
 
 			var attrs = {};
-			console.log('777777');
 			var portClass = 'port' + index;
 			var portSelector = selector + '>.' + portClass;
 			var portLabelSelector = portSelector + '>.port-label';
@@ -168,12 +167,13 @@
 			if (selector === '.outPorts') {
 				attrs[portSelector]['ref-dx'] = 0;
 				if (this.attributes.outPorts.length !== 0) {
-					let cjname = this.attributes.outPorts[index].ProbsName + '-';
+					let cjname = this.attributes.outPorts[index].ProbsName;
 					let dkname = this.attributes.outPorts[index].ProportName + '-';
 					let fcname = this.attributes.outPorts[index].ProportFunctiontype + '-';
 					let joname = this.attributes.outPorts[index].ProportJointtype + '-';
 					let dename = this.attributes.outPorts[index].ProportDesc;
 					let devdesc = this.attributes.outPorts[index].ProbsDesc + '-';
+					let getType = this.attributes.outPorts[index].Type;
 					if (this.attributes.outPorts[index].ProbsName === '') {
 						cjname = '';
 						devdesc = '';
@@ -182,8 +182,9 @@
 					this.embedport.out[index] = new joint.shapes.basic.RectPort({
 						id: this.attributes.outPorts[index].Guid,
 						position: {
-							x: this.attributes.size.width + this.attributes.position.x - 63,
-							y: this.attributes.position.y + index * 26
+							// x: this.attributes.size.width + this.attributes.position.x - 63,
+							x: this.attributes.position.x ,
+							y: this.attributes.position.y + index * 36-30
 						},
 						porttts: devdesc + cjname + dkname + fcname + joname + dename,
 						z: window.assemblyz += 1,
@@ -194,11 +195,14 @@
 						devDatas: this.attributes.outPorts[index],
 						panelData: this.attributes.panelData,
 						attrs: {
-							text: {
-								text: joint.util.breakText(cjname + dkname + fcname + joname, {
-									width: 100,
-									height: 24
-								})
+							// text: {
+							// 	text: joint.util.breakText(cjname + dkname + fcname + joname, {
+							// 		width: 100,
+							// 		height: 24
+							// 	})
+							// }
+							text:{
+								text:cjname
 							}
 						}
 					});
@@ -209,20 +213,15 @@
 			return attrs;
 		}
 	});
-	joint.shapes.devs.AtomicT = joint.shapes.devs.Model.extend({
+	joint.shapes.devs.AtomicTP = joint.shapes.devs.Model.extend({
 		markup: `<g class="rotatable">
                 <g class="scalable">
                 </g>
                 <rect class="body"/>
                 <text class="labels"/>
-                <foreignObject width="80" height="30" x="30" y="0" class="htIconOut">
+                <foreignObject width="80" height="30" x="20" y="0" class="htIconOut">
                     <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:center;">
-                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: inherit;display:inline-block;width:80px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
-                    </div>
-                </foreignObject>
-                <foreignObject width="30" height="30" x="0" y="0" class="htIconOut2">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="background-color:#00B0F0;text-align:center;">
-                    <a title="" class="content-xx text-center" style="color:white;display:inline-block;width:30px;height:30px;line-height: 30px;text-decoration: none;"></a>
+                    <a title="rdgdfgd" class="content-x text-center" style="font-size: inherit;display:inline-block;width:80px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
                     </div>
                 </foreignObject>
                 </g>`.trim(),
@@ -259,6 +258,9 @@
 				}]
 			},
 			attrs: {
+				'.content-x':{
+					fill:'#CBFFFF'
+				},
 				'.body': {
 					fill: 'salmon'
 				},
@@ -295,17 +297,15 @@
 			} else {
 				porNumber = element.attributes.outPorts.length;
 			}
-			var portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 50;
-			// if (portHeight > element.attributes.attrs.rect.height) {//此处是加硬接线端口时，显示内部svg的最小高度，现在没有硬接线端口所以解除限制
-			// 	element.attributes.attrs.rect.height = portHeight;
-			// 	element.attributes.size.height = portHeight;
-			// }
+			var portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber +8;
+			if (portHeight > element.attributes.attrs.rect.height) {//此处是加硬接线端口时，显示内部svg的最小高度，现在没有硬接线端口所以解除限制
+				element.attributes.attrs.rect.height = portHeight;
+				element.attributes.size.height = portHeight;
+			}
 
 		},
 		getPortAttrs: function(portName, index, total, selector, type) { //此处为展示硬接线port与线的方法，后期用到可以研究下，此时可以先屏蔽
-
 			var attrs = {};
-
 			var portClass = 'port' + index;
 			var portSelector = selector + '>.' + portClass;
 			var portLabelSelector = portSelector + '>.port-label';
@@ -336,7 +336,7 @@
 			//插件名称-端口名称-收发类型-接口类型
 			if (selector === '.inPorts') {
 				if (this.attributes.inPorts.length !== 0) {
-					let cjname = this.attributes.inPorts[index].ProbsName + '-';
+					let cjname = this.attributes.inPorts[index].ProbsName;
 					let dkname = this.attributes.inPorts[index].ProportName + '-';
 					let fcname = this.attributes.inPorts[index].ProportFunctiontype + '-';
 					let joname = this.attributes.inPorts[index].ProportJointtype + '-';
@@ -347,11 +347,11 @@
 						devdesc = '';
 					}
 					devdesc = '';
-					this.embedport.in[index] = new joint.shapes.basic.RectPort({
+					this.embedport.in[index] = new joint.shapes.basic.RectPortP({
 						id: this.attributes.inPorts[index].Guid,
 						position: {
-							x: this.attributes.position.x,
-							y: this.attributes.position.y + index * 26
+							x: this.attributes.position.x+160,
+							y: this.attributes.position.y + index * 36 -30
 						},
 						porttts: devdesc + cjname + dkname + fcname + joname + dename,
 						z: window.assemblyz += 1,
@@ -363,10 +363,7 @@
 						panelData: this.attributes.panelData,
 						attrs: {
 							text: {
-								text: joint.util.breakText(cjname + dkname + fcname + joname, {
-									width: 100,
-									height: 24
-								})
+								text:cjname
 							}
 						}
 					});
@@ -376,12 +373,13 @@
 			if (selector === '.outPorts') {
 				attrs[portSelector]['ref-dx'] = 0;
 				if (this.attributes.outPorts.length !== 0) {
-					let cjname = this.attributes.outPorts[index].ProbsName + '-';
+					let cjname = this.attributes.outPorts[index].ProbsName;
 					let dkname = this.attributes.outPorts[index].ProportName + '-';
 					let fcname = this.attributes.outPorts[index].ProportFunctiontype + '-';
 					let joname = this.attributes.outPorts[index].ProportJointtype + '-';
 					let dename = this.attributes.outPorts[index].ProportDesc;
 					let devdesc = this.attributes.outPorts[index].ProbsDesc + '-';
+					let getType = this.attributes.outPorts[index].Type;
 					if (this.attributes.outPorts[index].ProbsName === '') {
 						cjname = '';
 						devdesc = '';
@@ -390,8 +388,9 @@
 					this.embedport.out[index] = new joint.shapes.basic.RectPort({
 						id: this.attributes.outPorts[index].Guid,
 						position: {
-							x: this.attributes.size.width + this.attributes.position.x - 63,
-							y: this.attributes.position.y + index * 26
+							// x: this.attributes.size.width + this.attributes.position.x - 63,
+							x: this.attributes.position.x ,
+							y: this.attributes.position.y + index * 36-30
 						},
 						porttts: devdesc + cjname + dkname + fcname + joname + dename,
 						z: window.assemblyz += 1,
@@ -402,11 +401,14 @@
 						devDatas: this.attributes.outPorts[index],
 						panelData: this.attributes.panelData,
 						attrs: {
-							text: {
-								text: joint.util.breakText(cjname + dkname + fcname + joname, {
-									width: 100,
-									height: 24
-								})
+							// text: {
+							// 	text: joint.util.breakText(cjname + dkname + fcname + joname, {
+							// 		width: 100,
+							// 		height: 24
+							// 	})
+							// }
+							text:{
+								text:cjname
 							}
 						}
 					});
@@ -442,23 +444,15 @@
 			elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
 		}
 	});
-	joint.shapes.devs.CabinetT = joint.shapes.devs.Model.extend({
+	joint.shapes.devs.CabinetTP = joint.shapes.devs.Model.extend({
 		markup: '<g class="rotatable">' +
-			// '<g class="scalable">' +
-			// '</g>' +
-			'<rect class="body parent-class"/>' +
-			// '<foreignObject class="gooseOut">' +
-			// '<div xmlns="http://www.w3.org/1999/xhtml" class="goosebody">' +
-			// '<div class="context">' +
-			// '<div class="icdContain">' +
-			// '</div>' +
-			// '</div>' +
-			// '</div>' +
-			// '</foreignObject>' +
-			'<g class="title-class">' +
-
-			'<text class="labels title-class" />' +
+			'<g class="scalable">' +
 			'</g>' +
+			'<rect class="body parent-class"/>' +
+			// '<g class="title-class">' +
+			// '<rect class="title-class" />' +
+			'<text class="labels title-class" />' +
+			// '</g>' +
 			'</g>',
 		defaults: joint.util.deepSupplement({
 			paper: null,
@@ -489,20 +483,6 @@
 				}]
 			},
 			attrs: {
-				'.context': {
-					width: 300,
-					// 'position': 'relative',
-					height: 'inherit'
-				},
-				'.icdContain': {
-					'position': 'fixed',
-					left: '30%',
-					top: '30%'
-				},
-				'.gooseOut': {
-					width: 300,
-					height: 100
-				},
 				'.labels': {
 					fill: '#ffffff',
 					text: 'jigui',
@@ -514,54 +494,44 @@
 					'font-family': 'Arial, helvetica, sans-serif'
 				},
 				'rect.parent-class': {
-					fill: '#CBFFFF',
-					stroke: '#CBFFFF',
+					fill: '#E2EFD9',
+					stroke: '#E2EFD9',
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
-					width: 393,
+					width: 453,
 					height: 515
 
 				},
 				'.body': {
-					fill: '#CBFFFF',
-					stroke: '#CBFFFF',
+					fill: '#E2EFD9',
+					stroke: '#E2EFD9',
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
-					width: 233,
-					height: 150
+					width: 453,
+					height: 100
 
 				},
 				'g.title-class': {
 					x: 0,
 					y: 0,
-					// transform: 'translate('+45%+','+50%+')'
+					transform: 'translate(0,0)'
+
 				},
 				'rect.title-class': {
-					fill: '#5B9BD5',
-					stroke: '#5B9BD5',
-					width: 233,
-					height: 54
+					fill: '#A8D08D',
+					stroke: '#A8D08D',
+					width: 333,
+					height: 32
 
 				},
 				'text.title-class': { //此处控制外部svg的title的相对位置等
-					fill: '#4F88BB',
+					fill: 'red',
 					text: 'jigui',
 					'font-size': 16,
-					'ref-x': .3,
-					'ref-y': 17,
-					'text-anchor': 'middle',
-					'y-alignment': 'middle',
-					'font-family': 'Arial, helvetica, sans-serif'
-
-				},
-				'text.title-class2': {
-					fill: '#ffffff',
-					text: 'jigui',
-					'font-size': 15,
-					'ref-x': .3,
-					'ref-y': 37,
+					'ref-x': .1,
+					'ref-y': 33,
 					'text-anchor': 'middle',
 					'y-alignment': 'middle',
 					'font-family': 'Arial, helvetica, sans-serif'
@@ -574,11 +544,13 @@
 			this.on('change:attrs', this.bindAutoSize(this));
 			// if (this.attributes.mainpanel) {
 			if (this.attributes.childequipments !== null) {
+				console.log('00000');
 				this.childEquipments(this.attributes.childequipments);
 			}
-			if (this.attributes.devicesNolink !== undefined) {
-				this.childEquipments(this.attributes.devicesNolink);
-			}
+			// if (this.attributes.devicesNolink !== undefined) {
+			// 	console.log('0000011');
+			// 	this.childEquipments(this.attributes.devicesNolink.noLinkDevices);
+			// }
 		},
 		bindAutoSize: function(element) { //同上面的bindautosize，暂时无用可以删除测试
 			var width = element.attributes.attrs['rect.title-class'].width;
@@ -617,6 +589,11 @@
 		},
 		childEquipments: function(data) { //此处的data实际使用的是rx、tx那些port
 			var $this = this;
+			var dataGuid = [];
+			for (var m = 0; m < data.length; m++) {
+				dataGuid.push(data[m].Guid);
+			}
+			console.log(data, 'data');
 			if ($this.chidpositons === undefined) { //此处是获取当前最外层svg的坐标，供下面里层的svg准备
 				$this.chidpositons = {
 					x: $this.attributes.position.x,
@@ -625,63 +602,69 @@
 				};
 			}
 			var ChildArray = [];
-			//var ChildPort = [];
 			var fdo;
 			var inprt, ouprt, dsname, idvs, portsname;
-			for (var i = 0; i < data.length; i++) {
-				if (data[i].DevId !== undefined) {
+			for (var j = 0; j < data.length; j++) {
+				if (data[j].DevId !== undefined) {
 					ChildArray = [];
 					continue;
 				}
-				if ($this.attributes.mainpanel && data[i].devicesInfo !== undefined) { //此处这个连续的if是为了上文97行getPortAttrs硬接线port与线提供数据的，若未考虑线的情况可以先将几个数组设置为空的，这样就port与线就不展示了
-					inprt = data[i].port.leftPort !== null ? data[i].port.leftPort : [];
-					ouprt = data[i].port.rightPort !== null ? data[i].port.rightPort : [];
-					dsname = data[i].devicesInfo.ProdevName;
-					portsname = data[i].devicesInfo.Type;
-					idvs = data[i].devicesInfo.Guid;
-				} else if ($this.attributes.mainpanel && data[i].devicesInfo === undefined) {
+				if ($this.attributes.mainpanel && data[j].devicesInfo !== undefined) { //此处这个连续的if是为了上文97行getPortAttrs硬接线port与线提供数据的，若未考虑线的情况可以先将几个数组设置为空的，这样就port与线就不展示了
+					inprt = data[j].port.leftPort !== null ? data[j].port.leftPort : [];
+					ouprt = data[j].port.rightPort !== null ? data[j].port.rightPort : [];
+					dsname = data[j].devicesInfo.ProdevName;
+					portsname = data[j].devicesInfo.Type;
+					idvs = data[j].devicesInfo.Guid;
+					console.log('1111113', idvs);
+				} else if ($this.attributes.mainpanel && data[j].devicesInfo === undefined) {
 					inprt = [];
-					ouprt = data[i].ports !== null ? data[i].ports : [];
-					dsname = data[i].ProdevName;
-					portsname = data[i].Type;
-					idvs = data[i].Guid;
+					ouprt = data[j].ports !== null ? data[j].ports : [];
+					dsname = data[j].ProdevName;
+					portsname = data[j].Type;
+					idvs = data[j].Guid;
 				} else {
-					inprt = data[i].ports !== null ? data[i].ports : [];
+					inprt = data[j].ports !== null ? data[j].ports : [];
 					ouprt = [];
-					dsname = data[i].ProdevName;
-					portsname = data[i].Type;
-					idvs = data[i].Guid;
+					dsname = data[j].ProdevName;
+					portsname = data[j].Type;
+					idvs = data[j].Guid;
+					console.log('111111', idvs);
 				}
-				ChildArray[i] = new joint.shapes.devs.AtomicT({
+				var getTitlePosi = (data.length-1)*10;
+				ChildArray[j] = new joint.shapes.devs.AtomicTP({
 					id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 					size: { //此处定义的是内部svg的size
-						width: 132,
-						height: 30
+						width: 232,
+						height: 0
 					},
 					position: { //根据上文准备的外部svg的位置定义内部svg的位置
-						x: $this.chidpositons.x - 35,
-						y: $this.chidpositons.y
+						x: $this.chidpositons.x + 120,
+						y: $this.chidpositons.y + 5
 					},
 					z: window.assemblyz += 1, //暂时不知道什么用，删除后无碍
 					inPorts: inprt, //以下这一堆是配置数据，通过model.attribute可以获取
 					outPorts: ouprt,
-					devDatas: data[i],
+					devDatas: data[j],
 					paper: this.attributes.paper,
 					panelData: $this.attributes.devDatas,
 					dsname: dsname,
 					portsname: portsname,
 					attrs: { //暂时无需改动
 						rect: {
-							fill: '#4F88BB',
-							stroke: '#41719C',
+							fill: '#CBFFFF',
+							stroke: '#CBFFFF',
 							x: 0,
 							y: 0,
-							width: 132,
-							height: 30
+							width: 232,
+							height: 0
+						},
+						'.htIconOut':{
+							x:0,
+							y:getTitlePosi
 						},
 						'.labels': {
 							text: '',
-							fill: '#306796',
+							fill: '#41719C',
 							'font-size': 12,
 							'text-anchor': 'middle',
 							'y-alignment': 'middle',
@@ -728,46 +711,18 @@
 							'y-alignment': 'middle',
 							'font-family': 'Arial, helvetica, sans-serif'
 
-						},
-						'.sig1': {
-							width: 20,
-							height: 20,
-							fill: '#ffffff',
-							'ref-x': 0,
-							y: 0
-						},
-						'.sig2': {
-							width: 20,
-							height: 20,
-							fill: '#ffffff',
-							'ref-x': 0,
-							'ref-y': .89
-						},
-						'.sig3': {
-							width: 20,
-							height: 20,
-							fill: '#ffffff',
-							'ref-x': .91,
-							y: 0
-						},
-						'.sig4': {
-							width: 20,
-							height: 20,
-							fill: '#ffffff',
-							'ref-x': .91,
-							'ref-y': .89
 						}
 					}
 				});
 
-				ChildArray[i].addTo(window.tbgraph);
-				fdo = viewE(ChildArray[i].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
-				$this.chidpositons.parentWidth += fdo.height + 10;
-				$this.chidpositons.y += fdo.height + 10; //内部svg的纵向间距
-				ChildArray[i].remove();
-				this.embed(ChildArray[i]);
-				this.attributes.size.height = $this.chidpositons.parentWidth;
-				this.attributes.attrs['.body'].height = $this.chidpositons.parentWidth - 100;
+				ChildArray[j].addTo(window.tbgraph);
+				fdo = viewE(ChildArray[j].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
+				$this.chidpositons.parentWidth += fdo.height + 60;
+				$this.chidpositons.y += fdo.height + 30;
+				ChildArray[j].remove();
+				this.embed(ChildArray[j]);
+				this.attributes.size.height = $this.chidpositons.parentWidth-140;//屏柜的height
+				this.attributes.attrs['.body'].height = $this.chidpositons.parentWidth-140;//屏柜的height
 			}
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;
@@ -850,7 +805,7 @@
 			return attrs;
 		}
 	});
-	joint.shapes.devs.Cabinet = joint.shapes.devs.Model.extend({
+	joint.shapes.devs.CabinetP = joint.shapes.devs.Model.extend({
 		markup: '<g class="rotatable">' +
 			'<g class="scalable">' +
 			'</g>' +
@@ -916,7 +871,7 @@
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
-					width: 233,
+					width: 333,
 					height: 250
 
 				},
@@ -929,7 +884,7 @@
 				'rect.title-class': {
 					fill: '#A8D08D',
 					stroke: '#A8D08D',
-					width: 233,
+					width: 333,
 					height: 32
 
 				},
@@ -1048,11 +1003,12 @@
 					idvs = data[j].Guid;
 					console.log('111111', idvs);
 				}
+				var getTitlePosi = (data.length-1)*10;
 				ChildArray[j] = new joint.shapes.devs.AtomicR({
 					id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 					size: { //此处定义的是内部svg的size
 						width: 232,
-						height: 70
+						height: 0
 					},
 					position: { //根据上文准备的外部svg的位置定义内部svg的位置
 						x: $this.chidpositons.x + 50,
@@ -1073,7 +1029,11 @@
 							x: 0,
 							y: 0,
 							width: 232,
-							height: 70
+							height: 0
+						},
+						'.htIconOut':{
+							x:90,
+							y:getTitlePosi
 						},
 						'.labels': {
 							text: '',
@@ -1131,7 +1091,7 @@
 				ChildArray[j].addTo(window.tbgraph);
 				fdo = viewE(ChildArray[j].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
 				$this.chidpositons.parentWidth += fdo.height + 60;
-				$this.chidpositons.y += fdo.height + 50;
+				$this.chidpositons.y += fdo.height + 30;
 				ChildArray[j].remove();
 				this.embed(ChildArray[j]);
 				this.attributes.size.height = $this.chidpositons.parentWidth+80;//屏柜的height

@@ -615,7 +615,6 @@
 					dsname = data[j].devicesInfo.ProdevName;
 					portsname = data[j].devicesInfo.Type;
 					idvs = data[j].devicesInfo.Guid;
-					console.log('1111113', idvs);
 				} else if ($this.attributes.mainpanel && data[j].devicesInfo === undefined) {
 					inprt = [];
 					ouprt = data[j].ports !== null ? data[j].ports : [];
@@ -628,7 +627,6 @@
 					dsname = data[j].ProdevName;
 					portsname = data[j].Type;
 					idvs = data[j].Guid;
-					console.log('111111', idvs);
 				}
 				var getTitlePosi = (data.length-1)*10;
 				ChildArray[j] = new joint.shapes.devs.AtomicTP({
@@ -988,7 +986,6 @@
 					dsname = data[j].devicesInfo.ProdevName;
 					portsname = data[j].devicesInfo.Type;
 					idvs = data[j].devicesInfo.Guid;
-					console.log('1111113', idvs);
 				} else if ($this.attributes.mainpanel && data[j].devicesInfo === undefined) {
 					inprt = [];
 					ouprt = data[j].ports !== null ? data[j].ports : [];
@@ -1001,7 +998,6 @@
 					dsname = data[j].ProdevName;
 					portsname = data[j].Type;
 					idvs = data[j].Guid;
-					console.log('111111', idvs);
 				}
 				var getTitlePosi = (data.length-1)*10;
 				ChildArray[j] = new joint.shapes.devs.AtomicR({

@@ -651,7 +651,6 @@ window.ddd = [];
       element.resize(wd, hi);
     },
     conNect: function(sourcePort, targetPort, type, posions, itemdatal) {
-
       let issourcefind = this.paper.findViewByModel(sourcePort);
       let istargetfind = this.paper.findViewByModel(targetPort);
       if (issourcefind === undefined) {
@@ -695,7 +694,6 @@ window.ddd = [];
           break;
       }
       this.leftLinkVertices += 40;
-
       var link = new joint.shapes.devs.PhyLink({
         id: itemdatal.PhylinkId,
         devDatas: itemdatal,

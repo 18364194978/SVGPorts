@@ -651,7 +651,7 @@ window.ddd = [];
       element.resize(wd, hi);
     },
     conNect: function(sourcePort, targetPort, type, posions, itemdatal) {
-
+      console.log('$$$$$$$$$$$$$')
       let issourcefind = this.paper.findViewByModel(sourcePort);
       let istargetfind = this.paper.findViewByModel(targetPort);
       if (issourcefind === undefined) {

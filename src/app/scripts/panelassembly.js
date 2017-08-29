@@ -53,35 +53,35 @@
 					console.log(data);
 					var haveLinkDevice = [];
 					data.main_panel.isZ = 1;
-					// $.each(data.main.Connection, function(index, item) {//ping
-					// 	// mainPanel.rightLink.push(item);
-					// 	if (item.Port1.DeviceId === undefined) {
-					// 		if (item.Port1.NetswitchId) {
-					// 			item.Port1.DeviceId = item.Port1.NetswitchId;
-					// 			item.Port1.NetswitchId = undefined;
-					// 		}
-					// 	}
-					// 	if (item.Port2.DeviceId === undefined) {
-					// 		if (item.Port2.NetswitchId) {
-					// 			item.Port2.DeviceId = item.Port2.NetswitchId;
-					// 			item.Port2.NetswitchId = undefined;
-					// 		}
+					$.each(data.main.Connection, function(index, item) {//ping
+						// mainPanel.rightLink.push(item);
+						if (item.Port1.DeviceId === undefined) {
+							if (item.Port1.NetswitchId) {
+								item.Port1.DeviceId = item.Port1.NetswitchId;
+								item.Port1.NetswitchId = undefined;
+							}
+						}
+						if (item.Port2.DeviceId === undefined) {
+							if (item.Port2.NetswitchId) {
+								item.Port2.DeviceId = item.Port2.NetswitchId;
+								item.Port2.NetswitchId = undefined;
+							}
 
-					// 	}
-					// 	if (item.Port1.DeviceId === item.Port2.DeviceId) {
-					// 		if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
-					// 			if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
-					// 				mainPanel.leftLink.push(item);
-					// 			} else {
-					// 				mainPanel.rightLink.push(item);
-					// 			}
-					// 		} else {
-					// 			mainPanel.leftLink.push(item);
-					// 		}
-					// 	} else {
-					// 		mainPanel.rightLink.push(item);
-					// 	}
-					// });
+						}
+						if (item.Port1.DeviceId === item.Port2.DeviceId) {
+							if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
+								if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
+									mainPanel.leftLink.push(item);
+								} else {
+									mainPanel.rightLink.push(item);
+								}
+							} else {
+								mainPanel.leftLink.push(item);
+							}
+						} else {
+							mainPanel.rightLink.push(item);
+						}
+					});
 					$.each(data.main.main_panel.devices, function(index, item) {
 							var shebei = {
 								devicesInfo: {},
@@ -195,10 +195,9 @@
 				let WidthG = 393;
 				//let MainHeight = 515;
 				let OtherHeight = 200;
-				let OtherY = 4110;
+				let OtherY = 4065;
 				if (data.main.other_panel !== null) {
 					for (var i = 0; i < data.main.other_panel.length; i++) {
-						console.log('***********',data.main.other_panel[i].panelName)
 						if (data.main.other_panel[i].length === 0) {
 							continue;
 						}
@@ -235,7 +234,7 @@
 							}
 						});
 						OtherHeight = ot.findView(paper.paper).$el[0];
-						OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
+						OtherY += viewE(OtherHeight).bbox(true).height + 20; //两个other_panel之间的纵向间距
 					}
 				}
 				$.each(window.nowAssemblylink, function(index, item) {

@@ -3,7 +3,7 @@
   if (ROOF === undefined) {
     ROOF = window;
   }
-  joint.shapes.basic.GPPort = joint.shapes.basic.Generic.extend({
+  joint.shapes.basic.GPPort = joint.shapes.basic.Generic.extend({//other_panel光配端子
     markup: '<g class="rotatable" fill="none"><g class="scalable"></g><text class="port-label"/><circle /><rect /></g>',
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
@@ -97,6 +97,49 @@
           'font-size': 9,
           'ref-x': 0,
           'ref-y': -10,
+          'text-anchor': 'middle',
+          'y-alignment': 'middle',
+          'font-family': 'Arial, helvetica, sans-serif'
+
+        }
+
+      }
+    }, joint.shapes.basic.Generic.prototype.defaults)
+  });
+  joint.shapes.basic.GPMainPort = joint.shapes.basic.Generic.extend({//main_panel光配端子
+    markup: '<g class="rotatable" fill="none"><g class="scalable"></g><text class="port-label"/><circle /><rect /></g>',
+    defaults: joint.util.deepSupplement({
+      type: 'basic.GPPort',
+      rightMenu: {
+        centerMenu: {
+          name: '释放', //释放光配
+          fc: function(cellView) {
+          }
+        },
+        otherMenu: [{
+          name: '上移',
+          fc: function(cellView) {
+          }
+        }, {
+          name: '下移',
+          fc: function(cellView) {
+          }
+        }]
+      },
+      attrs: {
+        circle: {
+          fill: '#305497',
+          stroke: 'none',
+          cx: 5,
+          cy: 5,
+          r: 7
+        },
+        'text.port-label': {
+          text: 'dsfafdf',
+          fill: '#000000',
+          'font-size': 9,
+          'ref-x': 4,
+          'ref-y': -6,
           'text-anchor': 'middle',
           'y-alignment': 'middle',
           'font-family': 'Arial, helvetica, sans-serif'

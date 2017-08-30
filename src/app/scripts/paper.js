@@ -709,7 +709,7 @@ window.ddd = [];
         attrs: {
           '.connection': {
             stroke: '#7bb4dc',
-            'stroke-width': 4
+            'stroke-width': 3
           }
         }
       });

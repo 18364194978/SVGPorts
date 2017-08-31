@@ -116,8 +116,86 @@ window.ddddata = {
 			Type: "rx"
 		},
 		ProjectOpticalcableGuid: '6664'
+	}, {
+		PhylinkId: "116",
+		Port1: {
+			DeviceId: "1111",
+			PortId: "A_11",
+			Type: "tx"
+		},
+		Port2: {
+			DeviceId: "3111",
+			PortId: "651",
+			Type: "rx"
+		},
+		ProjectOpticalcableGuid: '6665'
+	},{
+		PhylinkId: "117",
+		Port1: {
+			DeviceId: "1111",
+			PortId: "A_12",
+			Type: "tx"
+		},
+		Port2: {
+			DeviceId: "3111",
+			PortId: "652",
+			Type: "rx"
+		},
+		ProjectOpticalcableGuid: '6665'
+	},{
+		PhylinkId: "118",
+		Port1: {
+			DeviceId: "1111",
+			PortId: "A_14",
+			Type: "tx"
+		},
+		Port2: {
+			DeviceId: "3111",
+			PortId: "662",
+			Type: "rx"
+		},
+		ProjectOpticalcableGuid: '6665'
+	}, {
+		PhylinkId: "119",
+		Port1: {
+			DeviceId: "1111",
+			PortId: "A_11",
+			Type: "tx"
+		},
+		Port2: {
+			DeviceId: "3111",
+			PortId: "731",
+			Type: "rx"
+		},
+		ProjectOpticalcableGuid: '6665'
+	}, {
+		PhylinkId: "120",
+		Port1: {
+			DeviceId: "1111",
+			PortId: "A_12",
+			Type: "tx"
+		},
+		Port2: {
+			DeviceId: "3111",
+			PortId: "732",
+			Type: "rx"
+		},
+		ProjectOpticalcableGuid: '6665'
+	}, {
+		PhylinkId: "121",
+		Port1: {
+			DeviceId: "1111",
+			PortId: "A_14",
+			Type: "tx"
+		},
+		Port2: {
+			DeviceId: "3111",
+			PortId: "734",
+			Type: "rx"
+		},
+		ProjectOpticalcableGuid: '6665'
 	}],
-	main_panel: { //main_panel内无光配的device排在前面接着再是有光配的device
+	main_panel: { 
 		panelGuid: "panel_1",
 		panelName: "屏柜_1",
 		noLinkNum: 2,
@@ -127,19 +205,28 @@ window.ddddata = {
 			ports: [{
 				Guid: 'A_11',
 				ProbsName:'11',
-				toPortId: '651'
+				toPortIdMain: '651',//对应mian_panel有光配的端口
+				toPortIdOther: '731'//对应other_panel有光配的端口
 			}, {
 				Guid: 'A_12',
 				ProbsName:'12',
-				toPortId: '652'
+				toPortIdMain: '652',
+				toPortIdOther: '732'
 			}, {
 				Guid: 'A_13',
 				ProbsName:'13',
-				toPortId: '661'
+				toPortIdMain: '661',
+				toPortIdOther: '733'
 			}, {
 				Guid: 'A_14',
 				ProbsName:'14',
-				toPortId: '662'
+				toPortIdMain: '662',
+				toPortIdOther: '734'
+			}, {
+				Guid: 'A_15',
+				ProbsName:'15',
+				toPortIdMain: '',
+				toPortIdOther: ''
 			}]
 		}, {
 			Guid: 'B_1',
@@ -191,35 +278,58 @@ window.ddddata = {
 					Type: "TX"
 				}
 			]
-		}],
+		}
+		],
 
 		devicesWithGP: [{ //主装置信息
 			DevType: "IED",
-			Guid: "15",
+			Guid: "w_151",//图元id
+			deviceGuid:"w_15",//装置id
 			ProdevName: "线路保护5",
 			ProdevShortname: "PL2205A",
-			ports: [ //主装置内部端口信息
+			ports: [ //主装置有光配内部端口信息，只能存在一个端口
 				{
 					Guid: "651",
 					ProbsName: "B05-01 LC",
 					Type: "RX"
-				}, {
+				}
+			]
+		},{ //主装置信息
+			DevType: "IED",
+			Guid: "w_152",//图元id
+			deviceGuid:"w_15",//装置id
+			ProdevName: "线路保护5",
+			ProdevShortname: "PL2205A",
+			ports: [ //主装置内部端口信息
+				{
 					Guid: "652",
 					ProbsName: "B05-02 LC",
 					Type: "TX"
 				}
 			]
-		}, { //主装置信息
+		}
+		// , { //主装置信息
+		// 	DevType: "IED",
+		// 	Guid: "w_161",
+		// 	deviceGuid:"w_16",
+		// 	ProdevName: "线路保护6",
+		// 	ProdevShortname: "PL2204A",
+		// 	ports: [ //主装置内部端口信息
+		// 		{
+		// 			Guid: "661",
+		// 			ProbsName: "B06-01 LC",
+		// 			Type: "RX"
+		// 		}
+		// 	]
+		// }
+		,{ //主装置信息
 			DevType: "IED",
-			Guid: "16",
+			Guid: "w_162",
+			deviceGuid:"w_16",
 			ProdevName: "线路保护6",
 			ProdevShortname: "PL2204A",
 			ports: [ //主装置内部端口信息
 				{
-					Guid: "661",
-					ProbsName: "B06-01 LC",
-					Type: "RX"
-				}, {
 					Guid: "662",
 					ProbsName: "B06-02 LC",
 					Type: "TX"
@@ -227,11 +337,93 @@ window.ddddata = {
 			]
 		}]
 	},
-	other_panel: [{
+	other_panelWihtGP:[{
+		panelGuid:"panel_4",
+		panelName:"屏柜_4",
+		derection:"left",
+		Gport:[{
+			Guid:'gp_731',
+			toPortId:'731'
+		},{
+			Guid:'gp_732',
+			toPortId:'732'
+		},{
+			Guid:'gp_734',
+			toPortId:'734'
+		}],
+		devices: [{ //一个panel只能有一个device与port
+			DevType: "IED",
+			Guid: "171",
+			ProdevName: "线路保护7",
+			ProdevShortname: "PL2207A",
+			ports: [ 
+				{
+					Guid: "731",
+					ProbsName: "B07-01 LC",
+					Type: "TX"
+				}
+			]
+		}]
+	},{
+		panelGuid:"panel_5",
+		panelName:"屏柜_5",
+		derection:"left",
+		Gport:[{
+			Guid:'gp_731',
+			toPortId:'731'
+		},{
+			Guid:'gp_732',
+			toPortId:'732'
+		},{
+			Guid:'gp_734',
+			toPortId:'734'
+		}],
+		devices: [{ //一个panel只能有一个device与port
+			DevType: "IED",
+			Guid: "172",
+			ProdevName: "线路保护8",
+			ProdevShortname: "PL2208A",
+			ports: [ 
+				{
+					Guid: "732",
+					ProbsName: "B08-01 LC",
+					Type: "TX"
+				}
+			]
+		}]
+	},{
+		panelGuid:"panel_6",
+		panelName:"屏柜_6",
+		derection:"left",
+		Gport:[{
+			Guid:'gp_731',
+			toPortId:'731'
+		},{
+			Guid:'gp_732',
+			toPortId:'732'
+		},{
+			Guid:'gp_734',
+			toPortId:'734'
+		}],
+		devices: [{ //一个panel只能有一个device与port
+			DevType: "IED",
+			Guid: "174",
+			ProdevName: "线路保护9",
+			ProdevShortname: "PL2209A",
+			ports: [ 
+				{
+					Guid: "734",
+					ProbsName: "B09-01 LC",
+					Type: "TX"
+				}
+			]
+		}]
+	}],
+	other_panelWihtoutGP: [{
 		panelGuid: "panel_2",
 		panelName: "屏柜_2",
 		derection: 'left',
-		Gport: [{
+		Gport: [{//光配
 			Guid: 'gp_631',
 			toPortId: '631'
 		}, {
@@ -277,7 +469,7 @@ window.ddddata = {
 			// 		Port2: "未定义" //所在线路始发port2的id
 			// 	}]
 			// ],
-			ports: [ //主装置内部端口信息
+			ports: [ 
 				{
 					Guid: "631",
 					ProbsName: "B03-01 LC",
@@ -306,7 +498,7 @@ window.ddddata = {
 			Guid: 'gp_642',
 			toPortId: '642'
 		}],
-		devices: [{ //主装置信息
+		devices: [{ 
 			DevType: "IED",
 			Guid: "14",
 			ProdevName: "线路保护4",
@@ -339,7 +531,7 @@ window.ddddata = {
 			// 		Port2: "未定义" //所在线路始发port2的id
 			// 	}]
 			// ],
-			ports: [ //主装置内部端口信息
+			ports: [
 				{
 					Guid: "641",
 					ProbsName: "B04-01 LC",

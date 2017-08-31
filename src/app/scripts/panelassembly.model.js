@@ -3,7 +3,7 @@
 	if (ROOF === undefined) {
 		ROOF = window;
 	}
-	joint.shapes.devs.AtomicR = joint.shapes.devs.Model.extend({
+	joint.shapes.devs.AtomicR = joint.shapes.devs.Model.extend({ //main_panel的device
 		markup: `<g class="rotatable">
                 <g class="scalable">
                 </g>
@@ -87,7 +87,12 @@
 			} else {
 				porNumber = element.attributes.outPorts.length;
 			}
-			var portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 8;
+			var portHeight;
+			if (porNumber === 1) {
+				portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 0;
+			} else {
+				portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 8;
+			}
 			if (portHeight > element.attributes.attrs.rect.height) { //此处是加硬接线端口时，显示内部svg的最小高度，现在没有硬接线端口所以解除限制
 				element.attributes.attrs.rect.height = portHeight;
 				element.attributes.size.height = portHeight;
@@ -212,7 +217,7 @@
 			return attrs;
 		}
 	});
-	joint.shapes.devs.AtomicRP = joint.shapes.devs.Model.extend({
+	joint.shapes.devs.AtomicRP = joint.shapes.devs.Model.extend({ //main_panel内的光配组模型
 		markup: '<g class="rotatable">' +
 			'<g class="scalable">' +
 			'</g>' +
@@ -387,8 +392,8 @@
 						id: this.attributes.outPorts[index].Guid,
 						position: {
 							// x: this.attributes.size.width + this.attributes.position.x - 63,
-							x: this.attributes.position.x+10,
-							y: this.attributes.position.y + index * 36 + 40
+							x: this.attributes.position.x + 10,
+							y: this.attributes.position.y + index * 45 + 40
 						},
 						// porttts: devdesc + cjname + dkname + fcname + joname + dename,
 						z: window.assemblyz += 1,
@@ -501,7 +506,12 @@
 			} else {
 				porNumber = element.attributes.outPorts.length;
 			}
-			var portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 8;
+			var portHeight;
+			if (porNumber === 1) {
+				portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 0;
+			} else {
+				portHeight = (element.attributes.attrs['.inPorts rect'].height + 2) * porNumber + 8;
+			}
 			if (portHeight > element.attributes.attrs.rect.height) { //此处是加硬接线端口时，显示内部svg的最小高度，现在没有硬接线端口所以解除限制
 				element.attributes.attrs.rect.height = portHeight;
 				element.attributes.size.height = portHeight;
@@ -692,7 +702,7 @@
 					text: 'jigui',
 					'font-size': 14,
 					'ref-x': .5,
-					'ref-y': 17,
+					'ref-y': 5,
 					'text-anchor': 'middle',
 					'y-alignment': 'middle',
 					'font-family': 'Arial, helvetica, sans-serif'
@@ -730,12 +740,12 @@
 					height: 32
 
 				},
-				'text.title-class': { //此处控制外部svg的title的相对位置等
+				'text.title-class': { //此处控制panel名称相对位置
 					fill: '#538135',
 					text: 'jigui',
 					'font-size': 16,
 					'ref-x': .1,
-					'ref-y': 33,
+					'ref-y': 23,
 					'text-anchor': 'middle',
 					'y-alignment': 'middle',
 					'font-family': 'Arial, helvetica, sans-serif'
@@ -797,7 +807,6 @@
 			for (var m = 0; m < data.length; m++) {
 				dataGuid.push(data[m].Guid);
 			}
-			console.log(data, 'data');
 			if ($this.chidpositons === undefined) { //此处是获取当前最外层svg的坐标，供下面里层的svg准备
 				$this.chidpositons = {
 					x: $this.attributes.position.x,
@@ -871,7 +880,7 @@
 							'text-anchor': 'middle',
 							'y-alignment': 'middle',
 							'font-family': 'Arial, helvetica, sans-serif',
-							'ref-y': 15,
+							'ref-y': 5,
 							'ref-x': .5
 						},
 						'.inPorts rect': {
@@ -1120,7 +1129,7 @@
 			// if (this.attributes.mainpanel) {
 			if (this.attributes.childequipments !== null) {
 				console.log('00000');
-				this.childEquipments(this.attributes.childequipments.devices, this.attributes.childequipments.GPorts);
+				this.childEquipments(this.attributes.childequipments.devices, this.attributes.childequipments.GPorts, this.attributes.childequipments.devicesWithGP);
 			}
 			// if (this.attributes.devicesNolink !== undefined) {
 			// 	console.log('0000011');
@@ -1162,13 +1171,13 @@
 				this.findView(this.attributes.paper.paper).update();
 			}
 		},
-		childEquipments: function(data, GPorts) { //此处的data实际使用的是rx、tx那些port
+		childEquipments: function(data, GPorts, devicesWithGP) {
 			var $this = this;
 			var dataGuid = [];
 			for (var m = 0; m < data.length; m++) {
 				dataGuid.push(data[m].Guid);
 			}
-			console.log(data, 'data', GPorts, data.length);
+			console.log(data, 'data', GPorts, devicesWithGP);
 			if ($this.chidpositons === undefined) { //此处是获取当前最外层svg的坐标，供下面里层的svg准备
 				$this.chidpositons = {
 					x: $this.attributes.position.x,
@@ -1181,11 +1190,13 @@
 				y: 3950
 			};
 			var ChildArray = [];
+			var ChildWithGpArray = [];
 			var GPortArray = [];
+			window.getAllGPGuid = [];
 			var fdo;
 			var fdo2;
 			var inprt, ouprt, dsname, idvs, portsname;
-			for (var j = 0; j < data.length; j++) {
+			for (var j = 0; j < data.length; j++) { //main_panel内的无光配devices
 				if (data[j].DevId !== undefined) {
 					ChildArray = [];
 					continue;
@@ -1293,7 +1304,6 @@
 						}
 					}
 				});
-
 				ChildArray[j].addTo(window.tbgraph);
 				fdo = viewE(ChildArray[j].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
 				$this.chidpositons.parentWidth += fdo.height + 60;
@@ -1307,7 +1317,7 @@
 				this.attributes.size.height -= 20;
 			}
 			this.runder(ChildArray); //调用了上面的runder方法
-			for (var i = 0; i < GPorts.length; i++) {
+			for (var i = 0; i < GPorts.length; i++) { //main_panel内光配组
 				GPortArray[i] = new joint.shapes.devs.AtomicRP({
 					id: GPorts[i].Guid,
 					size: {
@@ -1324,21 +1334,136 @@
 						text: {
 							text: GPorts[i].portPanelName
 						},
-						'rect.parent-class':{
-							height:GPorts[i].ports.length*50
+						'rect.parent-class': {
+							height: GPorts[i].ports.length * 50
 						},
-						'.body':{
-							height:GPorts[i].ports.length*50
+						'.body': {
+							height: GPorts[i].ports.length * 50
 						}
 					}
 				});
 				GPortArray[i].addTo(window.tbgraph);
 				fdo2 = viewE(GPortArray[i].findView(window.tbpaper).$el[0]).bbox(true);
+				$this.chidpositons.parentWidth += fdo2.height + 60;
 				getHeight.y += fdo2.height + 0;
+				this.attributes.size.height += (GPorts[i].ports.length)*40;
+				this.attributes.attrs['.body'].height += (GPorts[i].ports.length)*40;
 				GPortArray[i].remove();
 				this.embed(GPortArray[i]);
+				$.each(GPorts[i].ports, function(index, ite) {
+					getAllGPGuid.push({
+						Guid: ite.Guid,
+						toPortIdMain: ite.toPortIdMain,
+						toPortIdOther: ite.toPortIdOther
+					});
+				})
 			}
 			this.runder(GPortArray);
+			console.log(getAllGPGuid, 'A_11');
+			$.each(getAllGPGuid, function(ind, ite2) { //main_panel内的有光配devices
+				var that = this;
+				for (var j = 0; j < devicesWithGP.length; j++) {
+					// inprt = data[j].port.leftPort !== null ? data[j].port.leftPort : [];
+					ouprt = devicesWithGP[j].port.rightPort
+					dsname = devicesWithGP[j].devicesInfo.ProdevName;
+					portsname = devicesWithGP[j].devicesInfo.Type;
+					idvs = devicesWithGP[j].devicesInfo.Guid;
+					if (ite2.toPortIdMain === devicesWithGP[j].devicesInfo.ports[0].Guid) {
+						let getY = window.ppp.findViewByModel(ite2.Guid).model.attributes.position.y;
+						let getX = window.ppp.findViewByModel(ite2.Guid).model.attributes.position.x;
+						ChildWithGpArray[j] = new joint.shapes.devs.AtomicR({
+							id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
+							size: { //此处定义的是内部svg的size
+								width: 232,
+								height: 0
+							},
+							position: { //根据上文准备的外部svg的位置定义内部svg的位置
+								x: $this.chidpositons.x + 200,
+								y: getY - 7
+							},
+							z: window.assemblyz += 1, //暂时不知道什么用，删除后无碍
+							// inPorts: inprt, //以下这一堆是配置数据，通过model.attribute可以获取
+							outPorts: ouprt,
+							devDatas: devicesWithGP[j],
+							// paper: that.attributes.paper,
+							panelData: $this.attributes.devDatas,
+							dsname: dsname,
+							portsname: portsname,
+							attrs: { //暂时无需改动
+								rect: {
+									fill: '#CBFFFF',
+									stroke: '#CBFFFF',
+									x: 0,
+									y: 0,
+									width: 232,
+									height: 0
+								},
+								'.htIconOut': {
+									x: 90,
+									y: 0
+								},
+								'.labels': {
+									text: '',
+									fill: '#41719C',
+									'font-size': 12,
+									'text-anchor': 'middle',
+									'y-alignment': 'middle',
+									'font-family': 'Arial, helvetica, sans-serif',
+									'ref-y': 15,
+									'ref-x': .5
+								},
+								'.inPorts rect': {
+									fill: '#4283bb',
+									stroke: '#665ba7',
+									x: -20,
+									y: 30,
+									width: 100,
+									height: 24
+								},
+								'.outPorts rect': {
+									fill: '#4283bb',
+									stroke: '#665ba7',
+									x: -82,
+									y: 30,
+									width: 100,
+									height: 24
+								},
+								'.inPorts text.port-label': {
+									width: 100,
+									height: 24,
+									fill: '#ffffff',
+									'font-size': 9,
+									x: -20,
+									'ref-x': 50,
+									'ref-y': 44,
+									'text-anchor': 'middle',
+									'y-alignment': 'middle',
+									'font-family': 'Arial, helvetica, sans-serif'
+
+								},
+								'.outPorts text.port-label': {
+									fill: '#ffffff',
+									'font-size': 9,
+									x: -82,
+									'ref-x': 50,
+									'ref-y': 44,
+									'text-anchor': 'middle',
+									'y-alignment': 'middle',
+									'font-family': 'Arial, helvetica, sans-serif'
+
+								}
+							}
+						});
+						ChildWithGpArray[j].addTo(window.tbgraph);
+						var fdooo = viewE(ChildWithGpArray[j].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
+						ChildWithGpArray[j].remove();
+					}
+				}
+			});
+			this.runder(ChildWithGpArray);
+			// var getPortY = window.ppp.findViewByModel(getAllGPGuid[0].Guid).model.attributes.position.y;
+			// this.attributes.size.height = $this.chidpositons.parentWidth + 80; //屏柜的height
+			// this.attributes.attrs['.body'].height = $this.chidpositons.parentWidth + 80; //屏柜的height
 		},
 		getPortAttrs: function(portName, index, total, selector, type) { //z暂时没用到，删除无碍
 

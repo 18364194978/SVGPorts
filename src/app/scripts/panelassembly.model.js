@@ -3,7 +3,7 @@
 	if (ROOF === undefined) {
 		ROOF = window;
 	}
-	joint.shapes.devs.AtomicR = joint.shapes.devs.Model.extend({ //main_panel的device
+	joint.shapes.devs.AtomicRPP = joint.shapes.devs.Model.extend({ //main_panel的device
 		markup: `<g class="rotatable">
                 <g class="scalable">
                 </g>
@@ -142,7 +142,7 @@
 						devdesc = '';
 					}
 					devdesc = '';
-					this.embedport.in[index] = new joint.shapes.basic.RectPort({
+					this.embedport.in[index] = new joint.shapes.basic.RectPortPP({
 						id: this.attributes.inPorts[index].Guid,
 						position: {
 							x: this.attributes.position.x,
@@ -172,25 +172,17 @@
 				attrs[portSelector]['ref-dx'] = 0;
 				if (this.attributes.outPorts.length !== 0) {
 					let cjname = this.attributes.outPorts[index].ProbsName;
-					let dkname = this.attributes.outPorts[index].ProportName + '-';
-					let fcname = this.attributes.outPorts[index].ProportFunctiontype + '-';
-					let joname = this.attributes.outPorts[index].ProportJointtype + '-';
-					let dename = this.attributes.outPorts[index].ProportDesc;
-					let devdesc = this.attributes.outPorts[index].ProbsDesc + '-';
-					let getType = this.attributes.outPorts[index].Type;
 					if (this.attributes.outPorts[index].ProbsName === '') {
 						cjname = '';
-						devdesc = '';
 					}
-					devdesc = '';
-					this.embedport.out[index] = new joint.shapes.basic.RectPort({
+					this.embedport.out[index] = new joint.shapes.basic.RectPortPP({
 						id: this.attributes.outPorts[index].Guid,
 						position: {
 							// x: this.attributes.size.width + this.attributes.position.x - 63,
 							x: this.attributes.position.x,
 							y: this.attributes.position.y + index * 36 - 30
 						},
-						porttts: devdesc + cjname + dkname + fcname + joname + dename,
+						porttts: cjname,
 						z: window.assemblyz += 1,
 						size: {
 							width: 100,
@@ -199,12 +191,6 @@
 						devDatas: this.attributes.outPorts[index],
 						panelData: this.attributes.panelData,
 						attrs: {
-							// text: {
-							// 	text: joint.util.breakText(cjname + dkname + fcname + joname, {
-							// 		width: 100,
-							// 		height: 24
-							// 	})
-							// }
 							text: {
 								text: cjname
 							}
@@ -551,23 +537,16 @@
 			if (selector === '.inPorts') {
 				if (this.attributes.inPorts.length !== 0) {
 					let cjname = this.attributes.inPorts[index].ProbsName;
-					let dkname = this.attributes.inPorts[index].ProportName + '-';
-					let fcname = this.attributes.inPorts[index].ProportFunctiontype + '-';
-					let joname = this.attributes.inPorts[index].ProportJointtype + '-';
-					let dename = this.attributes.inPorts[index].ProportDesc;
-					let devdesc = this.attributes.inPorts[index].ProbsDesc;
 					if (this.attributes.inPorts[index].ProbsName === '') {
 						cjname = '';
-						devdesc = '';
 					}
-					devdesc = '';
 					this.embedport.in[index] = new joint.shapes.basic.RectPortP({
 						id: this.attributes.inPorts[index].Guid,
 						position: {
 							x: this.attributes.position.x + 160,
 							y: this.attributes.position.y + index * 36 - 30
 						},
-						porttts: devdesc + cjname + dkname + fcname + joname + dename,
+						porttts: cjname,
 						z: window.assemblyz += 1,
 						size: {
 							width: 100,
@@ -599,7 +578,7 @@
 						devdesc = '';
 					}
 					devdesc = '';
-					this.embedport.out[index] = new joint.shapes.basic.RectPort({
+					this.embedport.out[index] = new joint.shapes.basic.RectPortPP({
 						id: this.attributes.outPorts[index].Guid,
 						position: {
 							// x: this.attributes.size.width + this.attributes.position.x - 63,
@@ -615,12 +594,6 @@
 						devDatas: this.attributes.outPorts[index],
 						panelData: this.attributes.panelData,
 						attrs: {
-							// text: {
-							// 	text: joint.util.breakText(cjname + dkname + fcname + joname, {
-							// 		width: 100,
-							// 		height: 24
-							// 	})
-							// }
 							text: {
 								text: cjname
 							}
@@ -658,7 +631,7 @@
 			elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
 		}
 	});
-	joint.shapes.devs.CabinetTP = joint.shapes.devs.Model.extend({
+	joint.shapes.devs.CabinetTP = joint.shapes.devs.Model.extend({//other_panel
 		markup: '<g class="rotatable">' +
 			'<g class="scalable">' +
 			'</g>' +
@@ -972,7 +945,7 @@
 				this.embedport.out = [];
 			}
 			if (this.attributes.inPorts.length !== 0) {
-				this.embedport.in[index] = new joint.shapes.basic.GPPort({
+				this.embedport.in[index] = new joint.shapes.basic.GPPortP({
 					position: {
 						x: this.attributes.position.x + 38,
 						y: this.attributes.position.y + index * 26 + 93
@@ -993,7 +966,7 @@
 			if (selector === '.outPorts') {
 				attrs[portSelector]['ref-dx'] = 0;
 				if (this.attributes.outPorts.length !== 0) {
-					this.embedport.out[index] = new joint.shapes.basic.GPPort({
+					this.embedport.out[index] = new joint.shapes.basic.GPPortP({
 						position: {
 							x: this.attributes.size.width + this.attributes.position.x - 50,
 							y: this.attributes.position.y + index * 26 + 93
@@ -1221,7 +1194,7 @@
 					idvs = data[j].Guid;
 				}
 				var getTitlePosi = (data.length - 1) * 10;
-				ChildArray[j] = new joint.shapes.devs.AtomicR({
+				ChildArray[j] = new joint.shapes.devs.AtomicRPP({
 					id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 					size: { //此处定义的是内部svg的size
 						width: 232,
@@ -1371,7 +1344,7 @@
 					if (ite2.toPortIdMain === devicesWithGP[j].devicesInfo.ports[0].Guid) {
 						let getY = window.ppp.findViewByModel(ite2.Guid).model.attributes.position.y;
 						let getX = window.ppp.findViewByModel(ite2.Guid).model.attributes.position.x;
-						ChildWithGpArray[j] = new joint.shapes.devs.AtomicR({
+						ChildWithGpArray[j] = new joint.shapes.devs.AtomicRPP({
 							id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 							size: { //此处定义的是内部svg的size
 								width: 232,
@@ -1461,9 +1434,6 @@
 				}
 			});
 			this.runder(ChildWithGpArray);
-			// var getPortY = window.ppp.findViewByModel(getAllGPGuid[0].Guid).model.attributes.position.y;
-			// this.attributes.size.height = $this.chidpositons.parentWidth + 80; //屏柜的height
-			// this.attributes.attrs['.body'].height = $this.chidpositons.parentWidth + 80; //屏柜的height
 		},
 		getPortAttrs: function(portName, index, total, selector, type) { //z暂时没用到，删除无碍
 
@@ -1497,7 +1467,7 @@
 				this.embedport.out = [];
 			}
 			if (this.attributes.inPorts.length !== 0) {
-				this.embedport.in[index] = new joint.shapes.basic.GPPort({
+				this.embedport.in[index] = new joint.shapes.basic.GPPortP({
 					position: {
 						x: this.attributes.position.x + 38,
 						y: this.attributes.position.y + index * 26 + 93
@@ -1518,7 +1488,7 @@
 			if (selector === '.outPorts') {
 				attrs[portSelector]['ref-dx'] = 0;
 				if (this.attributes.outPorts.length !== 0) {
-					this.embedport.out[index] = new joint.shapes.basic.GPPort({
+					this.embedport.out[index] = new joint.shapes.basic.GPPortP({
 						position: {
 							x: this.attributes.size.width + this.attributes.position.x - 50,
 							y: this.attributes.position.y + index * 26 + 93

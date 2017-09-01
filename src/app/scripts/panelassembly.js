@@ -54,8 +54,7 @@
 					console.log(data);
 					var haveLinkDevice = [];
 					data.main_panel.isZ = 1;
-					$.each(data.main.Connection, function(index, item) { //ping
-						// mainPanel.rightLink.push(item);
+					$.each(data.main.Connection, function(index, item) { 
 						if (item.Port1.DeviceId === undefined) {
 							if (item.Port1.NetswitchId) {
 								item.Port1.DeviceId = item.Port1.NetswitchId;
@@ -102,13 +101,6 @@
 						for (var fcopy in item) {
 							shebei.devicesInfo[fcopy] = item[fcopy];
 						}
-
-						// if ($.inArray(item2.Guid, haveLinkDevice) !== -1) {//ping
-						// 	console.log('1111');
-						// 	mainPanel.devices.push(shebei);
-						// } else {
-						// 	mainPanel.noLinkDevices.push(item2);
-						// }
 						mainPanel.devices.push(shebei);
 					});
 					$.each(data.main.main_panel.devicesWithGP, function(index, item) {
@@ -132,9 +124,8 @@
 						}
 						mainPanel.devicesWithGP.push(shebei);
 					});
-					// mainPanel.GPorts = data.main.main_device.Gport;//ping
-					// mainPanel.LPorts = data.main.main_device.Lport;//ping
-					// mainPanel.LineConnect = data.main.LineConnect;//ping
+					mainPanel.LPorts = data.main.main_panel.Lport;
+					mainPanel.LineConnect = data.main.LineConnect;
 					mainPanel.GPorts = data.main.main_panel.Gport;
 					console.log(mainPanel, 'mainpanel');
 					$this.creatModel(data, mainPanel, paper);
@@ -168,7 +159,6 @@
 				outPorts: [],
 				devDatas: data.main.main_panel,
 				childequipments: finddata,
-				// devicesNolink: finddata.noLinkDevices,
 				devicesNolink: finddata,
 				paper: paper,
 				mainpanel: true,
@@ -275,7 +265,6 @@
 				$.each(window.nowAssemblylink, function(index, item) { //添加所有devices连接线
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
-				// window.paper.conNect2();//ping
 				if (data.main.other_panelWihtoutGP.length !== 0) { //遍历添加other_panel无光配装置光配点
 					var portGuid = [];
 					$.each(data.main.other_panelWihtoutGP, function(index, item) {
@@ -292,7 +281,7 @@
 								if (item.derection === 'left') {
 									let getX = window.ppp.findViewByModel(item.Guid).model.attributes.position.x + 120;
 									let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 34;
-									let getGport = new joint.shapes.basic.GPPort({
+									let getGport = new joint.shapes.basic.GPPortP({
 										portRemove: 1,
 										id: item2.Guid,
 										// projectOpticalcableGuid: projectOpticalcableGuid,
@@ -344,7 +333,7 @@
 								if (item.derection === 'left') {
 									let getX = window.ppp.findViewByModel(item.Guid).model.attributes.position.x + 120;
 									let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 34;
-									let getGport = new joint.shapes.basic.GPPort({
+									let getGport = new joint.shapes.basic.GPPortP({
 										portRemove: 1,
 										id: item2.Guid,
 										// projectOpticalcableGuid: projectOpticalcableGuid,
@@ -397,55 +386,54 @@
 			$('.infosig-group').show();
 			$('.infosig-group').find('button').trigger('click');
 			paper.resizePaperScroller();
-			// $.each(finddata.LPorts, function(index, item) { //光缆的port点ping
-			// 	$.each(item, function(index2, item2) {
-			// 		var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x + 280 + (index - 1) * 45;
-			// 		var getY = window.ppp.findViewByModel(item2.Port1).model.attributes.position.y + 7;
-			// 		var LinePorts = new joint.shapes.basic.LPPort({
-			// 			portRemove: 1,
-			// 			id: item2.Guid,
-			// 			// projectOpticalcableGuid: projectOpticalcableGuid,
-			// 			position: {
-			// 				x: getX,
-			// 				y: getY
-			// 			},
-			// 			size: {
-			// 				width: 10,
-			// 				height: 10
-			// 			},
-			// 			attrs: {
-			// 				text: {
-			// 					text: item2.Guid,
-			// 					'font-size': 9,
-			// 					stroke: '',
-			// 					fill: '#306796',
-			// 					'ref-y': -10
-			// 				},
-			// 				rect: {
-			// 					width: 13,
-			// 					height: 13,
-			// 					rx: 13,
-			// 					ry: 13,
-			// 					fill: 'white',
-			// 					stroke: 'red',
-			// 					'stroke-dasharray': '3,4'
-			// 				}
-			// 			}
-			// 		});
-			// 		LinePorts.addTo(window.paper.graph);
-			// 	});
-			// });
+			$.each(finddata.LPorts, function(index, item) { //光缆的port点
+				$.each(item, function(index2, item2) {
+					var getX = window.ppp.findViewByModel(item2.Port1).model.attributes.position.x -120 - (index) * 45;
+					var getY = window.ppp.findViewByModel(item2.Port1).model.attributes.position.y -1;
+					var LinePorts = new joint.shapes.basic.LPPortP({
+						portRemove: 1,
+						id: item2.Guid,
+						position: {
+							x: getX,
+							y: getY
+						},
+						size: {
+							width: 10,
+							height: 10
+						},
+						attrs: {
+							text: {
+								text: item2.Guid,
+								'font-size': 9,
+								stroke: '',
+								fill: '#306796',
+								'ref-y': -10
+							},
+							rect: {
+								width: 13,
+								height: 13,
+								rx: 13,
+								ry: 13,
+								fill: 'white',
+								stroke: 'red',
+								'stroke-dasharray': '3,4'
+							}
+						}
+					});
+					LinePorts.addTo(window.paper.graph);
+				});
+			});
 			var getLinkConnectId = [];
-			// $.each(finddata.LineConnect, function(index, item) { //光缆port点的连接线ping
-			// 	var vie = 0;
-			// 	if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
-			// 		getLinkConnectId.push(item.LinkConnectId);
-			// 		vie = 1;
-			// 		window.paper.LineConnect(item, vie);
-			// 	} else {
-			// 		window.paper.LineConnect(item, vie);
-			// 	}
-			// });
+			$.each(finddata.LineConnect, function(index, item) { //光缆port点的连接线
+				var vie = 0;
+				if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
+					getLinkConnectId.push(item.LinkConnectId);
+					vie = 1;
+					window.paper.LineConnect(item, vie);
+				} else {
+					window.paper.LineConnect(item, vie);
+				}
+			});
 		}
 	}];
 })(window.jQuery, window.joint, window._, window.parent.window, window.V, window.GFC);

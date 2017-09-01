@@ -3,7 +3,7 @@
   if (ROOF === undefined) {
     ROOF = window;
   }
-  joint.shapes.basic.GPPort = joint.shapes.basic.Generic.extend({//other_panel光配端子
+  joint.shapes.basic.GPPortP = joint.shapes.basic.Generic.extend({//other_panel光配端子
     markup: '<g class="rotatable" fill="none"><g class="scalable"></g><text class="port-label"/><circle /><rect /></g>',
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
@@ -149,7 +149,7 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
-  joint.shapes.basic.LPPort = joint.shapes.basic.Generic.extend({//光缆的port点
+  joint.shapes.basic.LPPortP = joint.shapes.basic.Generic.extend({//光缆的port点
     markup: ['<g class="rotatable" fill="none">',
     '<g class="scalable"></g>',
     // '<text class="port-label"/>',//此处为文字展示，先屏蔽
@@ -257,7 +257,7 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
-  joint.shapes.basic.RectPort = joint.shapes.basic.Generic.extend({
+  joint.shapes.basic.RectPortPP = joint.shapes.basic.Generic.extend({
     markup: '<g class="rotatable">'+
     '<g class="scalable"></g>'+
     '<rect />'+
@@ -387,7 +387,7 @@
               if (mathy < 48 && (port1Dev.attributes.type === 'basic.RectPort' && port2Dev.attributes.type === 'basic.RectPort')) {
                 gppy += 35
               }
-              let gpp = new joint.shapes.basic.GPPort({
+              let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
                 position: { x: 515 + 4000, y: gppy + 35 },
@@ -431,7 +431,7 @@
                 qy += 35
               }
               directionGport = !directionGport;
-              let gpp = new joint.shapes.basic.GPPort({
+              let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
                 position: { x: qx, y: qy },
@@ -919,7 +919,7 @@
               if (mathy < 48 && (port1Dev.attributes.type === 'basic.RectPort' && port2Dev.attributes.type === 'basic.RectPort')) {
                 gppy += 35
               }
-              let gpp = new joint.shapes.basic.GPPort({
+              let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
                 position: { x: 515 + 4000, y: gppy + 35 },
@@ -963,7 +963,7 @@
                 qy += 35
               }
               directionGport = !directionGport;
-              let gpp = new joint.shapes.basic.GPPort({
+              let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
                 position: { x: qx, y: qy },
@@ -1321,8 +1321,6 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
-
-
   joint.shapes.basic.RectPortView = joint.dia.ElementView.extend({
     update: function(cell, renderingOnlyAttrs) {
       let elementTitls = this.$el.find('.content-x');
@@ -1486,7 +1484,7 @@
           } else {
             projectOpticalcableGuid = projectOpticalcableGuid[0];
           }
-          let gpp = new joint.shapes.basic.GPPort({
+          let gpp = new joint.shapes.basic.GPPortP({
             portRemove: 1,
             id: gppdata.Guid,
             projectOpticalcableGuid: projectOpticalcableGuid,
@@ -1542,7 +1540,7 @@
           } else {
             projectOpticalcableGuid = projectOpticalcableGuid[0];
           }
-          let gpp2 = new joint.shapes.basic.GPPort({
+          let gpp2 = new joint.shapes.basic.GPPortP({
             id: gppdata2.Guid,
             position: { x: 120, y: 35 },
             size: { width: 10, height: 10 },

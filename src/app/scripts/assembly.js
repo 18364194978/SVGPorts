@@ -738,30 +738,10 @@
 				// });
 				$.each(data.main.other_device, function() {
 					let arsgj = 0;
-					// $.each(this.devices, function() {//暂时屏蔽
-					// 	let selfodev = this;
-					// 	if (this.ports === null || this.ports.length === 0) {
-					// 		if (data.SignalFlows !== null) {
-					// 			let filtersig = _.filter(data.SignalFlows, function(gjfl) {
-					// 				return (gjfl.ProjectReceivedev === selfodev.Guid || gjfl.ProjectSenddev === selfodev.Guid);
-					// 			});
-					// 			if (filtersig.length === 0) {
-					// 				arsgj = 1;
-					// 				return false;
-					// 			} else {
-					// 				return true;
-					// 			}
-					// 		} else {
-					// 			arsgj = 1;
-					// 			return false;
-					// 		}
-					// 	}
-					// });
 					if (arsgj === 1) {
 						this.devices = [];
 					}
 				});
-
 				if (data.main.other_device !== null) {
 					for (var i = 0; i < data.main.other_device.length; i++) {
 						if (data.main.other_device[i].ports.length === 0) {
@@ -788,9 +768,6 @@
 							paper: paper,
 							mainpanel: false,
 							attrs: {
-								// 'text.title-class': {
-								// 	text: data.main.other_panel[i].PanelName
-								// }
 								'text.title-class': {
 									text: "PL2201A智能终端"
 								},
@@ -807,7 +784,6 @@
 					}
 				}
 				$.each(window.nowAssemblylink, function(index, item) {
-					// console.log(window.nowAssemblylink, 'window.nowAssemblylink');
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
 				window.paper.conNect2();

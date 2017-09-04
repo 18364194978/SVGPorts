@@ -330,7 +330,6 @@
 
 		},
 		getPortAttrs: function(portName, index, total, selector, type) { //此处为展示硬接线port与线的方法，后期用到可以研究下，此时可以先屏蔽
-			console.log('******');
 			var attrs = {};
 			var portClass = 'port' + index;
 			var portSelector = selector + '>.' + portClass;
@@ -729,15 +728,9 @@
 		initialize: function() { //将device的数据init进来
 			joint.shapes.devs.Model.prototype.initialize.apply(this, arguments);
 			this.on('change:attrs', this.bindAutoSize(this));
-			// if (this.attributes.mainpanel) {
 			if (this.attributes.childequipments !== null) {
-				console.log('00000');
 				this.childEquipments(this.attributes.childequipments);
 			}
-			// if (this.attributes.devicesNolink !== undefined) {
-			// 	console.log('0000011');
-			// 	this.childEquipments(this.attributes.devicesNolink.noLinkDevices);
-			// }
 		},
 		bindAutoSize: function(element) { //同上面的bindautosize，暂时无用可以删除测试
 			var width = element.attributes.attrs['rect.title-class'].width;
@@ -1099,9 +1092,7 @@
 		initialize: function() { //将device的数据init进来
 			joint.shapes.devs.Model.prototype.initialize.apply(this, arguments);
 			this.on('change:attrs', this.bindAutoSize(this));
-			// if (this.attributes.mainpanel) {
 			if (this.attributes.childequipments !== null) {
-				console.log('00000');
 				this.childEquipments(this.attributes.childequipments.devices, this.attributes.childequipments.GPorts, this.attributes.childequipments.devicesWithGP);
 			}
 			// if (this.attributes.devicesNolink !== undefined) {

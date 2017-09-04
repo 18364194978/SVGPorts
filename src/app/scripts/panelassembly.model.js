@@ -605,7 +605,7 @@
 			return attrs;
 		}
 	});
-	joint.shapes.devs.AtomicRView = joint.shapes.devs.ModelView.extend({
+	joint.shapes.devs.AtomicRPView = joint.shapes.devs.ModelView.extend({
 		renderPorts: function() {
 			var $inPorts = this.$('.inPorts').empty(); //这一堆暂时不确定作用，但删除后不碍事
 			var $outPorts = this.$('.outPorts').empty();
@@ -1502,5 +1502,5 @@
 			return attrs;
 		}
 	});
-	joint.shapes.devs.CabinetView = joint.shapes.devs.ModelView;
+	joint.shapes.devs.CabinetViewP = joint.shapes.devs.ModelView;
 })(window.jQuery, window.joint, window._, window.V, window.parent.window, window.GFC, window.bootbox);

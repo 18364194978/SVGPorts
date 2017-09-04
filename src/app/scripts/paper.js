@@ -802,7 +802,6 @@ window.ddd = [];
         var getX = window.a[i].attributes.position.x;
         var getY = window.a[i].attributes.position.y + 3;
         var getId = window.a[i].id;
-        console.log(getY, getY, getId, 'getIdgetIdgetId');
         let getGport = new joint.shapes.basic.GPPort({
           portRemove: 1,
           id: getId,

@@ -9,7 +9,7 @@
       type: 'basic.GPPort',
       rightMenu: {
         centerMenu: {
-          name: '释放', //释放光配
+          name: '去光配', //释放光配
           fc: function(cellView) {
             var ViewModel = cellView.model;
             if (ViewModel.attributes.projectOpticalcableGuid === undefined) {
@@ -40,7 +40,7 @@
           }
         },
         otherMenu: [{
-          name: '上移',
+          name: '依次上移',
           fc: function(cellView) {
             var ViewModel = cellView.model;
             $('.modal-body').text('确认上移该光配?');
@@ -61,7 +61,7 @@
             });
           }
         }, {
-          name: '下移',
+          name: '依次下移',
           fc: function(cellView) {
             var ViewModel = cellView.model;
             $('.modal-body').text('确认下移该光配?');

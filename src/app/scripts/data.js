@@ -185,9 +185,9 @@ window.ddddata = {
 			Type: "rx"
 		}
 	}],
-	main_panel: {//main_panel
-		panelGuid: "panel_1",//panel的id
-		panelName: "屏柜_1",//展示名称
+	main_panel: { //main_panel
+		panelGuid: "panel_1", //panel的id
+		panelName: "屏柜_1", //展示名称
 		Lport: [ //光缆端子信息，每一条光缆分为一个数组
 			[{
 				Guid: 'l_111', //光缆端子的id
@@ -405,7 +405,7 @@ window.ddddata = {
 			Guid: 'gp_734',
 			toPortId: '734'
 		}],
-		devices: [{ 
+		devices: [{
 			DevType: "IED",
 			Guid: "172",
 			ProdevName: "线路保护8",
@@ -508,3 +508,140 @@ window.ddddata = {
 		}]
 	}],
 };
+window.treedata = [{
+	Guid:'111',
+	Name:'111_q',
+	child:[{
+		Guid:'111a',
+		Name:'111a_q',
+		child:[{
+			Name:'111aa_q',
+			Guid:'111aa'
+		},{
+			Name:'112aa_q',
+			Guid:'112aa'
+		}]
+	},{
+		Guid:'112a',
+		Name:'112a_q',
+		child:[{
+			Name:'1112aa_q',
+			Guid:'1112aa'
+		},{
+			Name:'1122aa_q',
+			Guid:'1122aa'
+		}]
+	},{
+		Guid:'1113a',
+		Name:'1113a_q',
+		child:[{
+			Name:'1113aa_q',
+			Guid:'1113aa'
+		},{
+			Name:'1123aa_q',
+			Guid:'1123aa'
+		}]
+	}]
+}, {
+	Guid:'1112',
+	Name:'1112_q',
+	child:[{
+		Guid:'1112a',
+		Name:'1112a_q',
+		child:[{
+			Name:'1112aa_q',
+			Guid:'1112aa'
+		},{
+			Name:'1122aa_q',
+			Guid:'1122aa'
+		}]
+	},{
+		Guid:'1122a',
+		Name:'1122a_q',
+		child:[{
+			Name:'11122aa_q',
+			Guid:'11122aa'
+		},{
+			Name:'11222aa_q',
+			Guid:'11222aa'
+		}]
+	},{
+		Guid:'11132a',
+		Name:'11132a_q',
+		child:[{
+			Name:'11132aa_q',
+			Guid:'11132aa'
+		},{
+			Name:'11232aa_q',
+			Guid:'11232aa'
+		}]
+	}]
+}, {
+	Guid:'1113',
+	Name:'1113_q',
+	child:[{
+		Guid:'1311a',
+		Name:'1131a_q',
+		child:[{
+			Name:'1311aa_q',
+			Guid:'1131aa'
+		},{
+			Name:'1123aa_q',
+			Guid:'112a3a'
+		}]
+	},{
+		Guid:'112a3',
+		Name:'112a_3q',
+		child:[{
+			Name:'11312aa_q',
+			Guid:'11132aa'
+		},{
+			Name:'11223aa_q',
+			Guid:'1122a3a'
+		}]
+	},{
+		Guid:'1113a3',
+		Name:'1113a_3q',
+		child:[{
+			Name:'11133aa_q',
+			Guid:'11133aa'
+		},{
+			Name:'1123a3a_q',
+			Guid:'1123aa3'
+		}]
+	}]
+}, {
+	Guid:'1141',
+	Name:'1114_q',
+	child:[{
+		Guid:'4111a',
+		Name:'1411a_q',
+		child:[{
+			Name:'1411aa_q',
+			Guid:'1141aa'
+		},{
+			Name:'1124aa_q',
+			Guid:'112a4a'
+		}]
+	},{
+		Guid:'112a4',
+		Name:'112a_4q',
+		child:[{
+			Name:'11412aa_q',
+			Guid:'11142aa'
+		},{
+			Name:'11224aa_q',
+			Guid:'1122a4a'
+		}]
+	},{
+		Guid:'11134a',
+		Name:'1113a4_q',
+		child:[{
+			Name:'11413aa_q',
+			Guid:'11143aa'
+		},{
+			Name:'11234aa_q',
+			Guid:'1123a4a'
+		}]
+	}]
+}];

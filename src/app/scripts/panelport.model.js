@@ -3,13 +3,13 @@
   if (ROOF === undefined) {
     ROOF = window;
   }
-  joint.shapes.basic.GPPortP = joint.shapes.basic.Generic.extend({//other_panel光配端子
+  joint.shapes.basic.GPPortP = joint.shapes.basic.Generic.extend({ //other_panel光配端子
     markup: '<g class="rotatable" fill="none"><g class="scalable"></g><text class="port-label"/><circle /><rect /></g>',
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
       rightMenu: {
         centerMenu: {
-          name: '释放', //释放光配
+          name: '去光配', //释放光配
           fc: function(cellView) {
             var ViewModel = cellView.model;
             if (ViewModel.attributes.projectOpticalcableGuid === undefined) {
@@ -40,7 +40,7 @@
           }
         },
         otherMenu: [{
-          name: '上移',
+          name: '依次上移',
           fc: function(cellView) {
             var ViewModel = cellView.model;
             $('.modal-body').text('确认上移该光配?');
@@ -61,7 +61,7 @@
             });
           }
         }, {
-          name: '下移',
+          name: '依次下移',
           fc: function(cellView) {
             var ViewModel = cellView.model;
             $('.modal-body').text('确认下移该光配?');
@@ -106,24 +106,21 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
-  joint.shapes.basic.GPMainPort = joint.shapes.basic.Generic.extend({//main_panel光配端子
+  joint.shapes.basic.GPMainPort = joint.shapes.basic.Generic.extend({ //main_panel光配端子
     markup: '<g class="rotatable" fill="none"><g class="scalable"></g><text class="port-label"/><circle /><rect /></g>',
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
       rightMenu: {
         centerMenu: {
           name: '释放', //释放光配
-          fc: function(cellView) {
-          }
+          fc: function(cellView) {}
         },
         otherMenu: [{
           name: '上移',
-          fc: function(cellView) {
-          }
+          fc: function(cellView) {}
         }, {
           name: '下移',
-          fc: function(cellView) {
-          }
+          fc: function(cellView) {}
         }]
       },
       attrs: {
@@ -149,12 +146,12 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
-  joint.shapes.basic.LPPortP = joint.shapes.basic.Generic.extend({//光缆的port点
+  joint.shapes.basic.LPPortP = joint.shapes.basic.Generic.extend({ //光缆的port点
     markup: ['<g class="rotatable" fill="none">',
-    '<g class="scalable"></g>',
-    // '<text class="port-label"/>',//此处为文字展示，先屏蔽
-    '<circle />',
-    '<rect /></g>'
+      '<g class="scalable"></g>',
+      // '<text class="port-label"/>',//此处为文字展示，先屏蔽
+      '<circle />',
+      '<rect /></g>'
     ].join(''),
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
@@ -258,16 +255,16 @@
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
   joint.shapes.basic.RectPortPP = joint.shapes.basic.Generic.extend({
-    markup: '<g class="rotatable">'+
-    '<g class="scalable"></g>'+
-    '<rect />'+
-    '<text class="port-label"/>'+
-    '<foreignObject width="24" height="24" x="-20" y="30" class="htIconOut">'+
-    '<div xmlns="http://www.w3.org/1999/xhtml" height="24px" class="iconBodys" style="background-color:#00B0F0;text-align:center;">'+
-    '<a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: 12;display:inline-block;width:24px;height:24px;line-height: 24px;text-decoration: none;">RX</a>'+
-    '</div>'+
-    '</foreignObject>'+
-    '</g>',
+    markup: '<g class="rotatable">' +
+      '<g class="scalable"></g>' +
+      '<rect />' +
+      '<text class="port-label"/>' +
+      '<foreignObject width="24" height="24" x="-20" y="30" class="htIconOut">' +
+      '<div xmlns="http://www.w3.org/1999/xhtml" height="24px" class="iconBodys" style="background-color:#00B0F0;text-align:center;">' +
+      '<a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: 12;display:inline-block;width:24px;height:24px;line-height: 24px;text-decoration: none;">RX</a>' +
+      '</div>' +
+      '</foreignObject>' +
+      '</g>',
     defaults: joint.util.deepSupplement({
       type: 'basic.RectPort',
       showTopanel: function(cellView) {
@@ -286,7 +283,9 @@
           $.each(window.outherPanels.other_panel, function(palindex, pal) {
             let istt = false;
             $.each(pal.devices, function(indexdv, datadv) {
-              if (_.findWhere(datadv.ports, { Guid: tpoid }) !== undefined) {
+              if (_.findWhere(datadv.ports, {
+                  Guid: tpoid
+                }) !== undefined) {
                 nuwpanel.devices = [];
                 nuwpanel.devices.push(datadv);
                 nuwpanel.PanelGuid = pal.PanelGuid;
@@ -295,8 +294,12 @@
                 istt = true;
                 return false;
               }
-              if (_.findWhere(datadv.ports, { Guid: tpoid }) === undefined) {
-                if (cellView.model.get('gpportId') !== undefined && _.findWhere(datadv.ports, { Guid: cellView.model.get('gpportId') }) !== undefined) {
+              if (_.findWhere(datadv.ports, {
+                  Guid: tpoid
+                }) === undefined) {
+                if (cellView.model.get('gpportId') !== undefined && _.findWhere(datadv.ports, {
+                    Guid: cellView.model.get('gpportId')
+                  }) !== undefined) {
                   nuwpanel.devices = [];
                   nuwpanel.devices.push(datadv);
                   nuwpanel.PanelGuid = pal.PanelGuid;
@@ -336,8 +339,14 @@
             z: window.assemblyz += 1,
             id: nuwpanel.PanelGuid,
             portRemove: 1,
-            position: { x: 590 + 4000 + 150, y: dvdpostion.attributes.position.y - 50 },
-            size: { width: 393, height: 200 },
+            position: {
+              x: 590 + 4000 + 150,
+              y: dvdpostion.attributes.position.y - 50
+            },
+            size: {
+              width: 393,
+              height: 200
+            },
             inPorts: [],
             outPorts: [],
             devDatas: nuwpanel,
@@ -345,7 +354,9 @@
             paper: window.paper,
             mainpanel: false,
             attrs: {
-              'text.title-class': { text: nuwpanel.PanelName }
+              'text.title-class': {
+                text: nuwpanel.PanelName
+              }
             }
           });
           GFC.noUseF(otherpanelv);
@@ -390,8 +401,14 @@
               let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
-                position: { x: 515 + 4000, y: gppy + 35 },
-                size: { width: 10, height: 10 },
+                position: {
+                  x: 515 + 4000,
+                  y: gppy + 35
+                },
+                size: {
+                  width: 10,
+                  height: 10
+                },
                 devDatas: itemzjd.portZj,
                 attrs: {
                   text: {
@@ -434,8 +451,14 @@
               let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
-                position: { x: qx, y: qy },
-                size: { width: 10, height: 10 },
+                position: {
+                  x: qx,
+                  y: qy
+                },
+                size: {
+                  width: 10,
+                  height: 10
+                },
                 devDatas: itemzjd.portZj,
                 attrs: {
                   text: {
@@ -480,17 +503,31 @@
               if (sigdata.ProjectLinktype === 'Receive') {
                 selectt = '.sig4';
                 selects = '.sig2';
-                if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                if (_.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectReceivedev
+                  }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectSenddev
+                  }) !== undefined) {
                   selectt = '.sig1';
                   selects = '.sig2';
                   let recg = window.paper.graph.getCell(sigdata.ProjectReceivedev);
                   let seng = window.paper.graph.getCell(sigdata.ProjectSenddev);
-                  vertices = [{ x: seng.attributes.position.x - stepf, y: seng.attributes.position.y }, { x: recg.attributes.position.x - stepf, y: recg.attributes.position.y + recg.attributes.size.height }];
+                  vertices = [{
+                    x: seng.attributes.position.x - stepf,
+                    y: seng.attributes.position.y
+                  }, {
+                    x: recg.attributes.position.x - stepf,
+                    y: recg.attributes.position.y + recg.attributes.size.height
+                  }];
 
                 } else {
                   selectt = '.sig4';
                   selects = '.sig3';
-                  if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                  if (_.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectReceivedev
+                    }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectSenddev
+                    }) !== undefined) {
                     selectt = '.sig4';
                     selects = '.sig2';
                   }
@@ -498,16 +535,30 @@
               } else {
                 selectt = '.sig1';
                 selects = '.sig3';
-                if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                if (_.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectReceivedev
+                  }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectSenddev
+                  }) !== undefined) {
                   selectt = '.sig2';
                   selects = '.sig1';
                   let recg = window.paper.graph.getCell(sigdata.ProjectReceivedev);
                   let seng = window.paper.graph.getCell(sigdata.ProjectSenddev);
-                  vertices = [{ x: seng.attributes.position.x - stepf, y: seng.attributes.position.y }, { x: recg.attributes.position.x - stepf, y: recg.attributes.position.y + recg.attributes.size.height }];
+                  vertices = [{
+                    x: seng.attributes.position.x - stepf,
+                    y: seng.attributes.position.y
+                  }, {
+                    x: recg.attributes.position.x - stepf,
+                    y: recg.attributes.position.y + recg.attributes.size.height
+                  }];
                 } else {
                   selectt = '.sig3';
                   selects = '.sig4';
-                  if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                  if (_.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectReceivedev
+                    }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectSenddev
+                    }) !== undefined) {
                     selectt = '.sig1';
                     selects = '.sig3';
                   }
@@ -542,22 +593,35 @@
                   '</g>'
                 ].join(''),
                 sigshowinfo: sigdata.ProjectSigdesc,
-                source: { id: sigdata.ProjectSenddev, selector: selects },
-                target: { id: sigdata.ProjectReceivedev, selector: selectt },
+                source: {
+                  id: sigdata.ProjectSenddev,
+                  selector: selects
+                },
+                target: {
+                  id: sigdata.ProjectReceivedev,
+                  selector: selectt
+                },
                 attrs: {
                   '.marker-target': {
                     fill: '#306796',
                     stroke: null,
                     d: 'M 10 0 L 0 5 L 10 10 z'
                   },
-                  '.connection': { stroke: '#306796', opacity: 0.3, 'stroke-width': 3, 'stroke-dasharray': '5 2' }
+                  '.connection': {
+                    stroke: '#306796',
+                    opacity: 0.3,
+                    'stroke-width': 3,
+                    'stroke-dasharray': '5 2'
+                  }
                 },
                 id: sigdata.Guid,
                 vertices: vertices,
                 portRemove: 1,
                 //connector: { name: 'rounded' },
                 labels: [{
-                  position: { distance: .4 },
+                  position: {
+                    distance: .4
+                  },
                   attrs: {
                     rect: {
                       stroke: null,
@@ -629,14 +693,14 @@
                   let cjname = cellView.model.attributes.devDatas.ProbsName + '-';
                   let dkname = cellView.model.attributes.devDatas.ProportName + '-';
                   let fcname = cellView.model.attributes.devDatas.ProportFunctiontype + '-';
-                  let joname = cellView.model.attributes.devDatas.ProportJointtype +'-';
+                  let joname = cellView.model.attributes.devDatas.ProportJointtype + '-';
                   let dename = cellView.model.attributes.devDatas.ProportDesc;
                   let devdesc = cellView.model.attributes.devDatas.ProbsDesc + '-';
                   if (cellView.model.attributes.devDatas.ProbsName === '') {
                     cjname = '';
                     devdesc = '';
                   }
-                  cellView.model.attributes.porttts = devdesc + cjname + dkname + fcname + joname + dename; 
+                  cellView.model.attributes.porttts = devdesc + cjname + dkname + fcname + joname + dename;
                   cellView.model.attributes.attrs.text.text = cjname + dkname + fcname + joname + dename;
                   cellView.update();
                   //GFC.reload();
@@ -768,8 +832,8 @@
           width: 100,
           height: 24
         },
-        '.iconBody':{
-          height:24
+        '.iconBody': {
+          height: 24
         },
         'text.port-label': {
           text: 'dsfafdf',
@@ -790,16 +854,16 @@
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
   joint.shapes.basic.RectPortP = joint.shapes.basic.Generic.extend({
-    markup: '<g class="rotatable">'+
-    '<g class="scalable"></g>'+
-    '<rect />'+
-    '<text class="port-label"/>'+
-    '<foreignObject width="24" height="24" x="56" y="30" class="htIconOut">'+
-    '<div xmlns="http://www.w3.org/1999/xhtml" height="24px" class="iconBodys" style="background-color:#00B0F0;text-align:center;">'+
-    '<a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: 12;display:inline-block;width:24px;height:24px;line-height: 24px;text-decoration: none;">RX</a>'+
-    '</div>'+
-    '</foreignObject>'+
-    '</g>',
+    markup: '<g class="rotatable">' +
+      '<g class="scalable"></g>' +
+      '<rect />' +
+      '<text class="port-label"/>' +
+      '<foreignObject width="24" height="24" x="56" y="30" class="htIconOut">' +
+      '<div xmlns="http://www.w3.org/1999/xhtml" height="24px" class="iconBodys" style="background-color:#00B0F0;text-align:center;">' +
+      '<a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: 12;display:inline-block;width:24px;height:24px;line-height: 24px;text-decoration: none;">RX</a>' +
+      '</div>' +
+      '</foreignObject>' +
+      '</g>',
     defaults: joint.util.deepSupplement({
       type: 'basic.RectPort',
       showTopanel: function(cellView) {
@@ -818,7 +882,9 @@
           $.each(window.outherPanels.other_panel, function(palindex, pal) {
             let istt = false;
             $.each(pal.devices, function(indexdv, datadv) {
-              if (_.findWhere(datadv.ports, { Guid: tpoid }) !== undefined) {
+              if (_.findWhere(datadv.ports, {
+                  Guid: tpoid
+                }) !== undefined) {
                 nuwpanel.devices = [];
                 nuwpanel.devices.push(datadv);
                 nuwpanel.PanelGuid = pal.PanelGuid;
@@ -827,8 +893,12 @@
                 istt = true;
                 return false;
               }
-              if (_.findWhere(datadv.ports, { Guid: tpoid }) === undefined) {
-                if (cellView.model.get('gpportId') !== undefined && _.findWhere(datadv.ports, { Guid: cellView.model.get('gpportId') }) !== undefined) {
+              if (_.findWhere(datadv.ports, {
+                  Guid: tpoid
+                }) === undefined) {
+                if (cellView.model.get('gpportId') !== undefined && _.findWhere(datadv.ports, {
+                    Guid: cellView.model.get('gpportId')
+                  }) !== undefined) {
                   nuwpanel.devices = [];
                   nuwpanel.devices.push(datadv);
                   nuwpanel.PanelGuid = pal.PanelGuid;
@@ -868,8 +938,14 @@
             z: window.assemblyz += 1,
             id: nuwpanel.PanelGuid,
             portRemove: 1,
-            position: { x: 590 + 4000 + 150, y: dvdpostion.attributes.position.y - 50 },
-            size: { width: 393, height: 200 },
+            position: {
+              x: 590 + 4000 + 150,
+              y: dvdpostion.attributes.position.y - 50
+            },
+            size: {
+              width: 393,
+              height: 200
+            },
             inPorts: [],
             outPorts: [],
             devDatas: nuwpanel,
@@ -877,7 +953,9 @@
             paper: window.paper,
             mainpanel: false,
             attrs: {
-              'text.title-class': { text: nuwpanel.PanelName }
+              'text.title-class': {
+                text: nuwpanel.PanelName
+              }
             }
           });
           GFC.noUseF(otherpanelv);
@@ -922,8 +1000,14 @@
               let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
-                position: { x: 515 + 4000, y: gppy + 35 },
-                size: { width: 10, height: 10 },
+                position: {
+                  x: 515 + 4000,
+                  y: gppy + 35
+                },
+                size: {
+                  width: 10,
+                  height: 10
+                },
                 devDatas: itemzjd.portZj,
                 attrs: {
                   text: {
@@ -966,8 +1050,14 @@
               let gpp = new joint.shapes.basic.GPPortP({
                 portRemove: 1,
                 id: itemzjd.portZjId,
-                position: { x: qx, y: qy },
-                size: { width: 10, height: 10 },
+                position: {
+                  x: qx,
+                  y: qy
+                },
+                size: {
+                  width: 10,
+                  height: 10
+                },
                 devDatas: itemzjd.portZj,
                 attrs: {
                   text: {
@@ -1012,17 +1102,31 @@
               if (sigdata.ProjectLinktype === 'Receive') {
                 selectt = '.sig4';
                 selects = '.sig2';
-                if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                if (_.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectReceivedev
+                  }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectSenddev
+                  }) !== undefined) {
                   selectt = '.sig1';
                   selects = '.sig2';
                   let recg = window.paper.graph.getCell(sigdata.ProjectReceivedev);
                   let seng = window.paper.graph.getCell(sigdata.ProjectSenddev);
-                  vertices = [{ x: seng.attributes.position.x - stepf, y: seng.attributes.position.y }, { x: recg.attributes.position.x - stepf, y: recg.attributes.position.y + recg.attributes.size.height }];
+                  vertices = [{
+                    x: seng.attributes.position.x - stepf,
+                    y: seng.attributes.position.y
+                  }, {
+                    x: recg.attributes.position.x - stepf,
+                    y: recg.attributes.position.y + recg.attributes.size.height
+                  }];
 
                 } else {
                   selectt = '.sig4';
                   selects = '.sig3';
-                  if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                  if (_.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectReceivedev
+                    }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectSenddev
+                    }) !== undefined) {
                     selectt = '.sig4';
                     selects = '.sig2';
                   }
@@ -1030,16 +1134,30 @@
               } else {
                 selectt = '.sig1';
                 selects = '.sig3';
-                if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                if (_.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectReceivedev
+                  }) !== undefined && _.findWhere(window.outherPanels.main_panel.devices, {
+                    Guid: sigdata.ProjectSenddev
+                  }) !== undefined) {
                   selectt = '.sig2';
                   selects = '.sig1';
                   let recg = window.paper.graph.getCell(sigdata.ProjectReceivedev);
                   let seng = window.paper.graph.getCell(sigdata.ProjectSenddev);
-                  vertices = [{ x: seng.attributes.position.x - stepf, y: seng.attributes.position.y }, { x: recg.attributes.position.x - stepf, y: recg.attributes.position.y + recg.attributes.size.height }];
+                  vertices = [{
+                    x: seng.attributes.position.x - stepf,
+                    y: seng.attributes.position.y
+                  }, {
+                    x: recg.attributes.position.x - stepf,
+                    y: recg.attributes.position.y + recg.attributes.size.height
+                  }];
                 } else {
                   selectt = '.sig3';
                   selects = '.sig4';
-                  if (_.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectReceivedev }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, { Guid: sigdata.ProjectSenddev }) !== undefined) {
+                  if (_.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectReceivedev
+                    }) !== undefined || _.findWhere(window.outherPanels.main_panel.devices, {
+                      Guid: sigdata.ProjectSenddev
+                    }) !== undefined) {
                     selectt = '.sig1';
                     selects = '.sig3';
                   }
@@ -1074,22 +1192,35 @@
                   '</g>'
                 ].join(''),
                 sigshowinfo: sigdata.ProjectSigdesc,
-                source: { id: sigdata.ProjectSenddev, selector: selects },
-                target: { id: sigdata.ProjectReceivedev, selector: selectt },
+                source: {
+                  id: sigdata.ProjectSenddev,
+                  selector: selects
+                },
+                target: {
+                  id: sigdata.ProjectReceivedev,
+                  selector: selectt
+                },
                 attrs: {
                   '.marker-target': {
                     fill: '#306796',
                     stroke: null,
                     d: 'M 10 0 L 0 5 L 10 10 z'
                   },
-                  '.connection': { stroke: '#306796', opacity: 0.3, 'stroke-width': 3, 'stroke-dasharray': '5 2' }
+                  '.connection': {
+                    stroke: '#306796',
+                    opacity: 0.3,
+                    'stroke-width': 3,
+                    'stroke-dasharray': '5 2'
+                  }
                 },
                 id: sigdata.Guid,
                 vertices: vertices,
                 portRemove: 1,
                 //connector: { name: 'rounded' },
                 labels: [{
-                  position: { distance: .4 },
+                  position: {
+                    distance: .4
+                  },
                   attrs: {
                     rect: {
                       stroke: null,
@@ -1119,12 +1250,13 @@
           name: '编辑', //端口编辑
           fc: function(cellView) {
             var ViewModel = cellView.model;
+            console.log(cellView, 'cellllll')
             var EditStr = '';
             $('.modal-body').html('');
             $('.modal-title').html(this.name);
             EditStr += '<div class="form-group">' +
               '<label for="ProportName">端口信息名称:</label>' +
-              '<input type="text" class="form-control change-atr" value="' + ViewModel.attributes.devDatas.ProportName + '" id="ProportName">' +
+              '<input type="text" class="form-control change-atr" value="' + ViewModel.attributes.devDatas.ProdevName + '" id="ProportName">' +
               '</div>';
             $('.modal-body').html(EditStr);
             $('.main-modal').modal();
@@ -1158,18 +1290,12 @@
               setPubPortInfo(slotObj, function(obj) {
                 if (obj.status) {
                   ViewModel.attributes.devDatas.ProportName = GFC.formValidation($('#ProportName'));
-                  let cjname = cellView.model.attributes.devDatas.ProbsName + '-';
-                  let dkname = cellView.model.attributes.devDatas.ProportName + '-';
-                  let fcname = cellView.model.attributes.devDatas.ProportFunctiontype + '-';
-                  let joname = cellView.model.attributes.devDatas.ProportJointtype +'-';
-                  let dename = cellView.model.attributes.devDatas.ProportDesc;
-                  let devdesc = cellView.model.attributes.devDatas.ProbsDesc + '-';
-                  if (cellView.model.attributes.devDatas.ProbsName === '') {
+                  let cjname = cellView.model.attributes.devDatas.ProdevName;
+                  if (cellView.model.attributes.devDatas.ProdevName === '') {
                     cjname = '';
-                    devdesc = '';
                   }
-                  cellView.model.attributes.porttts = devdesc + cjname + dkname + fcname + joname + dename; 
-                  cellView.model.attributes.attrs.text.text = cjname + dkname + fcname + joname + dename;
+                  cellView.model.attributes.porttts = cjname;
+                  cellView.model.attributes.attrs.text.text = cjname;
                   cellView.update();
                   //GFC.reload();
                   $('.main-modal').modal('hide');
@@ -1182,7 +1308,118 @@
           }
         },
         otherMenu: [{
-            name: '更换', //更换端口
+            name: '上光配',
+            fc: function(cellView) {
+              var $this = this;
+              if (1 == 1) { //todo此处后期会换成加载上光配的接口
+                var gettreedata = window.treedata;
+                var data = [];
+                for (var i = 0; i < gettreedata.length; i++) {
+                  data.push({
+                    name: gettreedata[i].Name,
+                    Guid: gettreedata[i].Guid,
+                    children: getChildren(gettreedata[i].child)
+                  });
+                }
+
+                function getChildren(list) {
+                  let arr = [];
+                  for (var l = 0; l < list.length; l++) {
+                    arr.push({
+                      name: list[l].Name,
+                      Guid: list[l].Guid,
+                      children: getChildren2(list[l].child)
+                    });
+                  }
+                  return arr;
+                }
+
+                function getChildren2(list) {
+                  let arr = [];
+                  for (var i = 0; i < list.length; i++) {
+                    arr.push({
+                      name: list[i].Name,
+                      Guid: list[i].Guid
+                    });
+                  }
+                  return arr;
+                }
+
+                function getDefaultTreeOption() { //此处是给ztree加默认的图标
+                  function addDiyDom(treeId, treeNode) {
+                    var spaceWidth = 8;
+                    var switchObj = $("#" + treeNode.tId + "_switch"),
+                      icoObj = $("#" + treeNode.tId + "_ico"),
+                      checkObj = $("#" + treeNode.tId + "_check");
+                    switchObj.remove();
+                    checkObj.remove();
+                    icoObj.before(switchObj);
+                    icoObj.before(checkObj);
+                    if (treeNode.level > 0) {
+                      var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+                      switchObj.before(spaceStr);
+                    }
+                  }
+                  var defaultTreeSetting = {
+                    view: {
+                      showLine: false,
+                      showIcon: false,
+                      dblClickExpand: false,
+                      addDiyDom: addDiyDom,
+                      dblClickExpand: true
+                    }
+                  };
+                  return defaultTreeSetting;
+                }
+                console.log(data, 'dddddddd')
+                var EditStr = '';
+                $('.modal-body').html('').css({
+                  'padding-top': '5px'
+                });
+                $('.modal-title').html($this.name);
+                EditStr =
+                  `<div class="modal-body" id="plugSelectModalModal"> 
+                <div style="height:360px;width:552px;margin:auto;"> 
+                <div class="plugselect-modal-left"> 
+                <div class="plugselect-pubtree-div"> 
+                <label style="margin-right:120px">光配列表：</label>
+                <button id="plugtreeSearch" class="btn btn-default" style=" float:right">添加光配箱</button> 
+                </div> 
+                <ul class="plugselect-pubtree ztree" id="publicplugTree"></ul> 
+                </div> 
+                <div class="plugselect-modal-middle"> 
+                <span id="plugselectBtn" class="fa fa-chevron-right"></span> 
+                </div> 
+                </div> 
+                </div> `.trim();
+                // $('.modal-dialog').css('width','400px');
+                $('.modal-body').html(EditStr);
+                $('.main-modal').modal('show');
+                var option = {
+                  callback: {
+                    beforeExpand: function(treeId, treeNode) {
+                      if (treeNode.level == 2) {
+                        treeNode.hasLoad = true;
+                        console.log('node2');
+                      }
+                      if (treeNode.level == 3) {
+                        console.log('node3');
+                      }
+                      return true;
+                    }
+                  }
+                };
+                var zTree = $.fn.zTree.init($("#publicplugTree"), $.extend(true, option, getDefaultTreeOption()));
+                zTree.addNodes(null, data);
+              }
+            }
+          }, {
+            name: '去光配',
+            fc: function(cellView) {
+              console.log('点击端口');
+            }
+          }, {
+            name: '更换',
             fc: function(cellView) {
               var ViewModel = cellView.model;
               var $this = this;
@@ -1287,8 +1524,464 @@
                 }
               });
             }
-          }
+          }, {
+            name: '连接',
+            fc: function(cellView) {
+              var getAllPanelsAndDevs = ROOF.physical.GetAllPanelsAndDevs; //获取接口
+              var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId; //获取接口
+              var addPhyFiberEx = ROOF.physical.AddPhyFiberEx; //获取接口
+              var addPhyFiber = ROOF.physical.AddPhyFiber;
+              var $this = this;
+              getAllPanelsAndDevs(function(obj) {
+                if (obj.status) {
+                  var EditStr = '';
+                  $('.modal-body').html('').css({
+                    'padding-top': '5px'
+                  });
+                  $('.modal-title').html($this.name);
+                  EditStr = `<div class="ctrl-ist text-muted" style="position:absolute; left:18px;bottom:-40px;font-size: 14px;">按下ctrl键用鼠标点击可以批量选择端口.</div>
+                                                <div class="row" style="padding-top:inherit;padding-right:inherit;padding-left:inherit">
+                                                    <div class="form-group" style="float:left;width:40%;margin-right:10%">
+                                                    <label>对侧屏柜:</label>
+                                                        <select class="form-control end-panel-list"></select>
+                                                    </div>
+                                                    <div class="form-group" style="float:left;width:40%">
+                                                    <label>对侧装置:</label>
+                                                        <select class="form-control end-pdevices-list"></select>
+                                                    </div>
+                                                </div>
+                                            <p></p>
+                                            <div class="row" style="padding-bottom:inherit;padding-left:inherit;padding-right:inherit">
+                                                <label>对侧端口:</label>
+                                                    <div style="min-height: 300px;padding: 0;overflow-y: auto;" class="form-control">
+                                                            <div class="panel-group end-solt-list" id="end-solt-list">
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                            <div class="row" style="padding-top:inherit;padding-right:inherit;padding-left:inherit">
+                                                    <div class="form-group" style="float:left;width:20%;margin-right:5%">
+                                                    <input class="" type="checkbox" checked="true">
+                                                    <label>收发联动</label>
+                                                    </div>
+                                                    <div class="form-group" style="float:left;width:20%">
+                                                    <input class="" type="checkbox"/>
+                                                    <label>自动上光配</label>
+                                                    </div>
+                                                </div>`.trim();
+                  $('.modal-body').html(EditStr);
+                  // $('.main-modal').find('.modal-dialog').addClass('inherit-width');//将弹框设置为屏幕宽度
+                  $('.main-modal').modal('show');
+                  let isEdit = 0;
+                  $('.main-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+                    // $('.main-modal').find('.modal-dialog').removeClass('inherit-width');//将弹框设置为屏幕宽度
+                    GFC.rmStorage('linkOpenListCollapse');
+                    if (isEdit === 0) {
+                      return;
+                    }
+                    GFC.reload();
+                  });
+                  $('.edit-right').unbind('click');
+                  var IsCtrl = false;
+                  var ispl = false;
+                  let openPlC = function(event) {
+                    if (event.ctrlKey === true) {
+                      IsCtrl = true;
+                      //$('.poitem-to').removeClass('active');
+                      $('.ctrl-ist').removeClass('text-muted');
+                      $('.ctrl-ist').addClass('text-danger').text('目前状态是批量选择端口.');
+                    }
+                  };
+                  let closePlC = function(event) {
+                    if (event.which === 17) {
+                      IsCtrl = false;
+                      //$('.poitem-to').removeClass('list-group-item-info');
+                      $('.ctrl-ist').removeClass('text-danger');
+                      $('.ctrl-ist').addClass('text-muted').text('按下ctrl键用鼠标点击可以批量选择端口.');
+                    }
+                  };
+                  $(window).off('keyup').on('keyup', closePlC);
+                  $(window).off('keydown').on('keydown', openPlC);
+                  if (window.parent !== undefined) {
+                    $(ROOF).off('keyup').on('keyup', closePlC);
+                    $(ROOF).off('keydown').on('keydown', openPlC);
+                  }
+                  var creatlistPanel = function(sdg, ts) {
+                    sdg.html('');
+                    var str = '';
+                    var thispannel;
+                    $.each(obj.panel_list, function(indg, dgg) {
+                      if (dgg.PanelId === '' || dgg.ProprName === '') {
+                        return true;
+                      }
+                      str += `
+                                                <option value="${dgg.PanelId}">${dgg.ProprName}</option>
+                                                `.trim();
+                    });
+                    sdg.html(str);
+                    sdg.off('change').on('change', function() {
+                      var dArray = _.findWhere(obj.panel_list, {
+                        PanelId: $(this).val()
+                      });
+                      if (ts === 'l') {
+                        creatlistDev($('.start-pdevices-list'), dArray.Children, ts);
+                      } else {
+                        creatlistDev($('.end-pdevices-list'), dArray.Children, ts);
+                      }
+                    });
+                    if (ts === 'l') {
+                      $.each(obj.panel_list, function(ghind, ddde) {
+                        if (_.findWhere(ddde.Children, {
+                            Guid: cellView.model.id
+                          }) !== undefined) {
+                          thispannel = ddde.PanelId;
+                        }
+                      });
+                      sdg.val(thispannel);
+                      sdg.trigger('change');
+                      sdg.attr('disabled', 'disabled');
+                    } else {
+                      sdg.trigger('change');
+                    }
 
+                  };
+                  var creatlistDev = function(dsdg, ddata, ts) {
+                    dsdg.html('');
+                    var str = '';
+                    $.each(ddata, function(indg, dgg) {
+                      if (dgg.Guid === '' || dgg.ProdevName === '') {
+                        return true;
+                      }
+                      str += `
+                                                <option value="${dgg.Guid}">${dgg.ProdevName}</option>
+                                                `.trim();
+                    });
+                    dsdg.html(str);
+                    dsdg.off('change').on('change', function() {
+                      getPortsByDeviceId($(this).val(), function(portobj) {
+                        if (portobj.status) {
+                          var dArray = portobj.slot_list;
+                          // if (dArray.length === 0) {
+                          //   return;
+                          // }
+                          if (ts === 'l') {
+                            $('.start-solt-list').html('');
+                            creatlistSolt($('.start-solt-list'), dArray, ts);
+                          } else {
+                            $('.end-solt-list').html('');
+                            creatlistSolt($('.end-solt-list'), dArray, ts);
+                          }
+                        } else {
+                          console.log('ddd');
+                        }
+                      });
+
+                    });
+                    if (ts === 'l') {
+                      dsdg.val(cellView.model.id);
+                      dsdg.trigger('change');
+                      dsdg.attr('disabled', 'disabled');
+                    } else {
+                      dsdg.trigger('change');
+                    }
+                  };
+                  var creatlistSolt = function(dsdg, ddata, ts) {
+
+                    dsdg.html('');
+                    var str = '';
+                    var thislistid = '';
+                    var thisclass = '';
+                    if (ts === 'l') {
+                      thislistid = '#start-solt-list';
+                      thisclass = 'start-port-list';
+                    } else {
+                      thislistid = '#end-solt-list';
+                      thisclass = 'end-port-list';
+                    }
+                    $.each(ddata, function(indg, dgg) {
+                      var strc = '';
+                      $.each(dgg.Port_List, function(index, item) {
+                        var spanStr = '',
+                          findStr = '',
+                          isdisable = '';
+                        //console.log(item.c_pd_id);
+                        if (item.c_pd_id !== undefined || item.c_pd_id === '') {
+                          let devname;
+                          if (item.c_dev_name === undefined) {
+                            devname = item.c_ns_name;
+                          } else {
+                            devname = item.c_dev_name;
+                          }
+                          findStr = `<span
+                                                     class="findSenRevs"
+                                                      data-toggle="popover"
+                                                       data-placement="bottom"
+                                                        data-content="对侧装置:${devname}">
+                                                        (${item.c_pd_name} [${item.c_pd_ftype}])
+                                                        </span>`.trim();
+                          isdisable = 'disabled';
+                        }
+                        if (item.c_p1_id !== undefined) {
+                          spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
+                        }
+                        if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+                          strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+                        } else {
+                          strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${dgg.ProbsName}-${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${dgg.ProbsName}-${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+                        }
+
+
+                        //ProbsDesc + '-' + ProbsName + '-' + ProportFunctiontype + '-' + ProportJointtype,
+                      });
+                      let isInNet = '';
+                      if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+                        isInNet = 'in';
+                      }
+                      if (dgg.ProbsName === '') {
+                        dgg.ProbsName = '交换机端口';
+                      }
+                      str += `<div class="panel">
+                                                <div class="panel-heading" role="tab" id="headingOne-${ts}${indg}">
+                                                    <a data-id="${dgg.BcslotId}" role="button" data-toggle="collapse" data-parent="${thislistid}" href="#collapseOne-${ts}${indg}" aria-expanded="true" aria-controls="collapseOne-${ts}${indg}">
+                                                     ${dgg.ProbsName}
+                                                    </a>
+                                                </div>
+                                                <div id="collapseOne-${ts}${indg}" class="panel-collapse collapse ${isInNet}" role="tabpanel" aria-labelledby="headingOne-${ts}${indg}">
+                                                  <div class="panel-body">
+                                                    <div class="list-group ${thisclass}">
+                                                    ${strc}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                                `.trim();
+                    });
+                    console.log('aaa');
+                    dsdg.html(str);
+                    if (ts === 'l') {
+                      creatlistPort($('.start-port-list'));
+                    } else {
+                      creatlistPort($('.end-port-list'));
+                    }
+                    if (GFC.getStorage('linkOpenListCollapse') !== undefined) {
+                      $.each(GFC.getStorage('linkOpenListCollapse'), function(opindex, opids) {
+                        $('#' + opids).addClass('in');
+                      });
+                    }
+                  };
+                  var creatlistPort = function(sgt) {
+                    //sgt.html('');
+
+                    $('.findSenRevs').popover({
+                      trigger: 'hover'
+                    });
+                    sgt.find('.poitem-to').off('click').on('click', function() {
+                      if ($(this).hasClass('disabled')) {
+                        return;
+                      }
+                      if (IsCtrl) {
+                        ispl = true;
+                        $('.poitem-to.active').addClass('list-group-item-info');
+                        $('.poitem-to').removeClass('active');
+                        if ($(this).hasClass('list-group-item-info')) {
+                          $(this).removeClass('list-group-item-info');
+                        } else {
+                          $(this).addClass('list-group-item-info');
+                        }
+
+                      } else {
+                        ispl = false;
+                        $('.poitem-to').removeClass('list-group-item-info');
+                        if ($(this).hasClass('active')) {
+                          $(this).removeClass('active');
+                          sgt.find('.poitem-to').removeClass('active');
+                          return;
+                        }
+                        sgt.find('.poitem-to').removeClass('active');
+                        $(this).addClass('active');
+                      }
+
+                    }).off('dblclick').on('dblclick', function() {
+                      ispl = false;
+                      $('.poitem-to').removeClass('list-group-item-info');
+                      if ($(this).hasClass('active')) {
+                        $(this).removeClass('active');
+                        sgt.find('.poitem-to').removeClass('active');
+                        return;
+                      }
+                      sgt.find('.poitem-to').removeClass('active');
+                      $(this).addClass('active');
+                      if ($('.list-group-item.active').length === 2) {
+                        $('.edit-right').trigger('click');
+                      }
+                    });
+
+                    //GFC.showError(portobj.err_msg);
+                  };
+                  creatlistPanel($('.start-panel-list'), 'l');
+                  creatlistPanel($('.end-panel-list'), 'r');
+                  $('.edit-right').off('click').on('click', function() {
+                    var sendPortArray = [];
+                    var recvPortArray = [];
+                    let sendportname = [];
+                    let recvportname = [];
+                    let sendporttpye = [];
+                    let recvporttpye = [];
+                    var startAr = $('.start-port-list').find('.list-group-item-info');
+                    if (startAr.length !== 0) {
+                      $.each(startAr, function(stinx) {
+                        sendPortArray.push({
+                          type: startAr.eq(stinx).attr('data-types'),
+                          id: startAr.eq(stinx).attr('data-id')
+                        });
+                        sendportname.push(startAr.eq(stinx).attr('data-port-name'));
+                        sendporttpye.push(startAr.eq(stinx).attr('data-types'));
+                      });
+                    }
+                    var endAr = $('.end-port-list').find('.list-group-item-info');
+                    if (endAr.length !== 0) {
+                      $.each(endAr, function(endinx) {
+                        recvPortArray.push({
+                          type: endAr.eq(endinx).attr('data-types'),
+                          id: endAr.eq(endinx).attr('data-id')
+                        });
+                        recvportname.push(endAr.eq(endinx).attr('data-port-name'));
+                        recvporttpye.push(endAr.eq(endinx).attr('data-types'));
+                      });
+                    }
+                    var startAt = $('.start-port-list').find('.active').attr('data-id');
+                    var endAt = $('.end-port-list').find('.active').attr('data-id');
+                    if (ispl) {
+                      if (_.uniq(sendportname).length !== _.uniq(recvportname).length) {
+                        GFC.showError('请确保两侧批量选择的数量一致');
+                        return;
+                      }
+                      if (_.where(sendporttpye, 'DX').length !== 0 || _.where(recvporttpye, 'DX').length !== 0) {
+                        if (sendPortArray.length !== recvPortArray.length || _.where(sendporttpye, 'DX').length !== _.where(recvporttpye, 'DX').length) {
+                          GFC.showError('电口不能与光口连接');
+                          return;
+                        }
+
+                      } else {
+                        if (sendPortArray.length !== recvPortArray.length || _.where(sendporttpye, 'TX').length !== _.where(recvporttpye, 'RX').length) {
+                          GFC.showError('请确保两侧收发类型一致');
+                          return;
+                        }
+                        //var s = [1, 1, 1, 0, 1, 0, 0];
+                        if (_.findWhere(sendPortArray, {
+                            type: 'TX'
+                          }) !== undefined && _.findWhere(sendPortArray, {
+                            type: 'RX'
+                          }) !== undefined) {
+                          let senda = 0;
+                          let sendb = 1;
+                          let sendt = [];
+                          $.each(sendPortArray, function(indexsend, ss) {
+                            if (ss.type === 'TX') {
+                              sendt[senda] = ss;
+                              senda += 2;
+                            } else {
+                              sendt[sendb] = ss;
+                              sendb += 2;
+                            }
+                          });
+                          let recva = 1;
+                          let recvb = 0;
+                          let recvt = [];
+                          $.each(recvPortArray, function(indexrecv, rr) {
+                            if (rr.type === 'TX') {
+                              recvt[recva] = rr;
+                              recva += 2;
+                            } else {
+                              recvt[recvb] = rr;
+                              recvb += 2;
+                            }
+                          });
+                          sendPortArray = sendt;
+                          recvPortArray = recvt;
+                        }
+                      }
+                      var fiberlist = [];
+                      $.each(sendPortArray, function(sendindex, senditem) {
+                        fiberlist.push({
+                          SrcPortId: senditem.id
+                        });
+                      });
+                      $.each(recvPortArray, function(recvindex, recvitem) {
+                        fiberlist[recvindex].DstPortId = recvitem.id;
+                      });
+                      addPhyFiberEx(fiberlist, function(plstj) {
+                        if (plstj.status) {
+                          $('.poitem-to').removeClass('list-group-item-info');
+                          $('.poitem-to').removeClass('active');
+                          let arrOpen = [];
+                          $.each($('.panel-collapse.collapse.in'), function(epl, epd) {
+                            arrOpen.push(epd.id);
+                          });
+                          GFC.setStorage('linkOpenListCollapse', arrOpen);
+                          let endval = $('.end-pdevices-list').val();
+                          $('.start-pdevices-list').trigger('change');
+                          $('.end-pdevices-list').val(endval).trigger('change');
+                          isEdit = 1;
+                        } else {
+                          GFC.showError(plstj.err_msg);
+                        }
+                      });
+
+                    } else {
+                      var portinfo = {};
+                      if (startAt === undefined || endAt === undefined) {
+                        GFC.showError('请确保两侧各有一个端口被选中');
+                        return;
+                      }
+                      portinfo.SrcPortId = startAt;
+                      portinfo.DstPortId = endAt;
+                      console.log(portinfo);
+                      let sr = $('[data-id=' + portinfo.SrcPortId + ']').attr('data-types');
+                      let ds = $('[data-id=' + portinfo.DstPortId + ']').attr('data-types');
+                      if (sr === 'DX' || ds === 'DX') {
+                        if (sr !== ds) {
+                          GFC.showError('电口不能与光口连接');
+                          return;
+                        }
+                      } else {
+                        if (sr === ds) {
+                          GFC.showError('相同收发类型的端口不能相连');
+                          return;
+                        }
+                      }
+                      addPhyFiber(portinfo, function(dlstj) {
+                        if (dlstj.status) {
+                          $('.poitem-to').removeClass('list-group-item-info');
+                          $('.poitem-to').removeClass('active');
+                          let arrOpen = [];
+                          $.each($('.panel-collapse.collapse.in'), function(epl, epd) {
+                            arrOpen.push(epd.id);
+                          });
+                          GFC.setStorage('linkOpenListCollapse', arrOpen);
+                          let endval = $('.end-pdevices-list').val();
+                          $('.start-pdevices-list').trigger('change');
+                          $('.end-pdevices-list').val(endval).trigger('change');
+                          isEdit = 1;
+                        } else {
+                          GFC.showError(dlstj.err_msg);
+                        }
+                      });
+                    }
+                  });
+                } else {
+                  GFC.showError(obj.err_msg);
+                }
+              });
+            }
+          }
         ]
       },
       attrs: {
@@ -1300,8 +1993,8 @@
           width: 100,
           height: 24
         },
-        '.iconBody':{
-          height:24
+        '.iconBody': {
+          height: 24
         },
         'text.port-label': {
           text: 'dsfafdf',
@@ -1325,8 +2018,8 @@
     update: function(cell, renderingOnlyAttrs) {
       let elementTitls = this.$el.find('.content-x');
       elementTitls.attr('title', this.model.attributes.devDatas.Type).text(this.model.attributes.devDatas.Type);
-      if(this.model.attributes.devDatas.Type==="TX"){
-        elementTitls.css('background-color','#F4B183');
+      if (this.model.attributes.devDatas.Type === "TX") {
+        elementTitls.css('background-color', '#F4B183');
       }
       var allAttrs = this.model.get('attrs');
 
@@ -1383,7 +2076,11 @@
 
           $selected.each(function() {
 
-            vE(this).text(attrs.text + '', { lineHeight: attrs.lineHeight, textPath: attrs.textPath, annotations: attrs.annotations });
+            vE(this).text(attrs.text + '', {
+              lineHeight: attrs.lineHeight,
+              textPath: attrs.textPath,
+              annotations: attrs.annotations
+            });
           });
           specialAttributes.push('lineHeight', 'textPath', 'annotations');
         }
@@ -1447,7 +2144,12 @@
       // Note that we're using the bounding box without transformation because we are already inside
       // a transformed coordinate system.
       var size = this.model.get('size');
-      var bbox = { x: 0, y: 0, width: size.width, height: size.height };
+      var bbox = {
+        x: 0,
+        y: 0,
+        width: size.width,
+        height: size.height
+      };
 
       renderingOnlyAttrs = renderingOnlyAttrs || {};
 
@@ -1472,8 +2174,12 @@
       let panelPort = pp.ports;
       let phlink = this.model.attributes.devDatas.phylink;
       if (panelPort !== null && phlink !== undefined) {
-        if (_.findWhere(panelPort, { Guid: phlink.Port1.PortId }) !== undefined) {
-          let gppdata = _.findWhere(panelPort, { Guid: phlink.Port1.PortId });
+        if (_.findWhere(panelPort, {
+            Guid: phlink.Port1.PortId
+          }) !== undefined) {
+          let gppdata = _.findWhere(panelPort, {
+            Guid: phlink.Port1.PortId
+          });
           let filx = this.model.attributes.position.x;
           let fily = this.model.attributes.position.y;
           let projectOpticalcableGuid = _.filter(window.nowAssemblylink, function(pronum) {
@@ -1488,8 +2194,14 @@
             portRemove: 1,
             id: gppdata.Guid,
             projectOpticalcableGuid: projectOpticalcableGuid,
-            position: { x: -50, y: 35 },
-            size: { width: 10, height: 10 },
+            position: {
+              x: -50,
+              y: 35
+            },
+            size: {
+              width: 10,
+              height: 10
+            },
             attrs: {
               text: {
                 text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
@@ -1513,10 +2225,14 @@
             window.gppPort.push(gpp);
           }
         }
-        if (_.findWhere(panelPort, { Guid: phlink.Port2.PortId }) !== undefined) {
+        if (_.findWhere(panelPort, {
+            Guid: phlink.Port2.PortId
+          }) !== undefined) {
           let filx2 = this.model.attributes.position.x;
           let fily2 = this.model.attributes.position.y;
-          let gppdata2 = _.findWhere(panelPort, { Guid: phlink.Port2.PortId });
+          let gppdata2 = _.findWhere(panelPort, {
+            Guid: phlink.Port2.PortId
+          });
           let centergpp = _.filter(window.nowAssemblylink, function(numgpp) {
             return numgpp.Port1.PortId === gppdata2.Guid;
           });
@@ -1542,8 +2258,14 @@
           }
           let gpp2 = new joint.shapes.basic.GPPortP({
             id: gppdata2.Guid,
-            position: { x: 120, y: 35 },
-            size: { width: 10, height: 10 },
+            position: {
+              x: 120,
+              y: 35
+            },
+            size: {
+              width: 10,
+              height: 10
+            },
             projectOpticalcableGuid: projectOpticalcableGuid,
             attrs: {
               text: {
@@ -1566,11 +2288,15 @@
           gpp2.translate(filx2, fily2);
           return;
         }
-        let outherPanelsKj = _.findWhere(window.outherPanels.other_panel, { PanelGuid: phlink.Port2.PanelId });
+        let outherPanelsKj = _.findWhere(window.outherPanels.other_panel, {
+          PanelGuid: phlink.Port2.PanelId
+        });
         if (outherPanelsKj !== undefined) {
           // let filx2 = this.model.attributes.position.x;
           // let fily2 = this.model.attributes.position.y;
-          let gppdata2 = _.findWhere(outherPanelsKj.ports, { Guid: phlink.Port2.PortId });
+          let gppdata2 = _.findWhere(outherPanelsKj.ports, {
+            Guid: phlink.Port2.PortId
+          });
           if (!gppdata2) {
             return;
           }

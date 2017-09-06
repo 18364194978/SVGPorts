@@ -93,7 +93,108 @@
 				otherMenu: [{
 					name: '上光配',
 					fc: function(cellView) {
-						console.log('点击移动至');
+						var $this = this;
+						if (1 == 1) { //todo此处后期会换成加载上光配的接口
+							var gettreedata = window.treedata;
+							var data = [];
+							for (var i = 0; i < gettreedata.length; i++) {
+								data.push({
+									name: gettreedata[i].Name,
+									Guid: gettreedata[i].Guid,
+									children: getChildren(gettreedata[i].child)
+								});
+							}
+
+							function getChildren(list) {
+								let arr = [];
+								for (var l = 0; l < list.length; l++) {
+									arr.push({
+										name: list[l].Name,
+										Guid: list[l].Guid,
+										children: getChildren2(list[l].child)
+									});
+								}
+								return arr;
+							}
+
+							function getChildren2(list) {
+								let arr = [];
+								for (var i = 0; i < list.length; i++) {
+									arr.push({
+										name: list[i].Name,
+										Guid: list[i].Guid
+									});
+								}
+								return arr;
+							}
+
+							function getDefaultTreeOption() {//此处是给ztree加默认的图标
+								function addDiyDom(treeId, treeNode) {
+									var spaceWidth = 8;
+									var switchObj = $("#" + treeNode.tId + "_switch"),
+										icoObj = $("#" + treeNode.tId + "_ico"),
+										checkObj = $("#" + treeNode.tId + "_check");
+									switchObj.remove();
+									checkObj.remove();
+									icoObj.before(switchObj);
+									icoObj.before(checkObj);
+									if (treeNode.level > 0) {
+										var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+										switchObj.before(spaceStr);
+									}
+								}
+								var defaultTreeSetting = {
+									view: {
+										showLine: false,
+										showIcon: false,
+										dblClickExpand: false,
+										addDiyDom: addDiyDom,
+										dblClickExpand: true
+									}
+								};
+								return defaultTreeSetting;
+							}
+							console.log(data, 'dddddddd')
+							var EditStr = '';
+							$('.modal-body').html('').css({
+								'padding-top': '5px'
+							});
+							$('.modal-title').html($this.name);
+							EditStr =
+								`<div class="modal-body" id="plugSelectModalModal"> 
+								<div style="height:360px;width:552px;margin:auto;"> 
+								<div class="plugselect-modal-left"> 
+								<div class="plugselect-pubtree-div"> 
+								<label style="margin-right:120px">光配列表：</label>
+								<button id="plugtreeSearch" class="btn btn-default" style=" float:right">添加光配箱</button> 
+								</div> 
+								<ul class="plugselect-pubtree ztree" id="publicplugTree"></ul> 
+								</div> 
+								<div class="plugselect-modal-middle"> 
+								<span id="plugselectBtn" class="fa fa-chevron-right"></span> 
+								</div> 
+								</div> 
+								</div> `.trim();
+							// $('.modal-dialog').css('width','400px');
+							$('.modal-body').html(EditStr);
+							$('.main-modal').modal('show');
+							var option = {
+								callback: {
+									beforeExpand: function(treeId, treeNode) {
+										if (treeNode.level == 2) {
+											treeNode.hasLoad = true;
+											console.log('node2');
+										}
+										if (treeNode.level == 3) {
+											console.log('node3');
+										}
+										return true;
+									}
+								}
+							};
+							var zTree = $.fn.zTree.init($("#publicplugTree"), $.extend(true, option, getDefaultTreeOption()));
+							zTree.addNodes(null, data);
+						}
 					}
 				}, {
 					name: '去光配',
@@ -1946,6 +2047,7 @@
 						paper: this.attributes.paper,
 						panelData: $this.attributes.devDatas,
 						dsname: dsname,
+						porttts: dsname,
 						portsname: portsname,
 						attrs: { //暂时无需改动
 							rect: {

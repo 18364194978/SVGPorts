@@ -429,23 +429,227 @@
 				centerMenu: {
 					name: '编辑',
 					fc: function(cellView) {
-						console.log('点击编辑');
+						console.log(cellView.model, 'cellViewcell')
+						var ViewModel = cellView.model;
+						var EditStr = '';
+						var elementTitls = cellView.$el.find('.content-x');
+						$('.modal-title').html(this.name);
+						EditStr += '<div class="form-group">' +
+							'<label for="exampleInputEmail1">装置名称:</label>' +
+							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.deviceName + '" id="exampleInputEmail1" placeholder="">' +
+							'</div>';
+						$('.modal-body').html(EditStr);
+						$('.main-modal').modal();
+						$('.edit-right').unbind('click');
+						$('.edit-right').click(function() {
+							var NewName = '';
+							var renamePhydevice = ROOF.physical.RenamePhydevice;
+							if ($.trim($('.change-atr').val()) !== '') {
+								NewName = $('.change-atr').val();
+							}
+							renamePhydevice(ViewModel.attributes.id, NewName, function(obj) {
+								if (obj.status) {
+									cellView.model.attributes.dsname = NewName;
+									elementTitls.attr('title', NewName).text(NewName);
+									$('.main-modal').modal('hide');
+								} else {
+									ROOF.common.promptInformation('编辑失败:' + obj.err_msg);
+								}
+							});
+						});
 					}
 				},
 				otherMenu: [{
 					name: '移动至',
 					fc: function(cellView) {
-						console.log('点击移动至');
+						var inport = cellView.model.attributes.inPorts;
+						var outport = cellView.model.attributes.outPorts;
+						if (inport.length !== 0 || outport.length !== 0) {
+							GFC.showError('包含硬接线，不可移动');
+							return;
+						}
+						var ViewModel = cellView.model;
+						var treeNote = ROOF.svgPortHardwireNote.getNodeByParam('guid', ViewModel.attributes.id);
+						ROOF.common.loadModalContent(ROOF.hardconnection.moveDeviceModal());
+						ROOF.hardconnection.loadMoveDeviceData(treeNote);
+						ROOF.hardconnection.initMoveDeviceHanlder(treeNote);
 					}
 				}, {
 					name: '端口',
 					fc: function(cellView) {
-						console.log('点击端口');
-					}
-				}, {
-					name: '连接',
-					fc: function(cellView) {
-						console.log('点击连接');
+						var ViewModel = cellView.model;
+						var $this = this;
+						let AppH = [];
+						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
+						getPortsByDeviceId(ViewModel.id, function(obj) {
+							if (obj.status) {
+								console.log(obj);
+								$('.main-modal-body').html('');
+								$('.modal-title').html($this.name);
+								let str = '';
+								$.each(obj.slot_list, function(poindx, podate) {
+									var strc = '';
+									$.each(podate.Port_List, function(index, item) {
+										var spanStr = '',
+											findStr = '',
+											isdisable = '';
+										//console.log(item.c_pd_id);
+										if (item.c_pd_id !== undefined || item.c_pd_id === '') {
+											let devname;
+											if (item.c_dev_name === undefined) {
+												devname = item.c_ns_name;
+											} else {
+												devname = item.c_dev_name;
+											}
+											findStr = `<span
+                                                     class="findSenRevs"
+                                                      data-toggle="popover"
+                                                       data-placement="bottom"
+                                                        data-content="对侧装置:${devname}">
+                                                        (${item.c_pd_name} [${item.c_pd_ftype}])
+                                                        </span>`.trim();
+											isdisable = '';
+										}
+										if (item.c_p1_id !== undefined) {
+											spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
+										}
+										if (podate.BcslotId === '' || podate.ProbsDesc === '') {
+											strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                <span class="dk">${item.ProportName}</span>[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+										} else {
+											item.BcslotId = podate.BcslotId;
+											item.ProbsDesc = podate.ProbsDesc;
+											strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${podate.ProbsName}-${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${podate.ProbsName}-<span class="dk">${item.ProportName}</span>[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+										}
+										AppH.push(item);
+
+									});
+									let soledesc = podate.ProbsDesc;
+									if (soledesc === '') {
+										soledesc = '点击展开';
+									}
+									str += `<div class="panel panel-info" style="border:none;">
+                                                <div class="panel-heading" role="tab" id="headingOne-${poindx}">
+                                                    <a data-id="${podate.BcslotId}" role="button" data-toggle="collapse" data-parent="#port-solt-list" href="#collapseOne-${poindx}" aria-expanded="true" aria-controls="collapseOne-${poindx}">
+                                                     ${soledesc}
+                                                    </a>
+                                                </div>
+                                                <div id="collapseOne-${poindx}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne-${poindx}">
+                                                  <div class="panel-body">
+                                                    <div class="list-group">
+                                                    ${strc}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                                `.trim();
+								});
+								let slotll = `<div style="min-height: 300px;padding: 0;overflow-y: auto;" class="form-control">
+                                                        <div class="panel-group" id="port-solt-list">
+                                                        ${str}
+                                                        </div>
+                                                </div>`;
+								$('.main-modal-body').html(slotll);
+								$('.main-modal').modal();
+								$('.main-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+									GFC.reload();
+								});
+								$('.edit-right').off('click').on('click', function() {
+									$('.main-modal').modal('hide');
+								});
+								$('.list-group-item').on('mousedown', function(event) {
+									var $thisE = $(this);
+									if (event.which === 3) {
+										console.log($(this).attr('data-id'));
+										var EditRStr = '<div class="right-edit-port-menu">' +
+											'<div class="items edit-port">编辑</div>' +
+											'<div class="items remove-port">删除</div>' +
+											'<div>';
+										GFC.addHtmlToPage(EditRStr, '.right-edit-port-menu');
+										$('.right-edit-port-menu').offset({
+											top: event.clientY,
+											left: event.clientX
+										});
+										$('.edit-port').one('click', function() {
+											let thisEdata = _.findWhere(AppH, {
+												Guid: $thisE.attr('data-id')
+											});
+											bootbox.prompt({
+												title: '请输入自定义名称',
+												value: thisEdata.ProportName,
+												callback: function(result) {
+													if (result === null) {
+														//GFC.showError('dd');
+														return;
+													} else {
+														if ($.trim(result) === '') {
+															GFC.showError('不可以输入空的名称！');
+															return;
+														}
+														if (result.length > 12) {
+															GFC.showError('端口名称长度不能大于12位!');
+															return;
+														}
+														if (!parseInt('0x' + result)) {
+															GFC.showError('端口名称必须为数字，或16进制数!');
+															return;
+														}
+														let slotObj = {};
+														console.log(thisEdata);
+														// return;
+														slotObj.Guid = thisEdata.Guid;
+														//slotObj.PubbsPubportBcslotGuid = thisEdata.ProbsProportBcslotGuid;
+														slotObj.PortName = result;
+														slotObj.PortDesc = thisEdata.ProportDesc;
+														slotObj.PortMediaType = thisEdata.ProportMediatype;
+														slotObj.PortJointType = thisEdata.ProportJointtype;
+														slotObj.ProportDesc = thisEdata.ProportDesc;
+														slotObj.PortFuncType = thisEdata.ProportFunctiontype;
+														let setPubPortInfo = ROOF.devconfig.SetPortInfo;
+														setPubPortInfo(slotObj, function(objse) {
+															if (objse.status) {
+																$thisE.find('.dk').text(result);
+															} else {
+																GFC.showError(objse.err_msg);
+															}
+														});
+													}
+												}
+											});
+											//GFC.addHtmlToPage(AppH, '.daboule-modal');
+											//$('.daboule-modal').modal('show');
+										});
+										var deleteDevPort = ROOF.devconfig.DeleteDevPort;
+										$('.remove-port').one('click', function() {
+											ROOF.common.promptConfirm('确认要执行删除操作吗？', function() {
+												deleteDevPort($thisE.attr('data-id'), function(objr) {
+													if (objr.status) {
+														$thisE.remove();
+													} else {
+														GFC.showError(objr.err_msg);
+													}
+												});
+											});
+
+										});
+										$(window).one('click', function() {
+											$('.right-edit-port-menu').remove();
+										});
+									} else {
+										$('.right-edit-port-menu').remove();
+									}
+								});
+							} else {
+								GFC.showError(obj.err_msg);
+							}
+						});
 					}
 				}]
 			},
@@ -856,19 +1060,49 @@
 			rightMenu: {
 				centerMenu: {
 					name: '编辑',
-					fc: function(centerMenu) {
-						console.log('点击编辑');
+					fc: function(cellView) {
+						console.log(cellView);
+						var ViewModel = cellView.model;
+						ROOF.common.loadModalContent(ROOF.hardconnection.renameBoxModal());
+						ROOF.hardconnection.loadRenameBoxData(ViewModel.id, ViewModel.attributes.devDatas.PanelName);
+						ROOF.hardconnection.initRenameBoxHanlder();
+						$('#eidtboxSavtbtn', ROOF.document).on('click', function() {
+							ViewModel.attributes.attrs.text.text = $('#renameboxName', ROOF.document).val();
+							cellView.update();
+
+						});
+
 					}
 				},
 				otherMenu: [{
 					name: '移动至',
-					fc: function(centerMenu) {
-						console.log('点击移动至');
+					fc: function(cellView) {
+						console.log(cellView);
+						//右单击平柜移动到小室
+						var ViewModel = cellView.model;
+						var treeNote = ROOF.svgPortHardwireNote.getNodeByParam('guid', ViewModel.attributes.devDatas.PanelGuid);
+						if (treeNote !== null) {
+							ROOF.common.loadModalContent(ROOF.hardconnection.moveBoxModal());
+							$('#moveBoxHomeSel', ROOF.document).val(treeNote.Parent);
+							ROOF.hardconnection.loadMoveBoxData(treeNote);
+							ROOF.hardconnection.initMoveBoxHanlder(treeNote);
+						}
+						console.log(treeNote);
 					}
 				}, {
-					name: '屏内装置',
-					fc: function(centerMenu) {
-						console.log('点击屏内装置');
+					name: '组屏',
+					fc: function(cellView) {
+						console.log('屏内装置' + cellView);
+						//$('.main-modal').modal();
+						console.log(cellView.model);
+						ROOF.common.loadModalContent(ROOF.hardconnection.mergeBox());
+						ROOF.hardconnection.loadmergeBox(cellView.model.id);
+						ROOF.hardconnection.initmergeBoxHanlder();
+					}
+				}, {
+					name: '组缆',
+					fc: function(cellView) {
+						console.log('组揽')
 					}
 				}]
 			},
@@ -1248,9 +1482,9 @@
 						ROOF.hardconnection.loadmergeBox(cellView.model.id);
 						ROOF.hardconnection.initmergeBoxHanlder();
 					}
-				},{
-					name:'组揽',
-					fc:function(cellView){
+				}, {
+					name: '组揽',
+					fc: function(cellView) {
 						console.log('组揽');
 					}
 				}]

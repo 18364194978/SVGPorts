@@ -368,7 +368,7 @@
 					mainPanel.other_device = newData.other_device;
 					mainPanel.GPorts = data.main.main_device.Gport;
 					mainPanel.LPorts = data.main.main_device.Lport;
-					mainPanel.LineConnect = data.main.LineConnect;
+					mainPanel.LineConnect = newData.PhyLink;
 					console.log(mainPanel, 'mainpanel');
 					$this.creatModel(newData, mainPanel, paper);
 				}
@@ -434,6 +434,11 @@
 				let OtherHeight = 200;
 				let OtherY = 4110;
 				if (data.other_device !== null) {//的other_device
+					var getPortId = [];
+					for (var i = 0; i < data.PhyLink.length; i++) {
+						getPortId.push({"Port1":data.PhyLink[i].Port1.PortId,"Port2":data.PhyLink[i].Port2.PortId});
+					}
+					// let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 7;
 					for (var i = 0; i < data.other_device.length; i++) {
 						if (data.other_device[i].DevPort.length === 0) {
 							continue;

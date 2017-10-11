@@ -2789,7 +2789,7 @@
 			for (var m = 0; m < data.length; m++) {
 				dataGuid.push(data[m].Guid);
 			}
-			console.log(data, 'data', gports, dataGuid);
+			// console.log(data, 'data', gports, dataGuid);
 			if ($this.chidpositons === undefined) { //此处是获取当前最外层svg的坐标，供下面里层的svg准备
 				$this.chidpositons = {
 					x: $this.attributes.position.x,
@@ -2846,33 +2846,38 @@
 				this.attributes.size.height -= 20;
 			}
 			this.runder(ChildArrays); //调用了上面的runder方法
-			for (var j = 0; j < data.length; j++) { //构建main_device
-				if (data[j].DevId !== undefined) {
-					ChildArray = [];
-					continue;
+			var portdata = [];
+			for (var j = 0; j < data.length; j++) {
+				portdata.push({
+					"Guid": data[j].SlotId,
+					"Name": data[j].SlotName,
+					"Type": "Card"
+				});
+				if (data[j].DevPort !== null && data[j].DevPort.length > 0) {
+					for (var l = 0; l < data[j].DevPort.length; l++) {
+						portdata.push({
+							"Guid": data[j].DevPort[l].Guid,
+							"Name": data[j].DevPort[l].Name,
+							"Type": data[j].DevPort[l].Type
+						});
+					}
 				}
-				if ($this.attributes.mainpanel && data[j].devicesInfo !== undefined) { //此处这个连续的if是为了上文97行getPortAttrs硬接线port与线提供数据的，若未考虑线的情况可以先将几个数组设置为空的，这样就port与线就不展示了
-					inprt = data[j].port.leftPort !== null ? data[j].port.leftPort : [];
-					ouprt = data[j].port.rightPort !== null ? data[j].port.rightPort : [];
-					dsname = data[j].devicesInfo.ProdevName;
-					portsname = data[j].devicesInfo.Type;
-					idvs = data[j].devicesInfo.Guid;
-					console.log('1111113', idvs);
-				} else if ($this.attributes.mainpanel && data[j].devicesInfo === undefined) {
+			}
+			for (var n = 0; n < portdata.length; n++) { //构建main_device的端口
+			}
+			for (var n = 0; n < portdata.length; n++) { //构建main_device的端口
+				console.log(portdata.length,'lenle');
+				// if ($this.attributes.mainpanel && data[j].devicesInfo !== undefined) { //此处这个连续的if是为了上文97行getPortAttrs硬接线port与线提供数据的，若未考虑线的情况可以先将几个数组设置为空的，这样就port与线就不展示了
+					// inprt = data[j].port.leftPort !== null ? data[j].port.leftPort : [];
+					// ouprt = data[j].port.rightPort !== null ? data[j].port.rightPort : [];
 					inprt = [];
-					ouprt = data[j].ports !== null ? data[j].ports : [];
-					dsname = data[j].ProdevName;
-					portsname = data[j].Type;
-					idvs = data[j].Guid;
-				} else {
-					inprt = data[j].ports !== null ? data[j].ports : [];
 					ouprt = [];
-					dsname = data[j].ProdevName;
-					portsname = data[j].Type;
-					idvs = data[j].Guid;
-					console.log('111111', idvs);
-				}
+					dsname = portdata[n].Name;
+					portsname = portdata[n].Type;
+					idvs = portdata[n].Guid;
+				// }
 				if (portsname === "Card") {
+				console.log(portdata[n],'=')
 					ChildArray[j] = new joint.shapes.devs.AtomicR({
 						id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 						size: { //此处定义的是内部svg的size
@@ -2886,7 +2891,7 @@
 						z: window.assemblyz += 1, //暂时不知道什么用，删除后无碍
 						inPorts: inprt, //以下这一堆是配置数据，通过model.attribute可以获取
 						outPorts: ouprt,
-						devDatas: data[j],
+						devDatas: portdata[j],
 						paper: this.attributes.paper,
 						panelData: $this.attributes.devDatas,
 						dsname: dsname,
@@ -2966,7 +2971,7 @@
 						z: window.assemblyz += 1, //暂时不知道什么用，删除后无碍
 						inPorts: inprt, //以下这一堆是配置数据，通过model.attribute可以获取
 						outPorts: ouprt,
-						devDatas: data[j],
+						devDatas: portdata[j],
 						paper: this.attributes.paper,
 						panelData: $this.attributes.devDatas,
 						dsname: dsname,

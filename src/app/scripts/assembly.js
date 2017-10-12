@@ -564,6 +564,7 @@
 					}
 				});
 				$('#thb').show();
+				window.paper.conNect2();
 				// if (finddata.GPorts[1].length !== 0) { //other_device的光配
 				// 	$.each(finddata.GPorts[1], function(index2, item2) {
 				// 		let getX = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.x + 150;
@@ -612,6 +613,9 @@
 							"Port2": finddata.LineConnect[i].Port2.PortId
 						});
 					}
+					let ggg = window.ppp.findViewByModel("0f97493d-09ab-430f-8400-d8c0b1f38b6e").model.attributes.position.y;
+					let ggg2 = window.ppp.findViewByModel("e8934ee5-ae64-40c2-abd2-126c5b665ac6").model.attributes.position.y;
+					console.log(ggg,ggg2,'ggggggggggg')
 					for (var i = 0; i < finddata.other_device.length; i++) {
 						if (finddata.other_device[i].DevPort.length === 0) {
 							continue;
@@ -626,8 +630,8 @@
 								}
 							}
 						}
-						// let getY = window.ppp.findViewByModel(getids).model.attributes.position.y;//赞赞赞
-						// console.log(getPortId, getids, getY, 'portid');
+						let getY = window.ppp.findViewByModel(getids).model.attributes.position.y; //赞赞赞
+						console.log(getPortId, getids, getY, 'portid');
 						let portsLen = finddata.other_device[i].DevPort.length;
 						let titlePosition = (portsLen - 1) * 20;
 						let ot = new joint.shapes.devs.CabinetT({
@@ -668,7 +672,7 @@
 				$.each(window.nowAssemblylink, function(index, item) {
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
-				window.paper.conNect2();
+				// window.paper.conNect2();
 
 				$('#thb').hide();
 				window.tbgraph.clear();

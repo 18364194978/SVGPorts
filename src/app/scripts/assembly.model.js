@@ -2745,7 +2745,7 @@
 				this.childEquipments(this.attributes.childequipments);
 			}
 			if (this.attributes.devicesNolink !== undefined) {
-				this.childEquipments(this.attributes.devicesNolink.noLinkDevices, this.attributes.devicesNolink.GPorts);
+				this.childEquipments(this.attributes.devicesNolink.noLinkDevices, this.attributes.devicesNolink.GPorts,this.attributes.devicesNolink.mainPortId);
 			}
 		},
 		bindAutoSize: function(element) { //同上面的bindautosize，暂时无用可以删除测试
@@ -2783,7 +2783,7 @@
 				this.findView(this.attributes.paper.paper).update();
 			}
 		},
-		childEquipments: function(data, gports) { //此处的data实际使用的是rx、tx那些port
+		childEquipments: function(data, gports,mainPortId) { //此处的data实际使用的是rx、tx那些port
 			var $this = this;
 			var dataGuid = [];
 			for (var m = 0; m < data.length; m++) {
@@ -2799,10 +2799,11 @@
 			}
 			var ChildArrays = [];
 			if (gports !== undefined) {
+				console.log(gports,'gports');
 				window.a = [];
-				for (var n = 0; n < dataGuid.length; n++) {
-					for (var l = 0; l < gports.length; l++) {
-						if (gports[l].toPortId === dataGuid[n]) {
+				for (var n = 0; n < mainPortId.length; n++) {
+					for (var l = 0; l < gports[0].length; l++) {
+						if (gports[0][l].ForPort === mainPortId[n]) {
 							console.log('1111');
 							let getGport = new joint.shapes.basic.GPPort({ //todo此处需要后期修改
 								portRemove: 1,

@@ -309,14 +309,15 @@
 						rightLink: [],
 						GPorts: [],
 						other_device: [],
-						LineConnect: []
+						LineConnect: [],
+						mainPortId:[]
 					};
 					var data = $.parseJSON(obj.json_info);
 					data.main = dddata;
 					console.log(data);
 					var haveLinkDevice = [];
 					data.main_panel.isZ = 1;
-					$.each(data.main.Connection, function(index, item) { //硬接线数据处理
+					$.each(newData.PhyLink, function(index, item) { //硬接线数据处理
 						// mainPanel.rightLink.push(item);
 						if (item.Port1.DeviceId === undefined) {
 							if (item.Port1.NetswitchId) {
@@ -370,11 +371,11 @@
 							if (newData.other_device[k].DevPort.length > 1) {
 								for (var j = 0; j < newData.other_device[k].DevPort.length; j++) {
 									other_devices.push({
-										"DevPort":[newData.other_device[k].DevPort[j]],
+										"DevPort": [newData.other_device[k].DevPort[j]],
 										"Guid": newData.other_device[k].Guid,
 										"Name": newData.other_device[k].Name,
 										"PanelId": newData.other_device[k].PanelId,
-										"ShortName":newData.other_device[k].ShortName
+										"ShortName": newData.other_device[k].ShortName
 									});
 								}
 							} else {
@@ -382,9 +383,99 @@
 							}
 						}
 					}
+					var mainPortId = [];
+					var othrPortId = [];
+					var AllMainGport = [];
+					var AllOthrGport = [];
+					var AllportArr = []; //所有的光配点
+					$.each(newData.main_device.Bcslot, function(in1, p1) {
+						mainPortId.push(p1.SlotId);
+						if (p1.DevPort !== null || p1.DevPort !== undefined) {
+							$.each(p1.DevPort, function(in2, p2) {
+								mainPortId.push(p2.Guid);
+							});
+						}
+					});
+					$.each(other_devices, function(in3, p3) {
+						othrPortId.push(p3.DevPort[0].Guid);
+					});
+					if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
+						for (var m = 0; m < newData.PhyLink.length; m++) {
+							if (newData.PhyLink[m].Port1.DevType === "ODF") { //将光配push进属组
+								if (AllportArr.length === 0) {
+									AllportArr.push({
+										"DeviceId": newData.PhyLink[m].Port1.DeviceId,
+										"PanelId": newData.PhyLink[m].Port1.PanelId,
+										"PortId": newData.PhyLink[m].Port1.PortId
+									});
+								} else {
+									let getGpId1 = [];
+									getGpId1 = AllportArr.filter(x => x.PortId === newData.PhyLink[m].Port1.PortId);
+									if (getGpId1.length === 0) {
+										AllportArr.push({
+											"DeviceId": newData.PhyLink[m].Port1.DeviceId,
+											"PanelId": newData.PhyLink[m].Port1.PanelId,
+											"PortId": newData.PhyLink[m].Port1.PortId
+										});
+									}
+								}
+
+							}
+							if (newData.PhyLink[m].Port2.DevType === "ODF") {
+								if (AllportArr.length === 0) {
+									AllportArr.push({
+										"DeviceId": newData.PhyLink[m].Port2.DeviceId,
+										"PanelId": newData.PhyLink[m].Port2.PanelId,
+										"PortId": newData.PhyLink[m].Port2.PortId
+									});
+								} else {
+									let getGpId2 = [];
+									getGpId2 = AllportArr.filter(x => x.PortId === newData.PhyLink[m].Port2.PortId);
+									if (getGpId2.length === 0) {
+										AllportArr.push({
+											"DeviceId": newData.PhyLink[m].Port2.DeviceId,
+											"PanelId": newData.PhyLink[m].Port2.PanelId,
+											"PortId": newData.PhyLink[m].Port2.PortId
+										});
+									}
+								}
+							}
+						}
+					}
+					if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
+						for (let p = 0; p < newData.PhyLink.length; p++) {
+							if (newData.PhyLink[p].Port1.DevType !== "ODF" && newData.PhyLink[p].Port2.DevType === "ODF") {
+								if (mainPortId.indexOf(newData.PhyLink[p].Port1.PortId) !== -1) {
+									AllMainGport.push({
+										"Type":"Main",
+										"DeviceId": newData.PhyLink[p].Port2.DeviceId,
+										"PanelId": newData.PhyLink[p].Port2.PanelId,
+										"PortId": newData.PhyLink[p].Port2.PortId,
+										"ForPort":newData.PhyLink[p].Port1.PortId
+									});
+								}
+							}
+							if (newData.PhyLink[p].Port1.DevType === "ODF" && newData.PhyLink[p].Port2.DevType !== "ODF") {
+								if (othrPortId.indexOf(newData.PhyLink[p].Port2.PortId) !== -1) {
+									AllOthrGport.push({
+										"Type":"Othr",
+										"DeviceId": newData.PhyLink[p].Port1.DeviceId,
+										"PanelId": newData.PhyLink[p].Port1.PanelId,
+										"PortId": newData.PhyLink[p].Port1.PortId,
+										"ForPort":newData.PhyLink[p].Port2.PortId
+									});
+								}
+							}
+						}
+					}
+					var MainAndOthrGP = [];
+					MainAndOthrGP.push(AllMainGport);
+					MainAndOthrGP.push(AllOthrGport);
+					console.log(AllMainGport,AllOthrGport,MainAndOthrGP,'AllMainGport')
 					window.zjlinkDate = [];
-					mainPanel.other_device = other_devices;
-					mainPanel.GPorts = data.main.main_device.Gport;
+					mainPanel.mainPortId = mainPortId;
+					// mainPanel.other_device = other_devices;
+					mainPanel.GPorts = MainAndOthrGP;
 					mainPanel.LPorts = data.main.main_device.Lport;
 					mainPanel.LineConnect = newData.PhyLink;
 					console.log(mainPanel, 'mainpanel');
@@ -453,10 +544,10 @@
 				let OtherY = 4110;
 				if (finddata.other_device !== null) { //的other_device
 					var getPortId = [];
-					for (var i = 0; i < data.PhyLink.length; i++) { //依据连接的端口来定位other-device的位置
+					for (var i = 0; i < finddata.LineConnect.length; i++) { //依据连接的端口来定位other-device的位置
 						getPortId.push({
-							"Port1": data.PhyLink[i].Port1.PortId,
-							"Port2": data.PhyLink[i].Port2.PortId
+							"Port1": finddata.LineConnect[i].Port1.PortId,
+							"Port2": finddata.LineConnect[i].Port2.PortId
 						});
 					}
 					for (var i = 0; i < finddata.other_device.length; i++) {
@@ -473,7 +564,7 @@
 								}
 							}
 						}
-						let getY = window.ppp.findViewByModel(getids).model.attributes.position.y;
+						// let getY = window.ppp.findViewByModel(getids).model.attributes.position.y;//赞赞赞
 						// console.log(getPortId, getids, getY, 'portid');
 						let portsLen = finddata.other_device[i].DevPort.length;
 						let titlePosition = (portsLen - 1) * 20;
@@ -484,7 +575,7 @@
 							portRemove: 1,
 							position: {
 								x: OtherX,
-								y: getY
+								y: OtherY
 							},
 							size: {
 								width: WidthG,
@@ -626,16 +717,16 @@
 			// 	});
 			// });
 			var getLinkConnectId = [];
-			$.each(finddata.LineConnect, function(index, item) { //光缆port点的连接线
-				var vie = 0;
-				if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
-					getLinkConnectId.push(item.LinkConnectId);
-					vie = 1;
-					window.paper.LineConnect(item, vie);
-				} else {
-					window.paper.LineConnect(item, vie);
-				}
-			})
+			// $.each(finddata.LineConnect, function(index, item) { //暂时暂时光缆port点的连接线
+			// 	var vie = 0;
+			// 	if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
+			// 		getLinkConnectId.push(item.LinkConnectId);
+			// 		vie = 1;
+			// 		window.paper.LineConnect(item, vie);
+			// 	} else {
+			// 		window.paper.LineConnect(item, vie);
+			// 	}
+			// })
 		}
 	}];
 })(window.jQuery, window.joint, window._, window.parent.window, window.V, window.GFC);

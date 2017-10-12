@@ -308,7 +308,7 @@
 						leftLink: [],
 						rightLink: [],
 						GPorts: [],
-						other_device:[],
+						other_device: [],
 						LineConnect: []
 					};
 					var data = $.parseJSON(obj.json_info);
@@ -364,8 +364,26 @@
 						});
 						mainPanel.noLinkDevices.push(item);
 					});
+					var other_devices = [];
+					for (var k = 0; k < newData.other_device.length; k++) {
+						if (newData.other_device[k].DevPort !== null || newData.other_device[k].DevPort !== undefined) {
+							if (newData.other_device[k].DevPort.length > 1) {
+								for (var j = 0; j < newData.other_device[k].DevPort.length; j++) {
+									other_devices.push({
+										"DevPort":[newData.other_device[k].DevPort[j]],
+										"Guid": newData.other_device[k].Guid,
+										"Name": newData.other_device[k].Name,
+										"PanelId": newData.other_device[k].PanelId,
+										"ShortName":newData.other_device[k].ShortName
+									});
+								}
+							} else {
+								other_devices.push(newData.other_device[k]);
+							}
+						}
+					}
 					window.zjlinkDate = [];
-					mainPanel.other_device = newData.other_device;
+					mainPanel.other_device = other_devices;
 					mainPanel.GPorts = data.main.main_device.Gport;
 					mainPanel.LPorts = data.main.main_device.Lport;
 					mainPanel.LineConnect = newData.PhyLink;
@@ -433,25 +451,40 @@
 				let WidthG = 393;
 				let OtherHeight = 200;
 				let OtherY = 4110;
-				if (data.other_device !== null) {//的other_device
+				if (finddata.other_device !== null) { //的other_device
 					var getPortId = [];
-					for (var i = 0; i < data.PhyLink.length; i++) {
-						getPortId.push({"Port1":data.PhyLink[i].Port1.PortId,"Port2":data.PhyLink[i].Port2.PortId});
+					for (var i = 0; i < data.PhyLink.length; i++) { //依据连接的端口来定位other-device的位置
+						getPortId.push({
+							"Port1": data.PhyLink[i].Port1.PortId,
+							"Port2": data.PhyLink[i].Port2.PortId
+						});
 					}
-					// let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 7;
-					for (var i = 0; i < data.other_device.length; i++) {
-						if (data.other_device[i].DevPort.length === 0) {
+					for (var i = 0; i < finddata.other_device.length; i++) {
+						if (finddata.other_device[i].DevPort.length === 0) {
 							continue;
 						}
-						let portsLen = data.other_device[i].DevPort.length;
+						let getids;
+						if (getPortId.length > 0) {
+							for (var h = 0; h < getPortId.length; h++) {
+								if (finddata.other_device[i].DevPort[0].Guid === getPortId[h].Port1) {
+									getids = getPortId[h].Port2;
+								} else if (finddata.other_device[i].DevPort[0].Guid === getPortId[h].Port2) {
+									getids = getPortId[h].Port1;
+								}
+							}
+						}
+						let getY = window.ppp.findViewByModel(getids).model.attributes.position.y;
+						// console.log(getPortId, getids, getY, 'portid');
+						let portsLen = finddata.other_device[i].DevPort.length;
 						let titlePosition = (portsLen - 1) * 20;
 						let ot = new joint.shapes.devs.CabinetT({
 							z: window.assemblyz += 1,
-							id: data.other_device[i].Guid,
+							// id: data.other_device[i].Guid,//将含有多个端口的device分成多个相同id的device，故此处暂时屏蔽让系统自动分配id，后续需要也可以自己生成id赋值
+							devID: finddata.other_device[i].Guid, //装置id
 							portRemove: 1,
 							position: {
 								x: OtherX,
-								y: OtherY
+								y: getY
 							},
 							size: {
 								width: WidthG,
@@ -459,13 +492,13 @@
 							},
 							inPorts: [],
 							outPorts: [],
-							devDatas: data.other_device[i],
-							childequipments: data.other_device[i].DevPort,
+							devDatas: finddata.other_device[i],
+							childequipments: finddata.other_device[i].DevPort,
 							paper: paper,
 							mainpanel: false,
 							attrs: {
 								'text.title-class': {
-									text: data.other_device[i].Name
+									text: finddata.other_device[i].Name
 								},
 								'g.title-class': {
 									x: 0,

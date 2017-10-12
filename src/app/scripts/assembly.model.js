@@ -3076,7 +3076,6 @@
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;
 			}
-			console.log(ChildArray,'child')
 			this.runder(ChildArray); //调用了上面的runder方法
 		},
 		getPortAttrs: function(portName, index, total, selector, type) { //z暂时没用到，删除无碍

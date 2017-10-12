@@ -310,7 +310,7 @@
 						GPorts: [],
 						other_device: [],
 						LineConnect: [],
-						mainPortId:[]
+						mainPortId: []
 					};
 					var data = $.parseJSON(obj.json_info);
 					data.main = dddata;
@@ -387,7 +387,10 @@
 					var othrPortId = [];
 					var AllMainGport = [];
 					var AllOthrGport = [];
-					var AllportArr = []; //所有的光配点
+					var AllMainGportId = [];
+					var AllOthrGportId = [];
+					var AllGpToGP = [];
+					// var AllportArr = []; //所有的光配点
 					$.each(newData.main_device.Bcslot, function(in1, p1) {
 						mainPortId.push(p1.SlotId);
 						if (p1.DevPort !== null || p1.DevPort !== undefined) {
@@ -399,79 +402,102 @@
 					$.each(other_devices, function(in3, p3) {
 						othrPortId.push(p3.DevPort[0].Guid);
 					});
-					if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
-						for (var m = 0; m < newData.PhyLink.length; m++) {
-							if (newData.PhyLink[m].Port1.DevType === "ODF") { //将光配push进属组
-								if (AllportArr.length === 0) {
-									AllportArr.push({
-										"DeviceId": newData.PhyLink[m].Port1.DeviceId,
-										"PanelId": newData.PhyLink[m].Port1.PanelId,
-										"PortId": newData.PhyLink[m].Port1.PortId
-									});
-								} else {
-									let getGpId1 = [];
-									getGpId1 = AllportArr.filter(x => x.PortId === newData.PhyLink[m].Port1.PortId);
-									if (getGpId1.length === 0) {
-										AllportArr.push({
-											"DeviceId": newData.PhyLink[m].Port1.DeviceId,
-											"PanelId": newData.PhyLink[m].Port1.PanelId,
-											"PortId": newData.PhyLink[m].Port1.PortId
-										});
-									}
-								}
+					// if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
+					// 	for (var m = 0; m < newData.PhyLink.length; m++) {
+					// 		if (newData.PhyLink[m].Port1.DevType === "ODF") { //将光配push进属组
+					// 			if (AllportArr.length === 0) {
+					// 				AllportArr.push({
+					// 					"DeviceId": newData.PhyLink[m].Port1.DeviceId,
+					// 					"PanelId": newData.PhyLink[m].Port1.PanelId,
+					// 					"PortId": newData.PhyLink[m].Port1.PortId
+					// 				});
+					// 			} else {
+					// 				let getGpId1 = [];
+					// 				getGpId1 = AllportArr.filter(x => x.PortId === newData.PhyLink[m].Port1.PortId);
+					// 				if (getGpId1.length === 0) {
+					// 					AllportArr.push({
+					// 						"DeviceId": newData.PhyLink[m].Port1.DeviceId,
+					// 						"PanelId": newData.PhyLink[m].Port1.PanelId,
+					// 						"PortId": newData.PhyLink[m].Port1.PortId
+					// 					});
+					// 				}
+					// 			}
 
-							}
-							if (newData.PhyLink[m].Port2.DevType === "ODF") {
-								if (AllportArr.length === 0) {
-									AllportArr.push({
-										"DeviceId": newData.PhyLink[m].Port2.DeviceId,
-										"PanelId": newData.PhyLink[m].Port2.PanelId,
-										"PortId": newData.PhyLink[m].Port2.PortId
-									});
-								} else {
-									let getGpId2 = [];
-									getGpId2 = AllportArr.filter(x => x.PortId === newData.PhyLink[m].Port2.PortId);
-									if (getGpId2.length === 0) {
-										AllportArr.push({
-											"DeviceId": newData.PhyLink[m].Port2.DeviceId,
-											"PanelId": newData.PhyLink[m].Port2.PanelId,
-											"PortId": newData.PhyLink[m].Port2.PortId
-										});
-									}
-								}
-							}
-						}
-					}
+					// 		}
+					// 		if (newData.PhyLink[m].Port2.DevType === "ODF") {
+					// 			if (AllportArr.length === 0) {
+					// 				AllportArr.push({
+					// 					"DeviceId": newData.PhyLink[m].Port2.DeviceId,
+					// 					"PanelId": newData.PhyLink[m].Port2.PanelId,
+					// 					"PortId": newData.PhyLink[m].Port2.PortId
+					// 				});
+					// 			} else {
+					// 				let getGpId2 = [];
+					// 				getGpId2 = AllportArr.filter(x => x.PortId === newData.PhyLink[m].Port2.PortId);
+					// 				if (getGpId2.length === 0) {
+					// 					AllportArr.push({
+					// 						"DeviceId": newData.PhyLink[m].Port2.DeviceId,
+					// 						"PanelId": newData.PhyLink[m].Port2.PanelId,
+					// 						"PortId": newData.PhyLink[m].Port2.PortId
+					// 					});
+					// 				}
+					// 			}
+					// 		}
+					// 	}
+					// }
 					if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
 						for (let p = 0; p < newData.PhyLink.length; p++) {
 							if (newData.PhyLink[p].Port1.DevType !== "ODF" && newData.PhyLink[p].Port2.DevType === "ODF") {
 								if (mainPortId.indexOf(newData.PhyLink[p].Port1.PortId) !== -1) {
 									AllMainGport.push({
-										"Type":"Main",
+										"Type": "Main",
 										"DeviceId": newData.PhyLink[p].Port2.DeviceId,
 										"PanelId": newData.PhyLink[p].Port2.PanelId,
 										"PortId": newData.PhyLink[p].Port2.PortId,
-										"ForPort":newData.PhyLink[p].Port1.PortId
+										"ForPort": newData.PhyLink[p].Port1.PortId
 									});
+									AllMainGportId.push(newData.PhyLink[p].Port2.PortId);
 								}
 							}
-							if (newData.PhyLink[p].Port1.DevType === "ODF" && newData.PhyLink[p].Port2.DevType !== "ODF") {
-								if (othrPortId.indexOf(newData.PhyLink[p].Port2.PortId) !== -1) {
-									AllOthrGport.push({
-										"Type":"Othr",
+							// if (newData.PhyLink[p].Port1.DevType === "ODF" && newData.PhyLink[p].Port2.DevType !== "ODF") {
+							// 	if (othrPortId.indexOf(newData.PhyLink[p].Port2.PortId) !== -1) {
+							// 		AllOthrGport.push({
+							// 			"Type":"Othr",
+							// 			"DeviceId": newData.PhyLink[p].Port1.DeviceId,
+							// 			"PanelId": newData.PhyLink[p].Port1.PanelId,
+							// 			"PortId": newData.PhyLink[p].Port1.PortId,
+							// 			"ForPort":newData.PhyLink[p].Port2.PortId
+							// 		});
+							// 		AllOthrGportId.push(newData.PhyLink[p].Port1.PortId);
+							// 	}
+							// }
+							if (newData.PhyLink[p].Port1.DevType === "ODF" && newData.PhyLink[p].Port2.DevType === "ODF") {
+								if (AllMainGportId.indexOf(newData.PhyLink[p].Port1.PortId) !== -1) {
+									AllGpToGP.push({
+										"Type": "Othr",
+										"DeviceId": newData.PhyLink[p].Port2.DeviceId,
+										"PanelId": newData.PhyLink[p].Port2.PanelId,
+										"PortId": newData.PhyLink[p].Port2.PortId,
+										"ForPort": newData.PhyLink[p].Port1.PortId
+									})
+								}
+								if (AllOthrGportId.indexOf(newData.PhyLink[p].Port1.PortId) !== -1) {
+									AllGpToGP.push({
+										"Type": "Othr",
 										"DeviceId": newData.PhyLink[p].Port1.DeviceId,
 										"PanelId": newData.PhyLink[p].Port1.PanelId,
 										"PortId": newData.PhyLink[p].Port1.PortId,
-										"ForPort":newData.PhyLink[p].Port2.PortId
-									});
+										"ForPort": newData.PhyLink[p].Port2.PortId
+									})
 								}
 							}
 						}
 					}
 					var MainAndOthrGP = [];
 					MainAndOthrGP.push(AllMainGport);
-					MainAndOthrGP.push(AllOthrGport);
-					console.log(AllMainGport,AllOthrGport,MainAndOthrGP,'AllMainGport')
+					// MainAndOthrGP.push(AllOthrGport);
+					MainAndOthrGP.push(AllGpToGP);
+					console.log(MainAndOthrGP, 'AllMainGport')
 					window.zjlinkDate = [];
 					mainPanel.mainPortId = mainPortId;
 					// mainPanel.other_device = other_devices;
@@ -538,6 +564,42 @@
 					}
 				});
 				$('#thb').show();
+				// if (finddata.GPorts[1].length !== 0) { //other_device的光配
+				// 	$.each(finddata.GPorts[1], function(index2, item2) {
+				// 		let getX = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.x + 150;
+				// 		let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y + 7;
+				// 		let getGport = new joint.shapes.basic.GPPort({
+				// 			portRemove: 1,
+				// 			id: item2.PortId,
+				// 			position: {
+				// 				x: getX,
+				// 				y: getY
+				// 			},
+				// 			size: {
+				// 				width: 10,
+				// 				height: 10
+				// 			},
+				// 			attrs: {
+				// 				text: {
+				// 					// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
+				// 					text: item2.PortId,
+				// 					'font-size': 9,
+				// 					stroke: '',
+				// 					fill: '#306796',
+				// 					'ref-y': -10
+				// 				},
+				// 				rect: {
+				// 					width: 13,
+				// 					height: 13,
+				// 					rx: 13,
+				// 					ry: 13,
+				// 					fill: '#306796'
+				// 				}
+				// 			}
+				// 		});
+				// 		getGport.addTo(window.paper.graph);
+				// 	});
+				// }
 				let OtherX = 590 + 4000 + 150;
 				let WidthG = 393;
 				let OtherHeight = 200;
@@ -607,57 +669,7 @@
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
 				window.paper.conNect2();
-				// if (data.main.other_device.length !== 0) { //暂时暂时other_device的光配
-				// 	var portGuid = [];
-				// 	$.each(data.main.other_device, function(index, item) {
-				// 		$.each(item.ports, function(index2, item2) {
-				// 			portGuid.push({
-				// 				'derection': item.derection,
-				// 				'Guid': item2.Guid
-				// 			});
-				// 		});
-				// 	});
-				// 	$.each(portGuid, function(index, item) { //other_device的光配
-				// 		$.each(data.main.other_device[0].Gport, function(index2, item2) {
-				// 			if (item2.toPortId === item.Guid) {
-				// 				if (item.derection === 'left') {
-				// 					let getX = window.ppp.findViewByModel(item.Guid).model.attributes.position.x - 50;
-				// 					let getY = window.ppp.findViewByModel(item.Guid).model.attributes.position.y + 7;
-				// 					let getGport = new joint.shapes.basic.GPPort({
-				// 						portRemove: 1,
-				// 						id: item2.Guid,
-				// 						position: {
-				// 							x: getX,
-				// 							y: getY
-				// 						},
-				// 						size: {
-				// 							width: 10,
-				// 							height: 10
-				// 						},
-				// 						attrs: {
-				// 							text: {
-				// 								// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
-				// 								text: item2.Guid,
-				// 								'font-size': 9,
-				// 								stroke: '',
-				// 								fill: '#306796',
-				// 								'ref-y': -10
-				// 							},
-				// 							rect: {
-				// 								width: 13,
-				// 								height: 13,
-				// 								rx: 13,
-				// 								ry: 13,
-				// 								fill: '#306796'
-				// 							}
-				// 						}
-				// 					});
-				// 					getGport.addTo(window.paper.graph);
-				// 				}
-				// 			}
-				// 		});
-				// 	});
-				// }
+
 				$('#thb').hide();
 				window.tbgraph.clear();
 				window.assemblyZlink = [];

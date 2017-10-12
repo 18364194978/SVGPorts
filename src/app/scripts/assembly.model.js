@@ -2804,10 +2804,10 @@
 				for (var n = 0; n < mainPortId.length; n++) {
 					for (var l = 0; l < gports[0].length; l++) {
 						if (gports[0][l].ForPort === mainPortId[n]) {
-							console.log('1111');
+							console.log('1111',gports[0][l].PortId);
 							let getGport = new joint.shapes.basic.GPPort({ //todo此处需要后期修改
 								portRemove: 1,
-								id: gports[l].Guid,
+								id: gports[0][l].PortId,
 								position: {
 									x: $this.chidpositons.x + 250,
 									y: $this.chidpositons.y + 115 + (n - 1) * 40
@@ -2818,7 +2818,7 @@
 								},
 								attrs: {
 									text: {
-										text: gports[l].Guid,
+										text: gports[0][l].PortId,
 										'font-size': 9,
 										stroke: '',
 										fill: '#306796',

@@ -675,7 +675,7 @@
 						}
 						
 						let getY = window.ppp.findViewByModel(finddata.other_device[i].ForPort).model.attributes.position.y-9;
-						console.log( getY, 'portid');
+						let portsLen = finddata.other_device[i].DevPort.length;
 						let titlePosition = (portsLen - 1) * 20;
 						let devname  = '';
 						if (finddata.other_device[i].Name.length>11) {

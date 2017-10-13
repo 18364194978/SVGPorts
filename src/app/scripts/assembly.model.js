@@ -2449,7 +2449,7 @@
 						console.log(cellView.model, 'cellViewcell')
 						var ViewModel = cellView.model;
 						var EditStr = '';
-						var elementTitls = cellView.$el.find('.content-x');
+						window.elementTitls = cellView.$el.find('text.title-class');
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
 							'<label for="exampleInputEmail1">装置名称:</label>' +
@@ -2464,11 +2464,10 @@
 							if ($.trim($('.change-atr').val()) !== '') {
 								NewName = $('.change-atr').val();
 							}
-							renamePhydevice(ViewModel.attributes.id, NewName, function(obj) {
-								console.log(obj,ViewModel.attributes.id,NewName,'llllllllll')
+							renamePhydevice(ViewModel.attributes.devDatas.Guid, NewName, function(obj) {
 								if (obj.status) {
 									cellView.model.attributes.dsname = NewName;
-									elementTitls.attr('title', NewName).text(NewName);
+									elementTitls.text(NewName);
 									$('.main-modal').modal('hide');
 								} else {
 									ROOF.common.promptInformation('编辑失败:' + obj.err_msg);
@@ -2487,7 +2486,7 @@
 							return;
 						}
 						var ViewModel = cellView.model;
-						var treeNote = ROOF.svgPortHardwireNote.getNodeByParam('guid', ViewModel.attributes.id);
+						var treeNote = ROOF.svgPortHardwireNote.getNodeByParam('guid', ViewModel.attributes.devDatas.Guid);
 						ROOF.common.loadModalContent(ROOF.hardconnection.moveDeviceModal());
 						ROOF.hardconnection.loadMoveDeviceData(treeNote);
 						ROOF.hardconnection.initMoveDeviceHanlder(treeNote);
@@ -2496,10 +2495,12 @@
 					name: '端口',
 					fc: function(cellView) {
 						var ViewModel = cellView.model;
+						console.log(ViewModel,'ViewModel')
 						var $this = this;
 						let AppH = [];
 						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
-						getPortsByDeviceId(ViewModel.id, function(obj) {
+						getPortsByDeviceId(ViewModel.attributes.devDatas.Guid, function(obj) {
+							console.log(obj,ViewModel.attributes.devDatas.Guid,'端口');
 							if (obj.status) {
 								console.log(obj);
 								$('.main-modal-body').html('');

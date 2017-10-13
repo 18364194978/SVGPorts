@@ -1892,7 +1892,7 @@
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
 							'<label for="exampleInputEmail1">装置名称:</label>' +
-							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.deviceName + '" id="exampleInputEmail1" placeholder="">' +
+							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.Name + '" id="exampleInputEmail1" placeholder="">' +
 							'</div>';
 						$('.modal-body').html(EditStr);
 						$('.main-modal').modal();
@@ -2148,7 +2148,7 @@
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
-					width: 233,
+					width: 283,
 					height: 150
 				},
 				'g.title-class': {
@@ -2158,7 +2158,7 @@
 				'rect.title-class': {
 					fill: '#5B9BD5',
 					stroke: '#5B9BD5',
-					width: 233,
+					width: 283,
 					height: 54
 
 				},
@@ -2453,7 +2453,7 @@
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
 							'<label for="exampleInputEmail1">装置名称:</label>' +
-							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.deviceName + '" id="exampleInputEmail1" placeholder="">' +
+							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.Name + '" id="exampleInputEmail1" placeholder="">' +
 							'</div>';
 						$('.modal-body').html(EditStr);
 						$('.main-modal').modal();
@@ -2465,6 +2465,7 @@
 								NewName = $('.change-atr').val();
 							}
 							renamePhydevice(ViewModel.attributes.id, NewName, function(obj) {
+								console.log(obj,ViewModel.attributes.id,NewName,'llllllllll')
 								if (obj.status) {
 									cellView.model.attributes.dsname = NewName;
 									elementTitls.attr('title', NewName).text(NewName);
@@ -2804,7 +2805,7 @@
 				for (var n = 0; n < mainPortId.length; n++) {
 					for (var l = 0; l < gports[0].length; l++) {
 						if (gports[0][l].ForPort === mainPortId[n]) {
-							console.log('1111',gports[0][l].PortId);
+							console.log('1111');
 							let getGport = new joint.shapes.basic.GPPort({ //todo此处需要后期修改
 								portRemove: 1,
 								id: gports[0][l].PortId,
@@ -2818,7 +2819,7 @@
 								},
 								attrs: {
 									text: {
-										text: gports[0][l].PortId,
+										text: gports[0][l].PortName,
 										'font-size': 9,
 										stroke: '',
 										fill: '#306796',

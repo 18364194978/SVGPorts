@@ -802,6 +802,7 @@ window.ddd = [];
         var getX = window.a[i].attributes.position.x;
         var getY = window.a[i].attributes.position.y + 3;
         var getId = window.a[i].id;
+        var getName = window.a[i].attributes.attrs.text.text;
         let getGport = new joint.shapes.basic.GPPort({
           portRemove: 1,
           id: getId,
@@ -817,7 +818,7 @@ window.ddd = [];
           attrs: {
             text: {
               // text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
-              text: getId,
+              text: getName,
               'font-size': 9,
               stroke: '',
               fill: '#306796',

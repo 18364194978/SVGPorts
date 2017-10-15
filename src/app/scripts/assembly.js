@@ -510,9 +510,9 @@
 					})
 					if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
 						$.each(newData.PhyLink, function(ind1, itm1) {
-							if (itm1.Port1.PanelId === itm1.Port2.PanelId) {//一个点：mainGp或othrGp时
+							if (itm1.Port1.PanelId === itm1.Port2.PanelId) { //一个点：mainGp或othrGp时
 								if (itm1.Port1.DevType !== "ODF" && itm1.Port2.DevType === "ODF") {
-									if (newMainDevId.indexOf(itm1.Port1.DeviceId)!==-1) {
+									if (newMainDevId.indexOf(itm1.Port1.DeviceId) !== -1) {
 										let getExit = [];
 										getExit = newMainGp.filter(x => x.PortId === itm1.Port2.PortId);
 										if (getExit.length === 0) {
@@ -526,7 +526,7 @@
 											})
 										}
 									}
-									if (newOterDevId.indexOf(itm1.Port2.DeviceId)!==-1) {
+									if (newOterDevId.indexOf(itm1.Port2.DeviceId) !== -1) {
 										let getExit = [];
 										getExit = newOthrGP.filter(x => x.PortId === itm1.Port2.PortId);
 										if (getExit.length === 0) {
@@ -542,7 +542,7 @@
 									}
 								}
 								if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType !== "ODF") {
-									if (newMainDevId.indexOf(itm1.Port2.DeviceId)!==-1) {
+									if (newMainDevId.indexOf(itm1.Port2.DeviceId) !== -1) {
 										let getExit = [];
 										getExit = newMainGp.filter(x => x.PortId === itm1.Port1.PortId);
 										if (getExit.length === 0) {
@@ -556,7 +556,7 @@
 											})
 										}
 									}
-									if (newOterDevId.indexOf(itm1.Port2.DeviceId)!==-1) {
+									if (newOterDevId.indexOf(itm1.Port2.DeviceId) !== -1) {
 										let getExit = [];
 										getExit = newOthrGP.filter(x => x.PortId === itm1.Port1.PortId);
 										if (getExit.length === 0) {
@@ -570,11 +570,40 @@
 											})
 										}
 									}
+									if (newThidGP.length!==0) {
+										$.each(newThidGP,function(ii1,tt1){
+											let getExit = [];
+											let getExit2 = [];
+											let getExit3 = [];
+											getExit = newMainGp.filter(x => x.PortId === tt1.PortId);
+											getExit2 = newOthrGP.filter(x => x.PortId === tt1.PortId);
+											getExit3 = newCentGp.filter(x => x.PortId === tt1.PortId);
+											if (getExit.length === 0 && getExit2.length === 0 && getExit3.length === 0) {
+												newCentGp.push(tt1);
+											}
+										})
+									}
 								}
+								// if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType === "ODF") {
+								// 	if (newMainDevId.indexOf(itm1.Port1.DeviceId)!==-1) {
+								// 		let getExit = [];
+								// 		getExit = newMainGp.filter(x => x.PortId === itm1.Port1.PortId);
+								// 		if (getExit.length === 0) {
+								// 			newMainGp.push({
+								// 				"Type": "Main",
+								// 				"DeviceId": itm1.Port1.DeviceId,
+								// 				"PanelId": itm1.Port1.PanelId,
+								// 				"PortId": itm1.Port1.PortId,
+								// 				"PortName": itm1.Port1.PortName,
+								// 				"ForPort": itm1.Port2.PortId
+								// 			})
+								// 		}
+								// 	}
+								// }
 							}
-							if (itm1.Port1.PanelId !== itm1.Port2.PanelId) {//一个点：转接点时
+							if (itm1.Port1.PanelId !== itm1.Port2.PanelId) { //一个点：转接点时
 								if (itm1.Port1.DevType !== "ODF" && itm1.Port2.DevType === "ODF") {
-									if (newMainDevId.indexOf(itm1.Port1.DeviceId)!==-1) {
+									if (newMainDevId.indexOf(itm1.Port1.DeviceId) !== -1) {
 										let getExit = [];
 										let getExit2 = [];
 										let getExit3 = [];
@@ -592,9 +621,19 @@
 											})
 										}
 									}
+									if (newMainDevId.indexOf(itm1.Port1.DeviceId) === -1) {
+											newThidGP.push({
+												"Type": "Thid",
+												"DeviceId": itm1.Port2.DeviceId,
+												"PanelId": itm1.Port2.PanelId,
+												"PortId": itm1.Port2.PortId,
+												"PortName": itm1.Port2.PortName,
+												"ForPort": itm1.Port1.PortId
+											})
+									}
 								}
 								if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType !== "ODF") {
-									if (newMainDevId.indexOf(itm1.Port2.DeviceId)!==-1) {
+									if (newMainDevId.indexOf(itm1.Port2.DeviceId) !== -1) {
 										let getExit = [];
 										let getExit2 = [];
 										let getExit3 = [];
@@ -612,11 +651,46 @@
 											})
 										}
 									}
+									if (newThidGP.length!==0) {
+										$.each(newThidGP,function(ii1,tt1){
+											let getExit = [];
+											let getExit2 = [];
+											let getExit3 = [];
+											getExit = newMainGp.filter(x => x.PortId === tt1.PortId);
+											getExit2 = newOthrGP.filter(x => x.PortId === tt1.PortId);
+											getExit3 = newCentGp.filter(x => x.PortId === tt1.PortId);
+											if (getExit.length === 0 && getExit2.length === 0&& getExit3.length === 0) {
+												newCentGp.push(tt1);
+											}
+										})
+									}
+								}
+								if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType === "ODF") {
+									if (newThidGP.indexOf(itm1.Port1.DeviceId) === -1) {
+											newThidGP.push({
+												"Type": "Thid",
+												"DeviceId": itm1.Port1.DeviceId,
+												"PanelId": itm1.Port1.PanelId,
+												"PortId": itm1.Port1.PortId,
+												"PortName": itm1.Port1.PortName,
+												"ForPort": ''
+											})
+									}
+									if (newThidGP.indexOf(itm1.Port2.DeviceId) === -1) {
+											newThidGP.push({
+												"Type": "Thid",
+												"DeviceId": itm1.Port2.DeviceId,
+												"PanelId": itm1.Port2.PanelId,
+												"PortId": itm1.Port2.PortId,
+												"PortName": itm1.Port2.PortName,
+												"ForPort": ''
+											})
+									}
 								}
 							}
 						})
 					}
-					console.log(newMainGp,newOthrGP,newCentGp,'点点点点');
+					console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
 					var MainAndOthrGP = [];
 					MainAndOthrGP.push(AllMainGport);
 					MainAndOthrGP.push(AllGpToGP);

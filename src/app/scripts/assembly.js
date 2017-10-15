@@ -570,8 +570,8 @@
 											})
 										}
 									}
-									if (newThidGP.length!==0) {
-										$.each(newThidGP,function(ii1,tt1){
+									if (newThidGP.length !== 0) {
+										$.each(newThidGP, function(ii1, tt1) {
 											let getExit = [];
 											let getExit2 = [];
 											let getExit3 = [];
@@ -579,7 +579,14 @@
 											getExit2 = newOthrGP.filter(x => x.PortId === tt1.PortId);
 											getExit3 = newCentGp.filter(x => x.PortId === tt1.PortId);
 											if (getExit.length === 0 && getExit2.length === 0 && getExit3.length === 0) {
-												newCentGp.push(tt1);
+												newCentGp.push({
+													"Type": "Centr",
+													"DeviceId": tt1.DeviceId,
+													"PanelId": tt1.PanelId,
+													"PortId": tt1.PortId,
+													"PortName": tt1.PortName,
+													"ForPort": tt1.ForPort
+												});
 											}
 										})
 									}
@@ -622,14 +629,14 @@
 										}
 									}
 									if (newMainDevId.indexOf(itm1.Port1.DeviceId) === -1) {
-											newThidGP.push({
-												"Type": "Thid",
-												"DeviceId": itm1.Port2.DeviceId,
-												"PanelId": itm1.Port2.PanelId,
-												"PortId": itm1.Port2.PortId,
-												"PortName": itm1.Port2.PortName,
-												"ForPort": itm1.Port1.PortId
-											})
+										newThidGP.push({
+											"Type": "Thid",
+											"DeviceId": itm1.Port2.DeviceId,
+											"PanelId": itm1.Port2.PanelId,
+											"PortId": itm1.Port2.PortId,
+											"PortName": itm1.Port2.PortName,
+											"ForPort": itm1.Port1.PortId
+										})
 									}
 								}
 								if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType !== "ODF") {
@@ -651,40 +658,47 @@
 											})
 										}
 									}
-									if (newThidGP.length!==0) {
-										$.each(newThidGP,function(ii1,tt1){
+									if (newThidGP.length !== 0) {
+										$.each(newThidGP, function(ii1, tt1) {
 											let getExit = [];
 											let getExit2 = [];
 											let getExit3 = [];
 											getExit = newMainGp.filter(x => x.PortId === tt1.PortId);
 											getExit2 = newOthrGP.filter(x => x.PortId === tt1.PortId);
 											getExit3 = newCentGp.filter(x => x.PortId === tt1.PortId);
-											if (getExit.length === 0 && getExit2.length === 0&& getExit3.length === 0) {
-												newCentGp.push(tt1);
+											if (getExit.length === 0 && getExit2.length === 0 && getExit3.length === 0) {
+												newCentGp.push({
+													"Type": "Centr",
+													"DeviceId": tt1.DeviceId,
+													"PanelId": tt1.PanelId,
+													"PortId": tt1.PortId,
+													"PortName": tt1.PortName,
+													"ForPort": tt1.ForPort
+												});
 											}
 										})
 									}
 								}
 								if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType === "ODF") {
 									if (newThidGP.indexOf(itm1.Port1.DeviceId) === -1) {
-											newThidGP.push({
-												"Type": "Thid",
-												"DeviceId": itm1.Port1.DeviceId,
-												"PanelId": itm1.Port1.PanelId,
-												"PortId": itm1.Port1.PortId,
-												"PortName": itm1.Port1.PortName,
-												"ForPort": ''
-											})
+										newThidGP.push({
+											"Type": "Thid",
+											"DeviceId": itm1.Port1.DeviceId,
+											"PanelId": itm1.Port1.PanelId,
+											"PortId": itm1.Port1.PortId,
+											"PortName": itm1.Port1.PortName,
+											"ForPort": ''
+										})
 									}
 									if (newThidGP.indexOf(itm1.Port2.DeviceId) === -1) {
-											newThidGP.push({
-												"Type": "Thid",
-												"DeviceId": itm1.Port2.DeviceId,
-												"PanelId": itm1.Port2.PanelId,
-												"PortId": itm1.Port2.PortId,
-												"PortName": itm1.Port2.PortName,
-												"ForPort": ''
-											})
+										newThidGP.push({
+											"Type": "Thid",
+											"DeviceId": itm1.Port2.DeviceId,
+											"PanelId": itm1.Port2.PanelId,
+											"PortId": itm1.Port2.PortId,
+											"PortName": itm1.Port2.PortName,
+											"ForPort": ''
+										})
 									}
 								}
 							}

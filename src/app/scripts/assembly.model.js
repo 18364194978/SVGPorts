@@ -96,81 +96,66 @@
 						var $this = this;
 						let getPanelId = cellView.model.attributes.panelData.PanelId;
 						let GetPanelOdfList = ROOF.physical.GetPanelOdfList;
-						GetPanelOdfList(getPanelId,function(obj){
+						GetPanelOdfList(getPanelId, function(obj) {
 							if (obj.status) {
-								console.log(obj,'obj')
-							}else{
-								console.log(err_msg);
-							}
-						});
-						
-						if (1 == 1) { //todo此处后期会换成加载上光配的接口
-							var gettreedata = window.treedata;
-							var data = [];
-							for (var i = 0; i < gettreedata.length; i++) {
-								data.push({
-									name: gettreedata[i].Name,
-									Guid: gettreedata[i].Guid,
-									children: getChildren(gettreedata[i].child)
+								console.log(obj, 'obj')
+								var datas = [];
+								for (var i = 0; i < obj.devices_list.length; i++) {
+									datas.push({
+										name: obj.devices_list[i].box_name,
+										type: obj.devices_list[i].Type,
+										Guid: obj.devices_list[i].box_idx,
+										children: getChildren(obj.devices_list[i].odf_list)
+									})
+								}
+
+								function getChildren(list) {
+									let arr = [];
+									for (var l = 0; l < list.length; l++) {
+										arr.push({
+											name: list[l].ProodfName,
+											Guid: list[l].Guid,
+											type: list[l].Type,
+											isParent: true //使末节点可展开
+												// children: getChildren2(list[l].child)
+										});
+									}
+									return arr;
+								}
+
+								function getDefaultTreeOption() { //此处是给ztree加默认的图标
+									function addDiyDom(treeId, treeNode) {
+										var spaceWidth = 8;
+										var switchObj = $("#" + treeNode.tId + "_switch"),
+											icoObj = $("#" + treeNode.tId + "_ico"),
+											checkObj = $("#" + treeNode.tId + "_check");
+										switchObj.remove();
+										checkObj.remove();
+										icoObj.before(switchObj);
+										icoObj.before(checkObj);
+										if (treeNode.level > 0) {
+											var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+											switchObj.before(spaceStr);
+										}
+									}
+									var defaultTreeSetting = {
+										view: {
+											showLine: false,
+											showIcon: false,
+											dblClickExpand: false,
+											addDiyDom: addDiyDom,
+											dblClickExpand: true
+										}
+									};
+									return defaultTreeSetting;
+								}
+								var EditStr = '';
+								$('.modal-body').html('').css({
+									'padding-top': '5px'
 								});
-							}
-
-							function getChildren(list) {
-								let arr = [];
-								for (var l = 0; l < list.length; l++) {
-									arr.push({
-										name: list[l].Name,
-										Guid: list[l].Guid,
-										children: getChildren2(list[l].child)
-									});
-								}
-								return arr;
-							}
-
-							function getChildren2(list) {
-								let arr = [];
-								for (var i = 0; i < list.length; i++) {
-									arr.push({
-										name: list[i].Name,
-										Guid: list[i].Guid
-									});
-								}
-								return arr;
-							}
-
-							function getDefaultTreeOption() { //此处是给ztree加默认的图标
-								function addDiyDom(treeId, treeNode) {
-									var spaceWidth = 8;
-									var switchObj = $("#" + treeNode.tId + "_switch"),
-										icoObj = $("#" + treeNode.tId + "_ico"),
-										checkObj = $("#" + treeNode.tId + "_check");
-									switchObj.remove();
-									checkObj.remove();
-									icoObj.before(switchObj);
-									icoObj.before(checkObj);
-									if (treeNode.level > 0) {
-										var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
-										switchObj.before(spaceStr);
-									}
-								}
-								var defaultTreeSetting = {
-									view: {
-										showLine: false,
-										showIcon: false,
-										dblClickExpand: false,
-										addDiyDom: addDiyDom,
-										dblClickExpand: true
-									}
-								};
-								return defaultTreeSetting;
-							}
-							var EditStr = '';
-							$('.modal-body').html('').css({
-								'padding-top': '5px'
-							});
-							$('.modal-title').html($this.name);
-							EditStr =
-								`<div class="modal-body" id="plugSelectModalModal"> 
+								$('.modal-title').html($this.name);
+								EditStr =
+									`<div class="modal-body" id="plugSelectModalModal"> 
 								<div style="height:360px;width:552px;margin:auto;"> 
 								<div class="plugselect-modal-left"> 
 								<div class="plugselect-pubtree-div"> 
@@ -184,26 +169,40 @@
 								</div> 
 								</div> 
 								</div> `.trim();
-							// $('.modal-dialog').css('width','400px');
-							$('.modal-body').html(EditStr);
-							$('.main-modal').modal('show');
-							var option = {
-								callback: {
-									beforeExpand: function(treeId, treeNode) {
-										if (treeNode.level == 2) {
-											treeNode.hasLoad = true;
-											console.log('node2');
+								// $('.modal-dialog').css('width','400px');
+								$('.modal-body').html(EditStr);
+								$('.main-modal').modal('show');
+								var option = {
+									callback: {
+										beforeExpand: function(treeId, treeNode) {
+											if (treeNode.level == 1) {
+												treeNode.hasLoad = true;
+												// devconfig.GetPubBcslotByPubdev(treeNode.id, function(obj) {
+												// 	if (obj.status) {
+												// 		$.each(obj.slot_list, function(i, child) {
+												// 			child.name = child.PubbsName;
+												// 			child.isParent = true;
+												// 		})
+												// 		$.fn.zTree.getZTreeObj("publicplugTree").addNodes(treeNode, 0, obj.slot_list);
+												// 	} else {
+												// 		common.promptInformation("获取信息失败：" + obj.err_msg);
+												// 	}
+												// })
+												console.log('node1');
+											}
+											if (treeNode.level == 0) {
+												console.log('node0');
+											}
+											return true;
 										}
-										if (treeNode.level == 3) {
-											console.log('node3');
-										}
-										return true;
 									}
-								}
-							};
-							var zTree = $.fn.zTree.init($("#publicplugTree"), $.extend(true, option, getDefaultTreeOption()));
-							zTree.addNodes(null, data);
-						}
+								};
+								var zTree = $.fn.zTree.init($("#publicplugTree"), $.extend(true, option, getDefaultTreeOption()));
+								zTree.addNodes(null, datas);
+							} else {
+								console.log(err_msg);
+							}
+						});
 					}
 				}, {
 					name: '去光配',
@@ -2504,12 +2503,12 @@
 					name: '端口',
 					fc: function(cellView) {
 						var ViewModel = cellView.model;
-						console.log(ViewModel,'ViewModel')
+						console.log(ViewModel, 'ViewModel')
 						var $this = this;
 						let AppH = [];
 						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
 						getPortsByDeviceId(ViewModel.attributes.devDatas.Guid, function(obj) {
-							console.log(obj,ViewModel.attributes.devDatas.Guid,'端口');
+							console.log(obj, ViewModel.attributes.devDatas.Guid, '端口');
 							if (obj.status) {
 								console.log(obj);
 								$('.main-modal-body').html('');
@@ -2756,7 +2755,7 @@
 				this.childEquipments(this.attributes.childequipments);
 			}
 			if (this.attributes.devicesNolink !== undefined) {
-				this.childEquipments(this.attributes.devicesNolink.noLinkDevices, this.attributes.devicesNolink.GPorts,this.attributes.devicesNolink.mainPortId);
+				this.childEquipments(this.attributes.devicesNolink.noLinkDevices, this.attributes.devicesNolink.GPorts, this.attributes.devicesNolink.mainPortId);
 			}
 		},
 		bindAutoSize: function(element) { //同上面的bindautosize，暂时无用可以删除测试
@@ -2794,7 +2793,7 @@
 				this.findView(this.attributes.paper.paper).update();
 			}
 		},
-		childEquipments: function(data, gports,mainPortId) { //此处的data实际使用的是rx、tx那些port
+		childEquipments: function(data, gports, mainPortId) { //此处的data实际使用的是rx、tx那些port
 			var $this = this;
 			var dataGuid = [];
 			for (var m = 0; m < data.length; m++) {
@@ -2854,7 +2853,7 @@
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
-			var inprt, ouprt, dsname, idvs, portsname,PanelId;
+			var inprt, ouprt, dsname, idvs, portsname, PanelId;
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;
 			}
@@ -2879,14 +2878,14 @@
 			}
 			for (var n = 0; n < portdata.length; n++) { //构建main_device的端口
 				// if ($this.attributes.mainpanel && data[j].devicesInfo !== undefined) { //此处这个连续的if是为了上文97行getPortAttrs硬接线port与线提供数据的，若未考虑线的情况可以先将几个数组设置为空的，这样就port与线就不展示了
-					// inprt = data[j].port.leftPort !== null ? data[j].port.leftPort : [];
-					// ouprt = data[j].port.rightPort !== null ? data[j].port.rightPort : [];
-					inprt = [];
-					ouprt = [];
-					dsname = portdata[n].Name;
-					portsname = portdata[n].Type;
-					idvs = portdata[n].Guid;
-					PanelId = portdata[n].PanelId;
+				// inprt = data[j].port.leftPort !== null ? data[j].port.leftPort : [];
+				// ouprt = data[j].port.rightPort !== null ? data[j].port.rightPort : [];
+				inprt = [];
+				ouprt = [];
+				dsname = portdata[n].Name;
+				portsname = portdata[n].Type;
+				idvs = portdata[n].Guid;
+				PanelId = portdata[n].PanelId;
 				// }
 				if (portsname === "Card") {
 					ChildArray[n] = new joint.shapes.devs.AtomicR({
@@ -3081,7 +3080,7 @@
 				ChildArray[n].addTo(window.tbgraph);
 				fdo = viewE(ChildArray[n].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
 				$this.chidpositons.parentWidth += fdo.height + 10;
-				$this.chidpositons.y += fdo.height + 15;//内部各个端口svg的间距
+				$this.chidpositons.y += fdo.height + 15; //内部各个端口svg的间距
 				// ChildArrays.push(ChildArray[j]);//此处为了下面this.runder(ChildArrays)展示，如果直接用ChildArray[i]则只能站址最后一个
 				ChildArray[n].remove();
 				this.embed(ChildArray[n]);

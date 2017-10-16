@@ -347,22 +347,23 @@
 						}
 					});
 					$.each(newData.main_device.Bcslot, function(index, item) { //硬接线端口数据处理
-						$.each(item.DevPort, function(index2, item2) {
-							var shebei = {
-								devicesInfo: {},
-								port: {
-									leftPort: [],
-									rightPort: [],
-									noLinkPort: []
-								}
-							};
-							shebei.devicesInfo = item2;
-							for (var fcopy in item2) {
-								shebei.devicesInfo[fcopy] = item2[fcopy];
-							}
+						// $.each(item.DevPort, function(index2, item2) {
+						// 	var shebei = {
+						// 		devicesInfo: {},
+						// 		port: {
+						// 			leftPort: [],
+						// 			rightPort: [],
+						// 			noLinkPort: []
+						// 		}
+						// 	};
+						// 	shebei.devicesInfo = item2;
+						// 	for (var fcopy in item2) {
+						// 		shebei.devicesInfo[fcopy] = item2[fcopy];
+						// 	}
 
 
-						});
+						// });
+						item.PanelId = newData.main_device.PanelId;
 						mainPanel.noLinkDevices.push(item);
 					});
 					var other_devices = [];

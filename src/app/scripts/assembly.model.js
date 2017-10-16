@@ -94,6 +94,16 @@
 					name: '上光配',
 					fc: function(cellView) {
 						var $this = this;
+						let getPanelId = cellView.model.attributes.panelData.PanelId;
+						let GetPanelOdfList = ROOF.physical.GetPanelOdfList;
+						GetPanelOdfList(getPanelId,function(obj){
+							if (obj.status) {
+								console.log(obj,'obj')
+							}else{
+								console.log(err_msg);
+							}
+						});
+						
 						if (1 == 1) { //todo此处后期会换成加载上光配的接口
 							var gettreedata = window.treedata;
 							var data = [];
@@ -154,7 +164,6 @@
 								};
 								return defaultTreeSetting;
 							}
-							console.log(data, 'dddddddd')
 							var EditStr = '';
 							$('.modal-body').html('').css({
 								'padding-top': '5px'
@@ -2845,7 +2854,7 @@
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
-			var inprt, ouprt, dsname, idvs, portsname;
+			var inprt, ouprt, dsname, idvs, portsname,PanelId;
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;
 			}
@@ -2862,7 +2871,8 @@
 						portdata.push({
 							"Guid": data[j].DevPort[l].Guid,
 							"Name": data[j].DevPort[l].Name,
-							"Type": data[j].DevPort[l].Type
+							"Type": data[j].DevPort[l].Type,
+							"PanelId": data[j].DevPort[l].PanelId
 						});
 					}
 				}
@@ -2876,6 +2886,7 @@
 					dsname = portdata[n].Name;
 					portsname = portdata[n].Type;
 					idvs = portdata[n].Guid;
+					PanelId = portdata[n].PanelId;
 				// }
 				if (portsname === "Card") {
 					ChildArray[n] = new joint.shapes.devs.AtomicR({

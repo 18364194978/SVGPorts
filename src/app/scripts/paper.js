@@ -699,7 +699,7 @@ window.ddd = [];
         devDatas: itemdatal,
         source: {
           id: sourcePort,
-          selector: 'circle'//连接点的筛选，表示连接<circle></>这样连接线与Gp点间的空隙会很小
+          selector: 'circle' //连接点的筛选，表示连接<circle></>这样连接线与Gp点间的空隙会很小
         },
         target: {
           id: targetPort,
@@ -716,7 +716,7 @@ window.ddd = [];
       });
       link.addTo(this.graph);
     },
-    LineConnect: function(data,vie) { //该函数处理光缆连接
+    LineConnect: function(data, vie) { //该函数处理光缆连接
       let camo = new joint.dia.Link({
         markup: [
           '<path class="connection" stroke="black" d="M 0 0 0 0"/>',
@@ -796,47 +796,6 @@ window.ddd = [];
         }]
       });
       camo.addTo(this.graph);
-    },
-    conNect2: function() {
-      if(window.a){
-      for (var i = 0; i < window.a.length; i++) {
-        var getX = window.a[i].attributes.position.x;
-        var getY = window.a[i].attributes.position.y + 3;
-        var getId = window.a[i].id;
-        var getName = window.a[i].attributes.attrs.text.text;
-        let getGport = new joint.shapes.basic.GPPort({
-          portRemove: 1,
-          id: getId,
-          // projectOpticalcableGuid: projectOpticalcableGuid,
-          position: {
-            x: getX,
-            y: getY
-          },
-          size: {
-            width: 10,
-            height: 10
-          },
-          attrs: {
-            text: {
-              // text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
-              text: getName,
-              'font-size': 9,
-              stroke: '',
-              fill: '#306796',
-              'ref-y': -10
-            },
-            rect: {
-              width: 13,
-              height: 13,
-              rx: 13,
-              ry: 13,
-              fill: '#306796'
-            }
-          }
-        });
-        getGport.addTo(this.graph);
-      }
-    }
     }
 
   };

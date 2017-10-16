@@ -2427,7 +2427,7 @@
 			return attrs;
 		}
 	});
-	joint.shapes.devs.Cabinet = joint.shapes.devs.Model.extend({ //main_device
+	joint.shapes.devs.Cabinet2 = joint.shapes.devs.Model.extend({ //main_device
 		markup: '<g class="rotatable">' +
 			'<g class="scalable">' +
 			'</g>' +
@@ -2800,48 +2800,48 @@
 				};
 			}
 			var ChildArrays = [];
-			if (gports !== undefined) {
-				console.log(gports,'gports');
-				window.a = [];
-				for (var n = 0; n < mainPortId.length; n++) {
-					for (var l = 0; l < gports[0].length; l++) {
-						if (gports[0][l].ForPort === mainPortId[n]) {
-							console.log('1111');
-							// let getY = window.ppp.findViewByModel(gports[0][l].ForPort).model.attributes.position.y;
-							let getGport = new joint.shapes.basic.GPPort({ //todo此处需要后期修改
-								portRemove: 1,
-								id: gports[0][l].PortId,
-								position: {
-									x: $this.chidpositons.x + 250,
-									y: $this.chidpositons.y + 115 + (n - 1) * 60
-								},
-								size: {
-									width: 10,
-									height: 10
-								},
-								attrs: {
-									text: {
-										text: gports[0][l].PortName,
-										'font-size': 9,
-										stroke: '',
-										fill: '#306796',
-										'ref-y': -10
-									},
-									rect: {
-										width: 13,
-										height: 13,
-										rx: 13,
-										ry: 13,
-										fill: '#306796'
-									}
-								}
-							});
-							ChildArrays[l] = getGport;
-							a[l] = ChildArrays[l];
-						}
-					}
-				}
-			}
+			// if (gports !== undefined) {
+			// 	console.log(gports,'gports');
+			// 	window.a = [];
+			// 	for (var n = 0; n < mainPortId.length; n++) {
+			// 		for (var l = 0; l < gports[0].length; l++) {
+			// 			if (gports[0][l].ForPort === mainPortId[n]) {
+			// 				console.log('1111');
+			// 				// let getY = window.ppp.findViewByModel(gports[0][l].ForPort).model.attributes.position.y;
+			// 				let getGport = new joint.shapes.basic.GPPort({ //todo此处需要后期修改
+			// 					portRemove: 1,
+			// 					id: gports[0][l].PortId,
+			// 					position: {
+			// 						x: $this.chidpositons.x + 250,
+			// 						y: $this.chidpositons.y + 115 + (n - 1) * 60
+			// 					},
+			// 					size: {
+			// 						width: 10,
+			// 						height: 10
+			// 					},
+			// 					attrs: {
+			// 						text: {
+			// 							text: gports[0][l].PortName,
+			// 							'font-size': 9,
+			// 							stroke: '',
+			// 							fill: '#306796',
+			// 							'ref-y': -10
+			// 						},
+			// 						rect: {
+			// 							width: 13,
+			// 							height: 13,
+			// 							rx: 13,
+			// 							ry: 13,
+			// 							fill: '#306796'
+			// 						}
+			// 					}
+			// 				});
+			// 				ChildArrays[l] = getGport;
+			// 				a[l] = ChildArrays[l];
+			// 			}
+			// 		}
+			// 	}
+			// }
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
@@ -3070,7 +3070,7 @@
 				ChildArray[n].addTo(window.tbgraph);
 				fdo = viewE(ChildArray[n].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
 				$this.chidpositons.parentWidth += fdo.height + 10;
-				$this.chidpositons.y += fdo.height + 30;
+				$this.chidpositons.y += fdo.height + 15;//内部各个端口svg的间距
 				// ChildArrays.push(ChildArray[j]);//此处为了下面this.runder(ChildArrays)展示，如果直接用ChildArray[i]则只能站址最后一个
 				ChildArray[n].remove();
 				this.embed(ChildArray[n]);

@@ -851,7 +851,7 @@
 				if (finddata.GPorts[1].length !== 0) { //other_device的光配
 					$.each(finddata.GPorts[1], function(index2, item2) {
 						let getX = 500 + 4000;;
-						let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
+						let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y+12;
 						let getGport = new joint.shapes.basic.GPPort({
 							portRemove: 1,
 							id: item2.PortId,
@@ -947,6 +947,7 @@
 				// $.each(window.nowAssemblylink, function(index, item) {
 				$.each(finddata.LineConnect, function(index, item) {
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
+					// window.paper.LineConnect(item,item); //此处为画出连接线
 				});
 
 

@@ -416,173 +416,173 @@
     }
 
   });
-  joint.shapes.devs.PhyLinkView = joint.dia.LinkView.extend({
-    update: function(model, attributes, opt) {
-      opt = opt || {};
+  // joint.shapes.devs.PhyLinkView = joint.dia.LinkView.extend({
+  //   update: function(model, attributes, opt) {
+  //     opt = opt || {};
 
-      if (!opt.updateConnectionOnly) {
-        // update SVG attributes defined by 'attrs/'.
-        this.updateAttributes();
-      }
-      // update the link path, label position etc.
-      this.updateConnection(opt);
+  //     if (!opt.updateConnectionOnly) {
+  //       // update SVG attributes defined by 'attrs/'.
+  //       this.updateAttributes();
+  //     }
+  //     // update the link path, label position etc.
+  //     this.updateConnection(opt);
 
-      this.updateLabelPositions();
-      this.updateToolsPosition();
-      this.updateArrowheadMarkers();
-      this.options.perpendicular = null;
-      // Mark that postponed update has been already executed.
-      this.updatePostponed = false;
-      let bdata = this.model.attributes.devDatas;
-      let ttthisfinde = this;
-      if (bdata.ProjectOpticalcableGuid !== '') {
-        let gldata = _.findWhere(window.opticalCable, { Guid: bdata.ProjectOpticalcableGuid });
-        let getFibersOfOpticalCable = ROOF.physical.GetFibersOfOpticalCable;
-        // getFibersOfOpticalCable(gldata.Guid, function(objgll) {
+  //     this.updateLabelPositions();
+  //     this.updateToolsPosition();
+  //     this.updateArrowheadMarkers();
+  //     this.options.perpendicular = null;
+  //     // Mark that postponed update has been already executed.
+  //     this.updatePostponed = false;
+  //     let bdata = this.model.attributes.devDatas;
+  //     let ttthisfinde = this;
+  //     if (bdata.ProjectOpticalcableGuid !== '') {
+  //       let gldata = _.findWhere(window.opticalCable, { Guid: bdata.ProjectOpticalcableGuid });
+  //       let getFibersOfOpticalCable = ROOF.physical.GetFibersOfOpticalCable;
+  //       // getFibersOfOpticalCable(gldata.Guid, function(objgll) {
           
-        //   if (objgll.status) {
-        //     let descsv = _.findWhere(objgll.fiber_list, { Guid: bdata.PhylinkId });
-        //     if (descsv === undefined) {
-        //       return;
-        //     }
+  //       //   if (objgll.status) {
+  //       //     let descsv = _.findWhere(objgll.fiber_list, { Guid: bdata.PhylinkId });
+  //       //     if (descsv === undefined) {
+  //       //       return;
+  //       //     }
 
-        //     ttthisfinde.model.set('labels', [{
-        //       position: { distance: .3 },
-        //       attrs: {
-        //         rect: {
-        //           stroke: null,
-        //           'stroke-width': 0,
-        //           opacity: 0,
-        //           fill: '#306796',
-        //           rx: 5,
-        //           ry: 5
-        //         },
-        //         text: {
-        //           text: gldata.ProocNumber + '-' + descsv.ProplNumber + '(' + gldata.ProocType + ')',
-        //           'font-size': 9,
-        //           fill: '#306796',
-        //           stroke: null,
-        //           opacity: 1,
-        //           'font-family': 'Arial, helvetica, sans-serif'
-        //         }
-        //       }
-        //     }]);
-        //   } else {
-        //     GFC.showError(objgll.err_msg);
-        //   }
-        // });
-      }
-      if (bdata.left) {
-        this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-        return;
-      }
-      let sourceViewH = this.sourceView;
-      let targetViewH = this.targetView;
-      if (sourceViewH.model.attributes.devDatas === undefined && targetViewH.model.attributes.devDatas === undefined) {
-        this.model.set('vertices', []);
-        if (bdata.ProjectOpticalcableGuid !== '') {
-          this.model.attributes.rightMenu.otherMenu = [];
-        }
-        return;
-      }
-      if (!bdata.iszl) {
+  //       //     ttthisfinde.model.set('labels', [{
+  //       //       position: { distance: .3 },
+  //       //       attrs: {
+  //       //         rect: {
+  //       //           stroke: null,
+  //       //           'stroke-width': 0,
+  //       //           opacity: 0,
+  //       //           fill: '#306796',
+  //       //           rx: 5,
+  //       //           ry: 5
+  //       //         },
+  //       //         text: {
+  //       //           text: gldata.ProocNumber + '-' + descsv.ProplNumber + '(' + gldata.ProocType + ')',
+  //       //           'font-size': 9,
+  //       //           fill: '#306796',
+  //       //           stroke: null,
+  //       //           opacity: 1,
+  //       //           'font-family': 'Arial, helvetica, sans-serif'
+  //       //         }
+  //       //       }
+  //       //     }]);
+  //       //   } else {
+  //       //     GFC.showError(objgll.err_msg);
+  //       //   }
+  //       // });
+  //     }
+  //     if (bdata.left) {
+  //       this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //       return;
+  //     }
+  //     let sourceViewH = this.sourceView;
+  //     let targetViewH = this.targetView;
+  //     if (sourceViewH.model.attributes.devDatas === undefined && targetViewH.model.attributes.devDatas === undefined) {
+  //       this.model.set('vertices', []);
+  //       if (bdata.ProjectOpticalcableGuid !== '') {
+  //         this.model.attributes.rightMenu.otherMenu = [];
+  //       }
+  //       return;
+  //     }
+  //     if (!bdata.iszl) {
 
 
-        if (sourceViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId === bdata.Port2.PanelId) {
-          this.model.set('vertices', []);
-          this.model.set('rightMenu', undefined);
-          this.model.set('vertexMarkup', 'none');
-          return;
-        }
-        if (targetViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId === bdata.Port2.PanelId) {
-          this.model.set('vertices', []);
-          this.model.set('rightMenu', undefined);
-          this.model.set('vertexMarkup', 'none');
-          return;
-        }
-        if (targetViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId !== bdata.Port2.PanelId) {
-          this.model.set('vertices', [{ x: sourceViewH.model.attributes.position.x + 120, y: sourceViewH.model.attributes.position.y + 35 }]);
-          //this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-          this.model.set('vertexMarkup', 'none');
-          return;
-        }
-        if (sourceViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId !== bdata.Port2.PanelId) {
-          this.model.set('vertices', [{ x: targetViewH.model.attributes.position.x - 120, y: targetViewH.model.attributes.position.y + 41 }]);
-          //this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-          this.model.set('vertexMarkup', 'none');
-          return;
-        }
-      }
+  //       if (sourceViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId === bdata.Port2.PanelId) {
+  //         this.model.set('vertices', []);
+  //         this.model.set('rightMenu', undefined);
+  //         this.model.set('vertexMarkup', 'none');
+  //         return;
+  //       }
+  //       if (targetViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId === bdata.Port2.PanelId) {
+  //         this.model.set('vertices', []);
+  //         this.model.set('rightMenu', undefined);
+  //         this.model.set('vertexMarkup', 'none');
+  //         return;
+  //       }
+  //       if (targetViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId !== bdata.Port2.PanelId) {
+  //         this.model.set('vertices', [{ x: sourceViewH.model.attributes.position.x + 120, y: sourceViewH.model.attributes.position.y + 35 }]);
+  //         //this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //         this.model.set('vertexMarkup', 'none');
+  //         return;
+  //       }
+  //       if (sourceViewH.model.attributes.devDatas === undefined && bdata.Port1.PanelId !== bdata.Port2.PanelId) {
+  //         this.model.set('vertices', [{ x: targetViewH.model.attributes.position.x - 120, y: targetViewH.model.attributes.position.y + 41 }]);
+  //         //this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //         this.model.set('vertexMarkup', 'none');
+  //         return;
+  //       }
+  //     }
 
-      if (!sourceViewH.model.attributes.devDatas) {
-        targetViewH.model.attributes.devDatas = { as: 1 };
-      }
-      if (!targetViewH.model.attributes.devDatas) {
-        targetViewH.model.attributes.devDatas = { as: 1 };
-        //return;
-      }
-      if (bdata.iszl && bdata.iszl === 1) {
-        this.model.set('vertices', []);
-        this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-        // this.model.attributes.rightMenu.otherMenu = [];
-        return;
-      }
-      if (bdata.iszl && bdata.iszl === 2) {
-        if (targetViewH.model.attributes.position.x > sourceViewH.model.attributes.position.x) {
-          if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type !== 'basic.GPPort') {
-            this.model.set('vertices', [{ x: sourceViewH.model.attributes.position.x + 120, y: sourceViewH.model.attributes.position.y + 35 }]);
-            this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-            return;
-          }
-          if (targetViewH.model.attributes.type !== 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
-            this.model.set('vertices', [{ x: targetViewH.model.attributes.position.x - 50, y: targetViewH.model.attributes.position.y + 41 }]);
-            this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-            return;
-          }
-          if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
-            this.model.set('vertices', []);
-            this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-            return;
-          }
+  //     if (!sourceViewH.model.attributes.devDatas) {
+  //       targetViewH.model.attributes.devDatas = { as: 1 };
+  //     }
+  //     if (!targetViewH.model.attributes.devDatas) {
+  //       targetViewH.model.attributes.devDatas = { as: 1 };
+  //       //return;
+  //     }
+  //     if (bdata.iszl && bdata.iszl === 1) {
+  //       this.model.set('vertices', []);
+  //       this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //       // this.model.attributes.rightMenu.otherMenu = [];
+  //       return;
+  //     }
+  //     if (bdata.iszl && bdata.iszl === 2) {
+  //       if (targetViewH.model.attributes.position.x > sourceViewH.model.attributes.position.x) {
+  //         if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type !== 'basic.GPPort') {
+  //           this.model.set('vertices', [{ x: sourceViewH.model.attributes.position.x + 120, y: sourceViewH.model.attributes.position.y + 35 }]);
+  //           this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //           return;
+  //         }
+  //         if (targetViewH.model.attributes.type !== 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
+  //           this.model.set('vertices', [{ x: targetViewH.model.attributes.position.x - 50, y: targetViewH.model.attributes.position.y + 41 }]);
+  //           this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //           return;
+  //         }
+  //         if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
+  //           this.model.set('vertices', []);
+  //           this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //           return;
+  //         }
 
-        } else {
-          if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type !== 'basic.GPPort') {
-            this.model.set('vertices', [{ x: sourceViewH.model.attributes.position.x - 120, y: sourceViewH.model.attributes.position.y + 41 }]);
-            this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-            return;
-          }
-          if (targetViewH.model.attributes.type !== 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
-            this.model.set('vertices', [{ x: targetViewH.model.attributes.position.x + 120, y: targetViewH.model.attributes.position.y + 35 }]);
-            this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-            return;
-          }
-          if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
-            this.model.set('vertices', []);
-            this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-            return;
-          }
-        }
+  //       } else {
+  //         if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type !== 'basic.GPPort') {
+  //           this.model.set('vertices', [{ x: sourceViewH.model.attributes.position.x - 120, y: sourceViewH.model.attributes.position.y + 41 }]);
+  //           this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //           return;
+  //         }
+  //         if (targetViewH.model.attributes.type !== 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
+  //           this.model.set('vertices', [{ x: targetViewH.model.attributes.position.x + 120, y: targetViewH.model.attributes.position.y + 35 }]);
+  //           this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //           return;
+  //         }
+  //         if (targetViewH.model.attributes.type === 'basic.GPPort' && sourceViewH.model.attributes.type === 'basic.GPPort') {
+  //           this.model.set('vertices', []);
+  //           this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //           return;
+  //         }
+  //       }
 
-        // this.model.attributes.rightMenu.otherMenu = [];
+  //       // this.model.attributes.rightMenu.otherMenu = [];
 
-      }
+  //     }
 
-      if (targetViewH.model.attributes.devDatas.as) {
-        return;
-      }
-      if (sourceViewH.model.attributes.devDatas.as) {
-        return;
-      }
+  //     if (targetViewH.model.attributes.devDatas.as) {
+  //       return;
+  //     }
+  //     if (sourceViewH.model.attributes.devDatas.as) {
+  //       return;
+  //     }
 
-      let sourceFunctionType = sourceViewH.model.attributes.devDatas.ProportFunctiontype;
-      let targetFunctionType = targetViewH.model.attributes.devDatas.ProportFunctiontype;
-      if (sourceFunctionType !== undefined && targetFunctionType !== undefined) {
-        if (sourceFunctionType === 'DX' || sourceFunctionType === 'DX') {
-          this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
-          this.model.attr('.connection', { stroke: '#306796' });
-        }
-      }
-      //return this;
-    }
-  });
+  //     let sourceFunctionType = sourceViewH.model.attributes.devDatas.ProportFunctiontype;
+  //     let targetFunctionType = targetViewH.model.attributes.devDatas.ProportFunctiontype;
+  //     if (sourceFunctionType !== undefined && targetFunctionType !== undefined) {
+  //       if (sourceFunctionType === 'DX' || sourceFunctionType === 'DX') {
+  //         this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+  //         this.model.attr('.connection', { stroke: '#306796' });
+  //       }
+  //     }
+  //     //return this;
+  //   }
+  // });
 })(window.jQuery, window.joint, window.GFC, window._, window.parent.window);

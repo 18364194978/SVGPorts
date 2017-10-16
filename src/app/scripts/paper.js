@@ -694,12 +694,12 @@ window.ddd = [];
           break;
       }
       this.leftLinkVertices += 40;
-      var link = new joint.shapes.devs.PhyLink({
+      var link = new joint.shapes.devs.PhyLink2({
         id: itemdatal.PhylinkId,
         devDatas: itemdatal,
         source: {
           id: sourcePort,
-          selector: 'circle'
+          selector: 'circle'//连接点的筛选，表示连接<circle></>这样连接线与Gp点间的空隙会很小
         },
         target: {
           id: targetPort,
@@ -711,7 +711,8 @@ window.ddd = [];
             stroke: '#7bb4dc',
             'stroke-width': 3
           }
-        }
+        },
+        // portRemove: 1
       });
       link.addTo(this.graph);
     },

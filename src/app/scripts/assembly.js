@@ -704,19 +704,46 @@
 							}
 						})
 					}
+					if (newCentGp.length > 0) {
+						$.each(newData.PhyLink, function(iin0, iit0) {
+							$.each(newCentGp, function(iin1, iit1) {
+								if (iit0.Port2.PortId === iit1.PortId) {
+									iit1.ForPort = iit0.Port1.PortId;
+								}
+							})
+
+						})
+					}
+					if (newOthrGP.length > 0) {
+						$.each(newData.PhyLink, function(iin0, iit0) {
+							$.each(newOthrGP, function(iin1, iit1) {
+								if (iit0.Port2.PortId === iit1.PortId) {
+									iit1.ForPort = iit0.Port1.PortId;
+								}
+							})
+
+						})
+					}
 					console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
 					var MainAndOthrGP = [];
 					MainAndOthrGP.push(AllMainGport);
 					MainAndOthrGP.push(AllGpToGP);
+
+					var NewMainAndOthrGP = [];
+					NewMainAndOthrGP.push(newMainGp);
+					NewMainAndOthrGP.push(newOthrGP);
+					NewMainAndOthrGP.push(newCentGp);
+
+
 					console.log(MainAndOthrGP, other_devices2, 'AllMainGport')
 					window.zjlinkDate = [];
 					mainPanel.mainPortId = mainPortId;
 					mainPanel.other_device = other_devices2;
-					mainPanel.GPorts = MainAndOthrGP;
+					mainPanel.GPorts = NewMainAndOthrGP;
 					mainPanel.LPorts = data.main.main_device.Lport;
 					mainPanel.LineConnect = newData.PhyLink;
 					console.log(mainPanel, 'mainpanel');
-					// $this.creatModel(newData, mainPanel, paper);
+					$this.creatModel(newData, mainPanel, paper);
 				}
 			});
 		},
@@ -776,9 +803,45 @@
 				});
 				$('#thb').show();
 				window.paper.conNect2();
+				if (finddata.GPorts[2].length !== 0) { //转接点的光配
+					$.each(finddata.GPorts[2], function(ins1, its1) {
+						let getX = 300 + 4000;
+						let getY = window.ppp.findViewByModel(its1.ForPort).model.attributes.position.y;
+						let getGport = new joint.shapes.basic.GPPort({
+							portRemove: 1,
+							id: its1.PortId,
+							position: {
+								x: getX,
+								y: getY
+							},
+							size: {
+								width: 10,
+								height: 10
+							},
+							attrs: {
+								text: {
+									// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
+									text: its1.PortName,
+									'font-size': 9,
+									stroke: '',
+									fill: 'red',
+									'ref-y': -10
+								},
+								rect: {
+									width: 13,
+									height: 13,
+									rx: 13,
+									ry: 13,
+									fill: 'red'
+								}
+							}
+						});
+						getGport.addTo(window.paper.graph);
+					})
+				}
 				if (finddata.GPorts[1].length !== 0) { //other_device的光配
 					$.each(finddata.GPorts[1], function(index2, item2) {
-						let getX = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.x + 450;
+						let getX = 500 + 4000;;
 						let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
 						let getGport = new joint.shapes.basic.GPPort({
 							portRemove: 1,
@@ -816,7 +879,7 @@
 				let WidthG = 393;
 				let OtherHeight = 200;
 				let OtherY = 4110;
-				if (finddata.other_device !== null) { //的other_device
+				if (finddata.other_device !== null) { //other_device
 
 					let ggg = window.ppp.findViewByModel("0f97493d-09ab-430f-8400-d8c0b1f38b6e").model.attributes.position.y;
 					let ggg2 = window.ppp.findViewByModel("e8934ee5-ae64-40c2-abd2-126c5b665ac6").model.attributes.position.y;
@@ -825,7 +888,7 @@
 							continue;
 						}
 
-						let getY = window.ppp.findViewByModel(finddata.other_device[i].ForPort).model.attributes.position.y - 9;
+						let getY = window.ppp.findViewByModel(finddata.other_device[i].ForPort).model.attributes.position.y;
 						let portsLen = finddata.other_device[i].DevPort.length;
 						let titlePosition = (portsLen - 1) * 20;
 						let devname = '';
@@ -870,10 +933,13 @@
 						OtherY += viewE(OtherHeight).bbox(true).height + 10; //两个other_panel之间的纵向间距
 					}
 				}
-				$.each(window.nowAssemblylink, function(index, item) {
+
+
+				// $.each(window.nowAssemblylink, function(index, item) {
+				$.each(finddata.LineConnect, function(index, item) {
 					window.paper.conNect(item.Port1.PortId, item.Port2.PortId, 'gl', 'right', item); //此处为画出连接线
 				});
-				// window.paper.conNect2();
+
 
 				$('#thb').hide();
 				window.tbgraph.clear();

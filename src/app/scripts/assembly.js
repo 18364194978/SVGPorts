@@ -618,7 +618,7 @@
 										getExit2 = newMainGp.filter(x => x.PortId === itm1.Port2.PortId);
 										getExit3 = newOthrGP.filter(x => x.PortId === itm1.Port2.PortId);
 										if (getExit.length === 0 && getExit2.length === 0 && getExit3.length === 0) {
-											newCentGp.push({
+											newThidGP.push({
 												"Type": "Centr",
 												"DeviceId": itm1.Port2.DeviceId,
 												"PanelId": itm1.Port2.PanelId,
@@ -628,15 +628,23 @@
 											})
 										}
 									}
-									if (newMainDevId.indexOf(itm1.Port1.DeviceId) === -1) {
-										newThidGP.push({
-											"Type": "Thid",
-											"DeviceId": itm1.Port2.DeviceId,
-											"PanelId": itm1.Port2.PanelId,
-											"PortId": itm1.Port2.PortId,
-											"PortName": itm1.Port2.PortName,
-											"ForPort": itm1.Port1.PortId
-										})
+									if (newOterDevId.indexOf(itm1.Port1.DeviceId) !== -1) {
+										let getExit = [];
+										let getExit2 = [];
+										let getExit3 = [];
+										getExit = newCentGp.filter(x => x.PortId === itm1.Port2.PortId);
+										getExit2 = newMainGp.filter(x => x.PortId === itm1.Port2.PortId);
+										getExit3 = newOthrGP.filter(x => x.PortId === itm1.Port2.PortId);
+										if (getExit.length === 0 && getExit2.length === 0 && getExit3.length === 0) {
+											newOthrGP.push({
+												"Type": "Othr",
+												"DeviceId": itm1.Port2.DeviceId,
+												"PanelId": itm1.Port2.PanelId,
+												"PortId": itm1.Port2.PortId,
+												"PortName": itm1.Port2.PortName,
+												"ForPort": itm1.Port1.PortId
+											})
+										}
 									}
 								}
 								if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType !== "ODF") {
@@ -658,6 +666,7 @@
 											})
 										}
 									}
+
 									if (newThidGP.length !== 0) {
 										$.each(newThidGP, function(ii1, tt1) {
 											let getExit = [];

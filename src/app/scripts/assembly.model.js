@@ -39,7 +39,7 @@
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
 							'<label for="ProportName">端口信息名称:</label>' +
-							'<input type="text" class="form-control change-atr" value="' + ViewModel.attributes.devDatas.ProdevName + '" id="ProportName">' +
+							'<input type="text" class="form-control change-atr" value="' + ViewModel.attributes.devDatas.Name + '" id="ProportName">' +
 							'</div>';
 						$('.modal-body').html(EditStr);
 						$('.main-modal').modal();
@@ -71,14 +71,18 @@
 							slotObj.ProportDesc = ViewModel.attributes.devDatas.ProportDesc;
 							var setPubPortInfo = ROOF.devconfig.SetPortInfo;
 							setPubPortInfo(slotObj, function(obj) {
+								console.log(obj,slotObj,'slotll')
 								if (obj.status) {
 									ViewModel.attributes.devDatas.ProportName = GFC.formValidation($('#ProportName'));
-									let cjname = cellView.model.attributes.devDatas.ProdevName;
-									if (cellView.model.attributes.devDatas.ProdevName === '') {
+									let cjname = cellView.model.attributes.devDatas.Name;
+									if (cellView.model.attributes.devDatas.Name === '') {
 										cjname = '';
 									}
-									cellView.model.attributes.porttts = cjname;
-									cellView.model.attributes.attrs.text.text = cjname;
+									let elementTitl = cellView.$el.find('.content-x');
+									elementTitl.text(slotObj.PortName);
+									cellView.model.attributes.dsname = slotObj.PortName;
+									cellView.model.attributes.porttts = slotObj.PortName;
+									// cellView.model.attributes.attrs.text.text = cjname;
 									cellView.update();
 									//GFC.reload();
 									$('.main-modal').modal('hide');
@@ -1045,7 +1049,7 @@
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
 							'<label for="ProportName">端口信息名称:</label>' +
-							'<input type="text" class="form-control change-atr" value="' + ViewModel.attributes.devDatas.ProdevName + '" id="ProportName">' +
+							'<input type="text" class="form-control change-atr" value="' + ViewModel.attributes.devDatas.Name + '" id="ProportName">' +
 							'</div>';
 						$('.modal-body').html(EditStr);
 						$('.main-modal').modal();
@@ -1079,12 +1083,14 @@
 							setPubPortInfo(slotObj, function(obj) {
 								if (obj.status) {
 									ViewModel.attributes.devDatas.ProportName = GFC.formValidation($('#ProportName'));
-									let cjname = cellView.model.attributes.devDatas.ProdevName;
+									let cjname = cellView.model.attributes.devDatas.Name;
 									if (cellView.model.attributes.devDatas.ProdevName === '') {
 										cjname = '';
 									}
-									cellView.model.attributes.porttts = cjname;
-									cellView.model.attributes.attrs.text.text = cjname;
+									let elementTitl = cellView.$el.find('.content-x');
+									elementTitl.text(slotObj.PortName);
+									cellView.model.attributes.dsname = slotObj.PortName;
+									cellView.model.attributes.porttts = slotObj.PortName;
 									cellView.update();
 									//GFC.reload();
 									$('.main-modal').modal('hide');
@@ -2589,7 +2595,7 @@
 						console.log(cellView.model, 'cellViewcell')
 						var ViewModel = cellView.model;
 						var EditStr = '';
-						window.elementTitls = cellView.$el.find('text.title-class');
+						let elementTitls = cellView.$el.find('text.title-class');
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
 							'<label for="exampleInputEmail1">装置名称:</label>' +

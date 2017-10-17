@@ -33,7 +33,6 @@
 					name: '编辑',
 					fc: function(cellView) {
 						var ViewModel = cellView.model;
-						console.log(cellView, 'cellllll')
 						var EditStr = '';
 						$('.modal-body').html('');
 						$('.modal-title').html(this.name);
@@ -71,7 +70,6 @@
 							slotObj.ProportDesc = ViewModel.attributes.devDatas.ProportDesc;
 							var setPubPortInfo = ROOF.devconfig.SetPortInfo;
 							setPubPortInfo(slotObj, function(obj) {
-								console.log(obj,slotObj,'slotll')
 								if (obj.status) {
 									ViewModel.attributes.devDatas.ProportName = GFC.formValidation($('#ProportName'));
 									let cjname = cellView.model.attributes.devDatas.Name;
@@ -302,7 +300,10 @@
 						var $this = this;
 						let AppH = [];
 						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
-						getPortsByDeviceId(ViewModel.attributes.parent, function(obj) {
+						var getMainDevId = ViewModel.attributes.panelData.Guid;
+						console.log(ViewModel.attributes,'parent')
+						getPortsByDeviceId(getMainDevId, function(obj) {
+							console.log(obj,'obj')
 							if (obj.status) {
 								$('.main-modal-body').html('');
 								$('.modal-title').html($this.name);
@@ -1043,7 +1044,6 @@
 					name: '编辑',
 					fc: function(cellView) {
 						var ViewModel = cellView.model;
-						console.log(cellView, 'cellllll')
 						var EditStr = '';
 						$('.modal-body').html('');
 						$('.modal-title').html(this.name);
@@ -1268,8 +1268,9 @@
 						var ViewModel = cellView.model;
 						var $this = this;
 						let AppH = [];
+						var getMainDevId = ViewModel.attributes.panelData.Guid;
 						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
-						getPortsByDeviceId(ViewModel.attributes.parent, function(obj) {
+						getPortsByDeviceId(getMainDevId, function(obj) {
 							if (obj.status) {
 								$('.main-modal-body').html('');
 								$('.modal-title').html($this.name);

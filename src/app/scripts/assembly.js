@@ -332,19 +332,20 @@
 							}
 
 						}
-						if (item.Port1.DeviceId === item.Port2.DeviceId) {
-							if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
-								if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
-									mainPanel.leftLink.push(item);
-								} else {
-									mainPanel.rightLink.push(item);
-								}
-							} else {
-								mainPanel.leftLink.push(item);
-							}
-						} else {
-							mainPanel.rightLink.push(item);
-						}
+						// if (item.Port1.DeviceId === item.Port2.DeviceId) {
+						// 	if (item.Port1.DeviceId === undefined || item.Port2.DeviceId === undefined) {
+						// 		if (item.Port1.NetswitchId !== undefined || item.Port2.NetswitchId !== undefined) {
+						// 			mainPanel.leftLink.push(item);
+						// 		} else {
+						// 			mainPanel.rightLink.push(item);
+						// 		}
+						// 	} else {
+						// 		mainPanel.leftLink.push(item);
+						// 	}
+						// } else {
+						// 	mainPanel.rightLink.push(item);
+						// }
+						mainPanel.rightLink.push(item);
 					});
 					$.each(newData.main_device.Bcslot, function(index, item) { //硬接线端口数据处理
 						// $.each(item.DevPort, function(index2, item2) {
@@ -368,20 +369,22 @@
 					});
 					var other_devices = [];
 					var other_devices2 = [];
-					for (var k = 0; k < newData.other_device.length; k++) { //将含有多个端口的other_device里拆分
-						if (newData.other_device[k].DevPort !== null || newData.other_device[k].DevPort !== undefined) {
-							if (newData.other_device[k].DevPort.length > 1) {
-								for (var j = 0; j < newData.other_device[k].DevPort.length; j++) {
-									other_devices.push({
-										"DevPort": [newData.other_device[k].DevPort[j]],
-										"Guid": newData.other_device[k].Guid,
-										"Name": newData.other_device[k].Name,
-										"PanelId": newData.other_device[k].PanelId,
-										"ShortName": newData.other_device[k].ShortName
-									});
+					if (newData.other_device !== undefined && newData.other_device !== null) {
+						for (var k = 0; k < newData.other_device.length; k++) { //将含有多个端口的other_device里拆分
+							if (newData.other_device[k].DevPort !== null || newData.other_device[k].DevPort !== undefined) {
+								if (newData.other_device[k].DevPort.length > 1) {
+									for (var j = 0; j < newData.other_device[k].DevPort.length; j++) {
+										other_devices.push({
+											"DevPort": [newData.other_device[k].DevPort[j]],
+											"Guid": newData.other_device[k].Guid,
+											"Name": newData.other_device[k].Name,
+											"PanelId": newData.other_device[k].PanelId,
+											"ShortName": newData.other_device[k].ShortName
+										});
+									}
+								} else {
+									other_devices.push(newData.other_device[k]);
 								}
-							} else {
-								other_devices.push(newData.other_device[k]);
 							}
 						}
 					}
@@ -423,7 +426,7 @@
 										"PanelId": getothrdev2[0].PanelId,
 										"ShortName": getothrdev2[0].ShortName,
 										"ForPort": newData.PhyLink[p].Port1.PortId,
-										"PosiType":true
+										"PosiType": true
 									});
 								}
 								if (getothrdev1.length !== 0 && getothrdev2.length === 0) {
@@ -434,7 +437,7 @@
 										"PanelId": getothrdev1[0].PanelId,
 										"ShortName": getothrdev1[0].ShortName,
 										"ForPort": newData.PhyLink[p].Port2.PortId,
-										"PosiType":true
+										"PosiType": true
 									});
 								}
 
@@ -791,9 +794,9 @@
 					$.each(finddata.GPorts[0], function(ins1, its1) {
 						let getX = 200 + 4000;
 						let getY;
-						if (its1.PosiType!==undefined&& its1.PosiType ===true) {
+						if (its1.PosiType !== undefined && its1.PosiType === true) {
 							getY = window.ppp.findViewByModel(its1.ForPort).model.attributes.position.y + 12;
-						}else{
+						} else {
 							getY = window.ppp.findViewByModel(its1.ForPort).model.attributes.position.y;
 						}
 						let getGport = new joint.shapes.basic.GPPort({
@@ -832,9 +835,9 @@
 					$.each(finddata.GPorts[2], function(ins1, its1) {
 						let getX = 450 + 4000;
 						let getY;
-						if (its1.PosiType!==undefined&&its1.PosiType ===true) {
+						if (its1.PosiType !== undefined && its1.PosiType === true) {
 							getY = window.ppp.findViewByModel(its1.ForPort).model.attributes.position.y + 12;
-						}else{
+						} else {
 							getY = window.ppp.findViewByModel(its1.ForPort).model.attributes.position.y;
 						}
 						let getGport = new joint.shapes.basic.GPPort({
@@ -873,9 +876,9 @@
 					$.each(finddata.GPorts[1], function(index2, item2) {
 						let getX = 650 + 4000;;
 						let getY;
-						if (item2.PosiType!==undefined&&item2.PosiType ===true) {
+						if (item2.PosiType !== undefined && item2.PosiType === true) {
 							getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y + 12;
-						}else{
+						} else {
 							getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
 						}
 						let getGport = new joint.shapes.basic.GPPort({
@@ -916,17 +919,17 @@
 				let OtherY = 4110;
 				if (finddata.other_device !== null) { //other_device
 
-					let ggg = window.ppp.findViewByModel("0f97493d-09ab-430f-8400-d8c0b1f38b6e").model.attributes.position.y;
-					let ggg2 = window.ppp.findViewByModel("e8934ee5-ae64-40c2-abd2-126c5b665ac6").model.attributes.position.y;
+					// let ggg = window.ppp.findViewByModel("0f97493d-09ab-430f-8400-d8c0b1f38b6e").model.attributes.position.y;
+					// let ggg2 = window.ppp.findViewByModel("e8934ee5-ae64-40c2-abd2-126c5b665ac6").model.attributes.position.y;
 					for (var i = 0; i < finddata.other_device.length; i++) {
 						if (finddata.other_device[i].DevPort.length === 0) {
 							continue;
 						}
 						let getY;
-						if (finddata.other_device[i].PosiType!==undefined&& finddata.other_device[i].PosiType ===true) {
+						if (finddata.other_device[i].PosiType !== undefined && finddata.other_device[i].PosiType === true) {
 							getY = window.ppp.findViewByModel(finddata.other_device[i].ForPort).model.attributes.position.y;
-						}else{
-							getY = window.ppp.findViewByModel(finddata.other_device[i].ForPort).model.attributes.position.y-9;
+						} else {
+							getY = window.ppp.findViewByModel(finddata.other_device[i].ForPort).model.attributes.position.y - 9;
 						}
 						let portsLen = finddata.other_device[i].DevPort.length;
 						let titlePosition = (portsLen - 1) * 20;
@@ -952,6 +955,7 @@
 							},
 							inPorts: [],
 							outPorts: [],
+							devicesNolink: finddata,
 							devDatas: finddata.other_device[i],
 							childequipments: finddata.other_device[i].DevPort,
 							paper: paper,

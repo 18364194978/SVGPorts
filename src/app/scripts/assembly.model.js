@@ -291,7 +291,36 @@
 				}, {
 					name: '去光配',
 					fc: function(cellView) {
-						console.log('点击端口');
+						var ViewModel = cellView.model;
+						let getAllGp = cellView.model.attributes.allData.GPorts;
+						let getExit = [];
+						getExit = _.filter(getAllGp[0], function(obs) {
+							return obs.ForPort === ViewModel.id;
+						});
+						if (getExit.length === 0) {
+							GFC.showError("该端口未上光配！");
+							return;
+						}
+						$('.modal-body').text('确认释放光配?');
+						$('.modal-title').html(this.name);
+						$('.main-modal').modal();
+						cellView.update();
+						$('.edit-right').unbind('click');
+						$('.edit-right').click(function() {
+							var releaseFiberDistFrame = ROOF.physical.ReleaseFiberDistFrame;
+							releaseFiberDistFrame(getExit[0].PortId, function(obj) {
+								console.log(getExit[0].PortId, obj, 'obj')
+								if (obj.status) {
+									$('.modal-body').text('释放光配成功');
+									$('.modal-body').text('');
+									$('.main-modal').modal('hide');
+
+								} else {
+									$('.modal-body').text('释放光配失败');
+								}
+							});
+
+						});
 					}
 				}, {
 					name: '更换',
@@ -301,9 +330,9 @@
 						let AppH = [];
 						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
 						var getMainDevId = ViewModel.attributes.panelData.Guid;
-						console.log(ViewModel.attributes,'parent')
+						console.log(ViewModel.attributes, 'parent')
 						getPortsByDeviceId(getMainDevId, function(obj) {
-							console.log(obj,'obj')
+							console.log(obj, 'obj')
 							if (obj.status) {
 								$('.main-modal-body').html('');
 								$('.modal-title').html($this.name);
@@ -1260,7 +1289,42 @@
 				}, {
 					name: '去光配',
 					fc: function(cellView) {
-						console.log('点击端口');
+						window.ViewModel = cellView.model;
+						let getAllGp = cellView.model.attributes.allData.GPorts;
+						let getExit = [];
+						let getExit2 = [];
+						getExit2 = _.filter(ViewModel.attributes.allData.other_device, function(obs1) {
+							return obs1.DevPort[0].Guid === ViewModel.id
+						});
+						if (getExit2.length > 0) {
+							getExit = _.filter(getAllGp[1], function(obs) {
+								return obs.PortId === getExit2[0].ForPort;
+							});
+						}
+						if (getExit.length === 0) {
+							GFC.showError("该端口未上光配！");
+							return;
+						}
+						$('.modal-body').text('确认释放光配?');
+						$('.modal-title').html(this.name);
+						$('.main-modal').modal();
+						cellView.update();
+						$('.edit-right').unbind('click');
+						$('.edit-right').click(function() {
+							var releaseFiberDistFrame = ROOF.physical.ReleaseFiberDistFrame;
+							releaseFiberDistFrame(getExit[0].PortId, function(obj) {
+								console.log(getExit[0].PortId, obj, 'obj')
+								if (obj.status) {
+									$('.modal-body').text('释放光配成功');
+									$('.modal-body').text('');
+									$('.main-modal').modal('hide');
+
+								} else {
+									$('.modal-body').text('释放光配失败');
+								}
+							});
+
+						});
 					}
 				}, {
 					name: '更换',
@@ -2325,7 +2389,7 @@
 			joint.shapes.devs.Model.prototype.initialize.apply(this, arguments);
 			this.on('change:attrs', this.bindAutoSize(this));
 			if (this.attributes.childequipments !== null) {
-				this.childEquipments(this.attributes.childequipments,this.attributes.devicesNolink);
+				this.childEquipments(this.attributes.childequipments, this.attributes.devicesNolink);
 			}
 			// if (this.attributes.devicesNolink !== undefined) {
 			// 	this.childEquipments(this.attributes.devicesNolink);
@@ -2366,7 +2430,7 @@
 				this.findView(this.attributes.paper.paper).update();
 			}
 		},
-		childEquipments: function(data,allData) { //此处的data实际使用的是rx、tx那些port
+		childEquipments: function(data, allData) { //此处的data实际使用的是rx、tx那些port
 			var $this = this;
 			if ($this.chidpositons === undefined) { //此处是获取当前最外层svg的坐标，供下面里层的svg准备
 				$this.chidpositons = {

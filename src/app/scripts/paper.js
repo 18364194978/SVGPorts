@@ -748,12 +748,12 @@ window.ddd = [];
         id: data.Guid,
         // sigshowinfo: '11111',//此处为鼠标放置在线上时展示名称，否则隐藏
         source: {
-          id: data.Port1.PortId,
-          // selector: selects
+          id: data.Port1,
+          selector: 'rect'
         },
         target: {
-          id: data.Port2.PortId,
-          // selector: selectt
+          id: data.Port2,
+          selector: 'rect'
         },
         // vertices: vertices,
         attrs: {
@@ -784,7 +784,7 @@ window.ddd = [];
               ry: 5
             },
             text: {
-              text: data.LinkConnectId,
+              text: data.Name,
               fill: '#ff0000',
               opacity: vie,
               // 'transform': 'rotate(90deg)',

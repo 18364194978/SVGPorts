@@ -310,7 +310,8 @@
 						GPorts: [],
 						other_device: [],
 						LineConnect: [],
-						mainPortId: []
+						mainPortId: [],
+						ZLLink:[]
 					};
 					var data = $.parseJSON(obj.json_info);
 					data.main = dddata;
@@ -400,6 +401,7 @@
 					var newThidGP = [];
 					var newCentGp = [];
 					var newZLGpLink = [];
+					var newZLGpLinkId = [];
 					var newAllZLGp = [];
 					var newAllZLGpId = [];
 					$.each(newData.main_device.Bcslot, function(in1, p1) {
@@ -725,19 +727,39 @@
 							let arr = [];
 							$.each(itt1.PhyLink, function(iis2, itt2) {
 								arr.push(itt2.PhyLinkId);
-								newAllZLGpId.push(itt2.PhyLinkId);
+								newAllZLGpId.push({
+									"Guid":itt2.PhyLinkId,
+									"Index":iis1
+								});
 							});
-							newZLGpLink.push(arr);
+							newZLGpLinkId.push({
+								"LinkIds":arr,
+								"LinkName":itt1.OpCableName,
+								"LinkId":itt1.OpCableId
+							});
 						});
 					}
-					if (newAllZLGpId.length !== 0) {
+					if (newAllZLGpId.length !== 0) {//组揽端子处理
 						$.each(newAllZLGpId, function(iis1, itt1) {
 							let getExit5 = [];
-							getExit5 = newData.PhyLink.filter(x => x.PhylinkId === itt1);
+							getExit5 = newData.PhyLink.filter(x => x.PhylinkId === itt1.Guid);
 							newAllZLGp.push({
-								"PortId": itt1,
+								"PortId": itt1.Guid,
+								"Index":itt1.Index,
 								"ForPort": getExit5[0].Port1.PortId
 							});
+						})
+					}
+					if (newZLGpLinkId.length!==0) {//组揽连接线处理
+						$.each(newZLGpLinkId,function(iis1,itt1){
+							for (var g = 1; g < itt1.LinkIds.length; g++) {
+								newZLGpLink.push({
+									"Port1":itt1.LinkIds[g-1]+'1',
+									"Port2":itt1.LinkIds[g]+'1',
+									"Guid":itt1.LinkId,
+									"Name":itt1.LinkName
+								});
+							}
 						})
 					}
 					console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
@@ -754,6 +776,7 @@
 					mainPanel.GPorts = NewMainAndOthrGP;
 					mainPanel.LPorts = data.main.main_device.Lport;
 					mainPanel.LineConnect = newData.PhyLink;
+					mainPanel.ZLLink = newZLGpLink;
 					console.log(mainPanel, 'mainpanel');
 					$this.creatModel(newData, mainPanel, paper);
 				}
@@ -1029,8 +1052,8 @@
 			$('.infosig-group').find('button').trigger('click');
 			paper.resizePaperScroller();
 			if (finddata.GPorts[3].length !== 0) { //组揽的光配
-				$.each(finddata.GPorts[3], function(index2, item2) { //暂时暂时光缆的port点
-					let getX = 250 + 4000;
+				$.each(finddata.GPorts[3], function(index2, item2) {
+					let getX = 250 + 4000 + item2.Index*20;
 					let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
 					let iid = item2.PortId + '1';
 					var LinePorts = new joint.shapes.basic.LPPort({
@@ -1068,16 +1091,16 @@
 				});
 			}
 			var getLinkConnectId = [];
-			// $.each(finddata.LineConnect, function(index, item) { //暂时暂时光缆port点的连接线
-			// 	var vie = 0;
-			// 	if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
-			// 		getLinkConnectId.push(item.LinkConnectId);
-			// 		vie = 1;
-			// 		window.paper.LineConnect(item, vie);
-			// 	} else {
-			// 		window.paper.LineConnect(item, vie);
-			// 	}
-			// })
+			$.each(finddata.ZLLink, function(index, item) { //暂时暂时光缆port点的连接线
+				var vie = 0;
+				if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
+					getLinkConnectId.push(item.LinkConnectId);
+					vie = 1;
+					window.paper.LineConnect(item, vie);
+				} else {
+					window.paper.LineConnect(item, vie);
+				}
+			})
 		}
 	}];
 })(window.jQuery, window.joint, window._, window.parent.window, window.V, window.GFC);

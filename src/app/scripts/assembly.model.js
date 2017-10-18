@@ -1894,6 +1894,7 @@
 					paper: this.attributes.paper,
 					panelData: $this.attributes.devDatas,
 					dsname: dsname,
+					porttts:dsname,
 					portsname: portsname,
 					attrs: { //暂时无需改动
 						rect: {

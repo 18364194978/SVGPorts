@@ -1002,6 +1002,7 @@
 							},
 							inPorts: [],
 							outPorts: [],
+							porttts:finddata.other_device[i].Name,
 							devicesNolink: finddata,
 							devDatas: finddata.other_device[i],
 							childequipments: finddata.other_device[i].DevPort,

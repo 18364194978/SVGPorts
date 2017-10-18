@@ -100,7 +100,7 @@
 						let GetPanelOdfList = ROOF.physical.GetPanelOdfList;
 						let GetPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
 						var addPhyFiber = ROOF.physical.AddPhyFiber;
-						let changePhyFiberConn = ROOF.physical.ChangePhyFiberConn;
+						let AddOdfPortInLink = ROOF.physical.AddOdfPortInLink;
 						GetPanelOdfList(getPanelId, function(obj) {
 							if (obj.status) {
 								var datas = [];
@@ -257,7 +257,7 @@
 													GFC.showError('请确保至少有一个端口被选中');
 													return;
 												}
-												changePhyFiberConn(linkId, endid, function(obd) {
+												AddOdfPortInLink(linkId, endid, function(obd) {
 													if (obd.status) {
 														console.log(obd, 'obd')
 														GFC.reload();
@@ -267,18 +267,6 @@
 														console.log(obd.err_msg, linkId, endid);
 													}
 												});
-											}
-										} else {
-											let getExit3 = [];
-											getExit3 = _.filter(getAllGp[1], function(o) {
-												return o.PortId === (_.filter(getAllOthrDev, function(p) {
-													return p.Guid === getPortId
-												}))[0].ForPort;
-											});
-											if (getExit3.length !== 0) {
-												GFC.showError("该端口已上光配！");
-											} else {
-												//转接
 											}
 										}
 									}
@@ -307,10 +295,11 @@
 						cellView.update();
 						$('.edit-right').unbind('click');
 						$('.edit-right').click(function() {
-							var releaseFiberDistFrame = ROOF.physical.ReleaseFiberDistFrame;
-							releaseFiberDistFrame(getExit[0].PortId, function(obj) {
+							var ReleaseLightDistribution = ROOF.physical.ReleaseLightDistribution;
+							ReleaseLightDistribution(getExit[0].PortId, function(obj) {
 								console.log(getExit[0].PortId, obj, 'obj')
 								if (obj.status) {
+									GFC.reload();
 									$('.modal-body').text('释放光配成功');
 									$('.modal-body').text('');
 									$('.main-modal').modal('hide');
@@ -417,6 +406,7 @@
 									}
 									let changePhyPort = ROOF.physical.ChangePhyPort;
 									changePhyPort(ViewModel.id, $thisE.attr('data-id'), function(objmn) {
+										console.log(ViewModel.id, $thisE.attr('data-id'), ViewModel, 'viewE')
 										if (objmn.status) {
 											$('.main-modal').modal('hide');
 											GFC.reload();
@@ -434,6 +424,16 @@
 				}, {
 					name: '连接',
 					fc: function(cellView) {
+						var ViewModel = cellView.model;
+						var getAllPhy = ViewModel.attributes.allData.rightLink;
+						let getExit = [];
+						getExit = _.filter(getAllPhy, function(oo1) {
+							return oo1.Port1.PortId === ViewModel.id;
+						});
+						if (getExit.length !== 0) {
+							GFC.showError('该端口已存在连接！');
+							return;
+						}
 						var getAllPanelsAndDevs = ROOF.physical.GetAllPanelsAndDevs; //获取接口
 						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId; //获取接口
 						var addPhyFiberEx = ROOF.physical.AddPhyFiberEx; //获取接口
@@ -488,34 +488,12 @@
 									GFC.reload();
 								});
 								$('.edit-right').unbind('click');
-								var IsCtrl = false;
 								var ispl = false;
-								let openPlC = function(event) {
-									if (event.ctrlKey === true) {
-										IsCtrl = true;
-										//$('.poitem-to').removeClass('active');
-										$('.ctrl-ist').removeClass('text-muted');
-										$('.ctrl-ist').addClass('text-danger').text('目前状态是批量选择端口.');
-									}
-								};
-								let closePlC = function(event) {
-									if (event.which === 17) {
-										IsCtrl = false;
-										//$('.poitem-to').removeClass('list-group-item-info');
-										$('.ctrl-ist').removeClass('text-danger');
-										$('.ctrl-ist').addClass('text-muted').text('按下ctrl键用鼠标点击可以批量选择端口.');
-									}
-								};
-								$(window).off('keyup').on('keyup', closePlC);
-								$(window).off('keydown').on('keydown', openPlC);
-								if (window.parent !== undefined) {
-									$(ROOF).off('keyup').on('keyup', closePlC);
-									$(ROOF).off('keydown').on('keydown', openPlC);
-								}
 								var creatlistPanel = function(sdg, ts) {
 									sdg.html('');
 									var str = '';
 									var thispannel;
+									console.log(obj, 'obj')
 									$.each(obj.panel_list, function(indg, dgg) {
 										if (dgg.PanelId === '' || dgg.ProprName === '') {
 											return true;
@@ -529,27 +507,9 @@
 										var dArray = _.findWhere(obj.panel_list, {
 											PanelId: $(this).val()
 										});
-										if (ts === 'l') {
-											creatlistDev($('.start-pdevices-list'), dArray.Children, ts);
-										} else {
-											creatlistDev($('.end-pdevices-list'), dArray.Children, ts);
-										}
+										creatlistDev($('.end-pdevices-list'), dArray.Children, ts);
 									});
-									if (ts === 'l') {
-										$.each(obj.panel_list, function(ghind, ddde) {
-											if (_.findWhere(ddde.Children, {
-													Guid: cellView.model.id
-												}) !== undefined) {
-												thispannel = ddde.PanelId;
-											}
-										});
-										sdg.val(thispannel);
-										sdg.trigger('change');
-										sdg.attr('disabled', 'disabled');
-									} else {
-										sdg.trigger('change');
-									}
-
+									sdg.trigger('change');
 								};
 								var creatlistDev = function(dsdg, ddata, ts) {
 									dsdg.html('');
@@ -567,43 +527,24 @@
 										getPortsByDeviceId($(this).val(), function(portobj) {
 											if (portobj.status) {
 												var dArray = portobj.slot_list;
-												// if (dArray.length === 0) {
-												//   return;
-												// }
-												if (ts === 'l') {
-													$('.start-solt-list').html('');
-													creatlistSolt($('.start-solt-list'), dArray, ts);
-												} else {
-													$('.end-solt-list').html('');
-													creatlistSolt($('.end-solt-list'), dArray, ts);
-												}
+												$('.end-solt-list').html('');
+												creatlistSolt($('.end-solt-list'), dArray, ts);
 											} else {
 												console.log('ddd');
 											}
 										});
-
 									});
-									if (ts === 'l') {
-										dsdg.val(cellView.model.id);
-										dsdg.trigger('change');
-										dsdg.attr('disabled', 'disabled');
-									} else {
-										dsdg.trigger('change');
-									}
+									dsdg.trigger('change');
 								};
 								var creatlistSolt = function(dsdg, ddata, ts) {
-
 									dsdg.html('');
 									var str = '';
 									var thislistid = '';
 									var thisclass = '';
-									if (ts === 'l') {
-										thislistid = '#start-solt-list';
-										thisclass = 'start-port-list';
-									} else {
-										thislistid = '#end-solt-list';
-										thisclass = 'end-port-list';
-									}
+									thislistid = '#end-solt-list';
+									thisclass = 'end-port-list';
+									console.log(ddata, 'ddata', ViewModel)
+									let getType = ViewModel.attributes.devDatas.Type;
 									$.each(ddata, function(indg, dgg) {
 										var strc = '';
 										$.each(dgg.Port_List, function(index, item) {
@@ -611,40 +552,112 @@
 												findStr = '',
 												isdisable = '';
 											//console.log(item.c_pd_id);
-											if (item.c_pd_id !== undefined || item.c_pd_id === '') {
-												let devname;
-												if (item.c_dev_name === undefined) {
-													devname = item.c_ns_name;
-												} else {
-													devname = item.c_dev_name;
-												}
-												findStr = `<span
+											if (getType === "RX") {
+												if (item.ProportFunctiontype === "TX") {
+													if (item.c_pd_id !== undefined || item.c_pd_id === '') {
+														let devname;
+														if (item.c_dev_name === undefined) {
+															devname = item.c_ns_name;
+														} else {
+															devname = item.c_dev_name;
+														}
+														findStr = `<span
                                                      class="findSenRevs"
                                                       data-toggle="popover"
                                                        data-placement="bottom"
                                                         data-content="对侧装置:${devname}">
                                                         (${item.c_pd_name} [${item.c_pd_ftype}])
                                                         </span>`.trim();
-												isdisable = 'disabled';
-											}
-											if (item.c_p1_id !== undefined) {
-												spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
-											}
-											if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
-												strc += `
+														isdisable = 'disabled';
+													}
+													if (item.c_p1_id !== undefined) {
+														spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
+													}
+													if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+														strc += `
                                                 <a class="list-group-item poitem-to ${isdisable}" data-port-name="${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
                                                 ${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
                                                 </a>
                                                 `.trim();
-											} else {
-												strc += `
+													} else {
+														strc += `
                                                 <a class="list-group-item poitem-to ${isdisable}" data-port-name="${dgg.ProbsName}-${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
                                                 ${dgg.ProbsName}-${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
                                                 </a>
                                                 `.trim();
+													}
+												}
+											} else if (getType === "TX") {
+												if (item.ProportFunctiontype === "RX") {
+													if (item.c_pd_id !== undefined || item.c_pd_id === '') {
+														let devname;
+														if (item.c_dev_name === undefined) {
+															devname = item.c_ns_name;
+														} else {
+															devname = item.c_dev_name;
+														}
+														findStr = `<span
+                                                     class="findSenRevs"
+                                                      data-toggle="popover"
+                                                       data-placement="bottom"
+                                                        data-content="对侧装置:${devname}">
+                                                        (${item.c_pd_name} [${item.c_pd_ftype}])
+                                                        </span>`.trim();
+														isdisable = 'disabled';
+													}
+													if (item.c_p1_id !== undefined) {
+														spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
+													}
+													if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+														strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+													} else {
+														strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${dgg.ProbsName}-${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${dgg.ProbsName}-${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+													}
+												}
+											} else if (getType === "DX") {
+												if (item.ProportFunctiontype === "DX") {
+													if (item.c_pd_id !== undefined || item.c_pd_id === '') {
+														let devname;
+														if (item.c_dev_name === undefined) {
+															devname = item.c_ns_name;
+														} else {
+															devname = item.c_dev_name;
+														}
+														findStr = `<span
+                                                     class="findSenRevs"
+                                                      data-toggle="popover"
+                                                       data-placement="bottom"
+                                                        data-content="对侧装置:${devname}">
+                                                        (${item.c_pd_name} [${item.c_pd_ftype}])
+                                                        </span>`.trim();
+														isdisable = 'disabled';
+													}
+													if (item.c_p1_id !== undefined) {
+														spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
+													}
+													if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+														strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+													} else {
+														strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${dgg.ProbsName}-${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${dgg.ProbsName}-${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+													}
+												}
 											}
-
-
 											//ProbsDesc + '-' + ProbsName + '-' + ProportFunctiontype + '-' + ProportJointtype,
 										});
 										let isInNet = '';
@@ -670,7 +683,6 @@
                                               </div>
                                                 `.trim();
 									});
-									console.log('aaa');
 									dsdg.html(str);
 									if (ts === 'l') {
 										creatlistPort($('.start-port-list'));
@@ -685,7 +697,6 @@
 								};
 								var creatlistPort = function(sgt) {
 									//sgt.html('');
-
 									$('.findSenRevs').popover({
 										trigger: 'hover'
 									});
@@ -693,29 +704,6 @@
 										if ($(this).hasClass('disabled')) {
 											return;
 										}
-										if (IsCtrl) {
-											ispl = true;
-											$('.poitem-to.active').addClass('list-group-item-info');
-											$('.poitem-to').removeClass('active');
-											if ($(this).hasClass('list-group-item-info')) {
-												$(this).removeClass('list-group-item-info');
-											} else {
-												$(this).addClass('list-group-item-info');
-											}
-
-										} else {
-											ispl = false;
-											$('.poitem-to').removeClass('list-group-item-info');
-											if ($(this).hasClass('active')) {
-												$(this).removeClass('active');
-												sgt.find('.poitem-to').removeClass('active');
-												return;
-											}
-											sgt.find('.poitem-to').removeClass('active');
-											$(this).addClass('active');
-										}
-
-									}).off('dblclick').on('dblclick', function() {
 										ispl = false;
 										$('.poitem-to').removeClass('list-group-item-info');
 										if ($(this).hasClass('active')) {
@@ -725,163 +713,40 @@
 										}
 										sgt.find('.poitem-to').removeClass('active');
 										$(this).addClass('active');
-										if ($('.list-group-item.active').length === 2) {
-											$('.edit-right').trigger('click');
-										}
-									});
 
-									//GFC.showError(portobj.err_msg);
+
+									}).off('dblclick').on('dblclick', function() {
+										$(this).addClass('active');
+										$('.edit-right').trigger('click');
+									});
 								};
-								creatlistPanel($('.start-panel-list'), 'l');
 								creatlistPanel($('.end-panel-list'), 'r');
 								$('.edit-right').off('click').on('click', function() {
-									var sendPortArray = [];
-									var recvPortArray = [];
 									let sendportname = [];
 									let recvportname = [];
-									let sendporttpye = [];
-									let recvporttpye = [];
-									var startAr = $('.start-port-list').find('.list-group-item-info');
-									if (startAr.length !== 0) {
-										$.each(startAr, function(stinx) {
-											sendPortArray.push({
-												type: startAr.eq(stinx).attr('data-types'),
-												id: startAr.eq(stinx).attr('data-id')
-											});
-											sendportname.push(startAr.eq(stinx).attr('data-port-name'));
-											sendporttpye.push(startAr.eq(stinx).attr('data-types'));
-										});
-									}
-									var endAr = $('.end-port-list').find('.list-group-item-info');
-									if (endAr.length !== 0) {
-										$.each(endAr, function(endinx) {
-											recvPortArray.push({
-												type: endAr.eq(endinx).attr('data-types'),
-												id: endAr.eq(endinx).attr('data-id')
-											});
-											recvportname.push(endAr.eq(endinx).attr('data-port-name'));
-											recvporttpye.push(endAr.eq(endinx).attr('data-types'));
-										});
-									}
-									var startAt = $('.start-port-list').find('.active').attr('data-id');
 									var endAt = $('.end-port-list').find('.active').attr('data-id');
-									if (ispl) {
-										if (_.uniq(sendportname).length !== _.uniq(recvportname).length) {
-											GFC.showError('请确保两侧批量选择的数量一致');
-											return;
-										}
-										if (_.where(sendporttpye, 'DX').length !== 0 || _.where(recvporttpye, 'DX').length !== 0) {
-											if (sendPortArray.length !== recvPortArray.length || _.where(sendporttpye, 'DX').length !== _.where(recvporttpye, 'DX').length) {
-												GFC.showError('电口不能与光口连接');
-												return;
-											}
-
-										} else {
-											if (sendPortArray.length !== recvPortArray.length || _.where(sendporttpye, 'TX').length !== _.where(recvporttpye, 'RX').length) {
-												GFC.showError('请确保两侧收发类型一致');
-												return;
-											}
-											//var s = [1, 1, 1, 0, 1, 0, 0];
-											if (_.findWhere(sendPortArray, {
-													type: 'TX'
-												}) !== undefined && _.findWhere(sendPortArray, {
-													type: 'RX'
-												}) !== undefined) {
-												let senda = 0;
-												let sendb = 1;
-												let sendt = [];
-												$.each(sendPortArray, function(indexsend, ss) {
-													if (ss.type === 'TX') {
-														sendt[senda] = ss;
-														senda += 2;
-													} else {
-														sendt[sendb] = ss;
-														sendb += 2;
-													}
-												});
-												let recva = 1;
-												let recvb = 0;
-												let recvt = [];
-												$.each(recvPortArray, function(indexrecv, rr) {
-													if (rr.type === 'TX') {
-														recvt[recva] = rr;
-														recva += 2;
-													} else {
-														recvt[recvb] = rr;
-														recvb += 2;
-													}
-												});
-												sendPortArray = sendt;
-												recvPortArray = recvt;
-											}
-										}
-										var fiberlist = [];
-										$.each(sendPortArray, function(sendindex, senditem) {
-											fiberlist.push({
-												SrcPortId: senditem.id
+									var startAt = ViewModel.id;
+									var portinfo = {};
+									portinfo.SrcPortId = startAt;
+									portinfo.DstPortId = endAt;
+									addPhyFiber(portinfo, function(dlstj) {
+										console.log(portinfo, dlstj, 'portinfo')
+										if (dlstj.status) {
+											$('.poitem-to').removeClass('list-group-item-info');
+											$('.poitem-to').removeClass('active');
+											let arrOpen = [];
+											$.each($('.panel-collapse.collapse.in'), function(epl, epd) {
+												arrOpen.push(epd.id);
 											});
-										});
-										$.each(recvPortArray, function(recvindex, recvitem) {
-											fiberlist[recvindex].DstPortId = recvitem.id;
-										});
-										addPhyFiberEx(fiberlist, function(plstj) {
-											if (plstj.status) {
-												$('.poitem-to').removeClass('list-group-item-info');
-												$('.poitem-to').removeClass('active');
-												let arrOpen = [];
-												$.each($('.panel-collapse.collapse.in'), function(epl, epd) {
-													arrOpen.push(epd.id);
-												});
-												GFC.setStorage('linkOpenListCollapse', arrOpen);
-												let endval = $('.end-pdevices-list').val();
-												$('.start-pdevices-list').trigger('change');
-												$('.end-pdevices-list').val(endval).trigger('change');
-												isEdit = 1;
-											} else {
-												GFC.showError(plstj.err_msg);
-											}
-										});
-
-									} else {
-										var portinfo = {};
-										if (startAt === undefined || endAt === undefined) {
-											GFC.showError('请确保两侧各有一个端口被选中');
-											return;
-										}
-										portinfo.SrcPortId = startAt;
-										portinfo.DstPortId = endAt;
-										console.log(portinfo);
-										let sr = $('[data-id=' + portinfo.SrcPortId + ']').attr('data-types');
-										let ds = $('[data-id=' + portinfo.DstPortId + ']').attr('data-types');
-										if (sr === 'DX' || ds === 'DX') {
-											if (sr !== ds) {
-												GFC.showError('电口不能与光口连接');
-												return;
-											}
+											GFC.setStorage('linkOpenListCollapse', arrOpen);
+											let endval = $('.end-pdevices-list').val();
+											$('.start-pdevices-list').trigger('change');
+											$('.end-pdevices-list').val(endval).trigger('change');
+											isEdit = 1;
 										} else {
-											if (sr === ds) {
-												GFC.showError('相同收发类型的端口不能相连');
-												return;
-											}
+											GFC.showError(dlstj.err_msg);
 										}
-										addPhyFiber(portinfo, function(dlstj) {
-											if (dlstj.status) {
-												$('.poitem-to').removeClass('list-group-item-info');
-												$('.poitem-to').removeClass('active');
-												let arrOpen = [];
-												$.each($('.panel-collapse.collapse.in'), function(epl, epd) {
-													arrOpen.push(epd.id);
-												});
-												GFC.setStorage('linkOpenListCollapse', arrOpen);
-												let endval = $('.end-pdevices-list').val();
-												$('.start-pdevices-list').trigger('change');
-												$('.end-pdevices-list').val(endval).trigger('change');
-												isEdit = 1;
-											} else {
-												GFC.showError(dlstj.err_msg);
-											}
-										});
-									}
+									});
 								});
 							} else {
 								GFC.showError(obj.err_msg);
@@ -1139,7 +1004,7 @@
 						let GetPanelOdfList = ROOF.physical.GetPanelOdfList;
 						let GetPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
 						var addPhyFiber = ROOF.physical.AddPhyFiber;
-						let changePhyFiberConn = ROOF.physical.ChangePhyFiberConn;
+						let AddOdfPortInLink = ROOF.physical.AddOdfPortInLink;
 						GetPanelOdfList(getPanelId, function(obj) {
 							if (obj.status) {
 								var datas = [];
@@ -1269,7 +1134,7 @@
 											GFC.showError('请确保至少有一个端口被选中');
 											return;
 										}
-										changePhyFiberConn(linkId, endid, function(obd) {
+										AddOdfPortInLink(linkId, endid, function(obd) {
 											if (obd.status) {
 												console.log(obd, 'obd')
 												GFC.reload();
@@ -1311,10 +1176,11 @@
 						cellView.update();
 						$('.edit-right').unbind('click');
 						$('.edit-right').click(function() {
-							var releaseFiberDistFrame = ROOF.physical.ReleaseFiberDistFrame;
-							releaseFiberDistFrame(getExit[0].PortId, function(obj) {
+							var ReleaseLightDistribution = ROOF.physical.ReleaseLightDistribution;
+							ReleaseLightDistribution(getExit[0].PortId, function(obj) {
 								console.log(getExit[0].PortId, obj, 'obj')
 								if (obj.status) {
+									GFC.reload();
 									$('.modal-body').text('释放光配成功');
 									$('.modal-body').text('');
 									$('.main-modal').modal('hide');
@@ -1490,7 +1356,7 @@
 									GFC.reload();
 								});
 								$('.edit-right').unbind('click');
-								var IsCtrl = false;
+
 								var ispl = false;
 								let openPlC = function(event) {
 									if (event.ctrlKey === true) {

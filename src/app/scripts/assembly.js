@@ -1053,7 +1053,10 @@
 			paper.resizePaperScroller();
 			if (finddata.GPorts[3].length !== 0) { //组揽的光配
 				$.each(finddata.GPorts[3], function(index2, item2) {
-					let getX = 250 + 4000 + item2.Index*20;
+					let getX = 250 + 4000 + item2.Index*30;
+					if (item2.Index > 6) {
+						getX = 250 + 4000 + (item2.Index + 1)*30;
+					}
 					let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
 					let iid = item2.PortId + '1';
 					var LinePorts = new joint.shapes.basic.LPPort({
@@ -1093,8 +1096,8 @@
 			var getLinkConnectId = [];
 			$.each(finddata.ZLLink, function(index, item) { //暂时暂时光缆port点的连接线
 				var vie = 0;
-				if (getLinkConnectId.indexOf(item.LinkConnectId) === -1) {
-					getLinkConnectId.push(item.LinkConnectId);
+				if (getLinkConnectId.indexOf(item.GuidGuid) === -1) {
+					getLinkConnectId.push(item.Guid);
 					vie = 1;
 					window.paper.LineConnect(item, vie);
 				} else {

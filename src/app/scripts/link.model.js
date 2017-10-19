@@ -205,7 +205,13 @@
         }
       },
       labels: [{
-        position: { distance: .5, offset: { x: 0, y: 0 } },
+        position: {
+          distance: .5,
+          offset: {
+            x: 0,
+            y: 0
+          }
+        },
         attrs: {
           rect: {
             stroke: '#ffffff',
@@ -213,7 +219,10 @@
             rx: 5,
             ry: 5
           },
-          foreignobject: { width: 30, height: 30 },
+          foreignobject: {
+            width: 30,
+            height: 30
+          },
           text: {
             text: 'name',
             'font-weight': 'lighter',
@@ -221,6 +230,105 @@
           }
         }
       }]
+    }
+  });
+  joint.shapes.devs.ZLLink = joint.dia.Link.extend({
+    markup: [
+      '<path class="connection" stroke="black" d="M 0 0 0 0"/>',
+      '<path class="marker-source" fill="black" stroke="black" d="M 0 0 0 0"/>',
+      '<path class="marker-target" fill="black" stroke="black" d="M 0 0 0 0"/>',
+      // '<text class="port-label"/>',
+      '<path class="connection-wrap" d="M 0 0 0 0"/>',
+      '<g class="labels"/>',
+      '<g class="marker-vertices"/>',
+      '<g class="marker-arrowheads"/>',
+      '<g class="link-tools"/>'
+    ].join(''),
+    toolMarkup: [ //以下几处是屏蔽joint.link自己定义的彩色箭头
+      '<g class="link-tool">',
+      '</g>'
+    ].join(''),
+    labelMarkup: [
+      '<g class="label">',
+      '<rect />',
+      '<text class="content-x"/>',
+      '<circle />',
+      '</g>'
+    ].join(''),
+    arrowheadMarkup: [
+      '<g class="marker-arrowhead-group marker-arrowhead-group-<%= end %>">',
+      '</g>'
+    ].join(''),
+    vertexMarkup: 'none',
+    defaults: {
+      type: 'devs.ZLLink',
+      rightMenu: {
+        centerMenu: {
+          name: '编辑',
+          fc: function(cellView) {
+            console.log('11111');
+            let getZLLinkId = cellView.model.attributes.ZLLinkId;
+            var EditStr = '';
+            $('.modal-body').html('');
+            $('.modal-title').html(this.name);
+            EditStr += '<div class="form-group">' +
+              '<label for="ProportName">光缆信息名称:</label>' +
+              '<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.Name + '" id="ProportName">' +
+              '</div>';
+            $('.modal-body').html(EditStr);
+            $('.main-modal').modal();
+            $('.edit-right').unbind('click');
+            $('.edit-right').click(function() {
+              console.log('2222')
+              var ChangeOpticalCableName = ROOF.physical.ChangeOpticalCableName;
+              ChangeOpticalCableName(getZLLinkId, GFC.formValidation($('#ProportName')), function(obj) {
+                if (obj.status) {
+                  let elementTitl = cellView.$el.find('.content-x');
+                  elementTitl.text(GFC.formValidation($('#ProportName')));
+                  cellView.model.attributes.devDatas.Name = GFC.formValidation($('#ProportName'));
+                  cellView.update();
+                  $('.main-modal').modal('hide');
+                } else {
+                  GFC.showError(obj.err_msg);
+                }
+              });
+            });
+          }
+        },
+        otherMenu: [{
+          name: '删除',
+          fc: function(cellView) {
+            console.log(cellView, 'cellView');
+            let getZLLinkId = cellView.model.attributes.ZLLinkId;
+            $('.modal-title').html(this.name);
+            $('.modal-body').html('');
+            $('.modal-body').text('确定删除该光纤吗?');
+            $('.main-modal').modal();
+            $('.edit-right').unbind('click');
+            $('.edit-right').click(function() {
+              var DeletePhyOpticalCable = ROOF.physical.DeletePhyOpticalCable;
+              DeletePhyOpticalCable(getZLLinkId, function(obj) {
+                if (obj.status) {
+                  cellView.model.remove();
+                  GFC.reload();
+                  $('.main-modal').modal('hide');
+                  $('.modal-body').html('');
+                } else {
+                  GFC.showError('删除光纤失败' + obj.err_msg);
+                }
+              });
+            });
+          }
+        }]
+      },
+      attrs: {
+        '.connection': {
+          stroke: 'red',
+          // opacity: 0.3,
+          'stroke-width': 1.3,
+          'stroke-dasharray': '4 3'
+        },
+      }
     }
   });
   joint.shapes.devs.PhyLink2 = joint.dia.Link.extend({
@@ -411,7 +519,10 @@
         }]
       },
       attrs: {
-        '.connection': { stroke: '#7bb4dc', 'stroke-width': 4 }
+        '.connection': {
+          stroke: '#7bb4dc',
+          'stroke-width': 4
+        }
       }
     }
 
@@ -439,7 +550,7 @@
   //       let gldata = _.findWhere(window.opticalCable, { Guid: bdata.ProjectOpticalcableGuid });
   //       let getFibersOfOpticalCable = ROOF.physical.GetFibersOfOpticalCable;
   //       // getFibersOfOpticalCable(gldata.Guid, function(objgll) {
-          
+
   //       //   if (objgll.status) {
   //       //     let descsv = _.findWhere(objgll.fiber_list, { Guid: bdata.PhylinkId });
   //       //     if (descsv === undefined) {

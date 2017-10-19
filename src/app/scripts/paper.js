@@ -717,51 +717,18 @@ window.ddd = [];
       link.addTo(this.graph);
     },
     LineConnect: function(data, vie) { //该函数处理光缆连接
-      let camo = new joint.dia.Link({
-        markup: [
-          '<path class="connection" stroke="black" d="M 0 0 0 0"/>',
-          '<path class="marker-source" fill="black" stroke="black" d="M 0 0 0 0"/>',
-          '<path class="marker-target" fill="black" stroke="black" d="M 0 0 0 0"/>',
-          // '<text class="port-label"/>',
-          '<path class="connection-wrap" d="M 0 0 0 0"/>',
-          '<g class="labels"/>',
-          '<g class="marker-vertices"/>',
-          '<g class="marker-arrowheads"/>',
-          '<g class="link-tools"/>'
-        ].join(''),
-        toolMarkup: [ //以下几处是屏蔽joint.link自己定义的彩色箭头
-          '<g class="link-tool">',
-          '</g>'
-        ].join(''),
-        labelMarkup: [
-          '<g class="label">',
-          '<rect />',
-          '<text />',
-          '<circle />',
-          '</g>'
-        ].join(''),
-        arrowheadMarkup: [
-          '<g class="marker-arrowhead-group marker-arrowhead-group-<%= end %>">',
-          '</g>'
-        ].join(''),
-        vertexMarkup: 'none',
-        id: data.Guid,
-        // sigshowinfo: '11111',//此处为鼠标放置在线上时展示名称，否则隐藏
+      let camo = new joint.shapes.devs.ZLLink({
+        ZLLinkId:data.Guid,
+        devDatas:data,
         source: {
           id: data.Port1,
-          selector: 'rect'
+          selector: 'rect',
         },
         target: {
           id: data.Port2,
           selector: 'rect'
         },
-        // vertices: vertices,
         attrs: {
-          // '.marker-target': {//此处为构造箭头
-          //   fill: '#306796',
-          //   stroke: null,
-          //   d: 'M 10 0 L 0 5 L 10 10 z'
-          // },
           '.connection': {
             stroke: 'red',
             // opacity: 0.3,
@@ -769,8 +736,6 @@ window.ddd = [];
             'stroke-dasharray': '4 3'
           },
         },
-        // router: routers,
-        portRemove: 1,
         labels: [{
           position: {
             distance: .7
@@ -789,7 +754,7 @@ window.ddd = [];
               opacity: vie,
               // 'transform': 'rotate(90deg)',
               // transform:'rotate(90deg)',
-              'font-size':9,
+              'font-size': 9,
               'font-variant': 'small-caps'
             }
           }

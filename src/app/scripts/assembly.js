@@ -311,7 +311,7 @@
 						other_device: [],
 						LineConnect: [],
 						mainPortId: [],
-						ZLLink:[]
+						ZLLink: []
 					};
 					var data = $.parseJSON(obj.json_info);
 					data.main = dddata;
@@ -728,36 +728,46 @@
 							$.each(itt1.PhyLink, function(iis2, itt2) {
 								arr.push(itt2.PhyLinkId);
 								newAllZLGpId.push({
-									"Guid":itt2.PhyLinkId,
-									"Index":iis1
+									"Guid": itt2.PhyLinkId,
+									"Index": iis1
 								});
 							});
 							newZLGpLinkId.push({
-								"LinkIds":arr,
-								"LinkName":itt1.OpCableName,
-								"LinkId":itt1.OpCableId
+								"LinkIds": arr,
+								"LinkName": itt1.OpCableName,
+								"LinkId": itt1.OpCableId
 							});
 						});
 					}
-					if (newAllZLGpId.length !== 0) {//组揽端子处理
+					if (newAllZLGpId.length !== 0) { //组揽端子处理
 						$.each(newAllZLGpId, function(iis1, itt1) {
 							let getExit5 = [];
 							getExit5 = newData.PhyLink.filter(x => x.PhylinkId === itt1.Guid);
-							newAllZLGp.push({
-								"PortId": itt1.Guid,
-								"Index":itt1.Index,
-								"ForPort": getExit5[0].Port1.PortId
-							});
+							if (mainPortId.indexOf(getExit5[0].Port1.PortId) !== -1) {
+								newAllZLGp.push({
+									"PortId": itt1.Guid,
+									"Index": itt1.Index,
+									"ForPort": getExit5[0].Port1.PortId,
+									"PosiType": true
+								});
+							} else {
+								newAllZLGp.push({
+									"PortId": itt1.Guid,
+									"Index": itt1.Index,
+									"ForPort": getExit5[0].Port1.PortId,
+									"PosiType": false
+								});
+							}
 						})
 					}
-					if (newZLGpLinkId.length!==0) {//组揽连接线处理
-						$.each(newZLGpLinkId,function(iis1,itt1){
+					if (newZLGpLinkId.length !== 0) { //组揽连接线处理
+						$.each(newZLGpLinkId, function(iis1, itt1) {
 							for (var g = 1; g < itt1.LinkIds.length; g++) {
 								newZLGpLink.push({
-									"Port1":itt1.LinkIds[g-1]+'1',
-									"Port2":itt1.LinkIds[g]+'1',
-									"Guid":itt1.LinkId,
-									"Name":itt1.LinkName
+									"Port1": itt1.LinkIds[g - 1] + '1',
+									"Port2": itt1.LinkIds[g] + '1',
+									"Guid": itt1.LinkId,
+									"Name": itt1.LinkName
 								});
 							}
 						})
@@ -1002,7 +1012,7 @@
 							},
 							inPorts: [],
 							outPorts: [],
-							porttts:finddata.other_device[i].Name,
+							porttts: finddata.other_device[i].Name,
 							devicesNolink: finddata,
 							devDatas: finddata.other_device[i],
 							childequipments: finddata.other_device[i].DevPort,
@@ -1054,11 +1064,14 @@
 			paper.resizePaperScroller();
 			if (finddata.GPorts[3].length !== 0) { //组揽的光配
 				$.each(finddata.GPorts[3], function(index2, item2) {
-					let getX = 250 + 4000 + item2.Index*30;
+					let getX = 250 + 4000 + item2.Index * 30;
 					if (item2.Index > 6) {
-						getX = 250 + 4000 + (item2.Index + 1)*30;
+						getX = 250 + 4000 + (item2.Index + 1) * 30;
 					}
 					let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
+					if (item2.PosiType === true) {
+						getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y+10;
+					}
 					let iid = item2.PortId + '1';
 					var LinePorts = new joint.shapes.basic.LPPort({
 						portRemove: 1,

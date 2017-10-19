@@ -762,14 +762,16 @@
 					}
 					if (newZLGpLinkId.length !== 0) { //组揽连接线处理
 						$.each(newZLGpLinkId, function(iis1, itt1) {
+							let arr = [];
 							for (var g = 1; g < itt1.LinkIds.length; g++) {
-								newZLGpLink.push({
+								arr.push({
 									"Port1": itt1.LinkIds[g - 1] + '1',
 									"Port2": itt1.LinkIds[g] + '1',
 									"Guid": itt1.LinkId,
 									"Name": itt1.LinkName
 								});
 							}
+							newZLGpLink.push(arr);
 						})
 					}
 					console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
@@ -1070,7 +1072,7 @@
 					}
 					let getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y;
 					if (item2.PosiType === true) {
-						getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y+10;
+						getY = window.ppp.findViewByModel(item2.ForPort).model.attributes.position.y + 10;
 					}
 					let iid = item2.PortId + '1';
 					var LinePorts = new joint.shapes.basic.LPPort({
@@ -1109,14 +1111,25 @@
 			}
 			var getLinkConnectId = [];
 			$.each(finddata.ZLLink, function(index, item) { //暂时暂时光缆port点的连接线
-				var vie = 0;
-				if (getLinkConnectId.indexOf(item.GuidGuid) === -1) {
-					getLinkConnectId.push(item.Guid);
-					vie = 1;
-					window.paper.LineConnect(item, vie);
-				} else {
-					window.paper.LineConnect(item, vie);
+				for (var p = 0; p < item.length; p++) {
+					let len = (item.length) % 2 === 0 ? (item.length) / 2 : (item.length + 1) / 2;
+					let vie = 0;
+					if ((p+1) === len) {
+						vie = 1;
+					}
+					window.paper.LineConnect(item[p], vie);
 				}
+				// $.each(item, function(index1, item2) {
+				// 	var vie = 0;
+				// 	if (getLinkConnectId.indexOf(item2.GuidGuid) === -1) {
+				// 		getLinkConnectId.push(item2.Guid);
+				// 		vie = 1;
+				// 		window.paper.LineConnect(item2, vie);
+				// 	} else {
+				// 		window.paper.LineConnect(item2, vie);
+				// 	}
+				// })
+
 			})
 		}
 	}];

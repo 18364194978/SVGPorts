@@ -45,14 +45,14 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title daboule-modal-title">Modal title</h4>
+                                        <h4 class="modal-title2 daboule-modal-title">Modal title</h4>
                                     </div>
-                                    <div class="modal-body daboule-modal-body">
+                                    <div class="modal-body2 daboule-modal-body">
                                         <p>One fine body&hellip;</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                        <button type="button" class="btn btn-primary edit-bt">确定</button>
+                                        <button type="button" class="btn btn-primary edit-bt2">确定</button>
                                     </div>
                                 </div>
                             </div>

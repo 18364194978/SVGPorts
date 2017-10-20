@@ -164,7 +164,7 @@
 								<div class="plugselect-modal-left"> 
 								<div class="plugselect-pubtree-div"> 
 								<label style="margin-right:120px">光配列表：</label>
-								<button id="plugtreeSearch" class="btn btn-default" style=" float:right">添加光配箱</button> 
+								<button id="plugtreeSearch1" class="btn btn-default" style=" float:right">添加光配箱</button> 
 								</div> 
 								<ul class="plugselect-pubtree ztree" id="publicplugTree"></ul> 
 								</div> 
@@ -271,6 +271,44 @@
 										}
 									}
 								});
+								$('#plugtreeSearch1').off('click').on('click', function() {
+									$('.modal-body2').html('').css({
+										'padding-top': '5px'
+									});
+									$('.modal-title2').html('添加光配箱');
+									var content = `
+										<div class="modal-body" id="addLightBoxModal"> 
+										<div class="modal-item"><span class="modal-item-title">光配箱规格:</span> 
+										<select class="form-control" id="lightBoxSel"> 
+										<option value="1U">1U</option> 
+										<option value="2U">2U</option> 
+										<option value="3U" selected="true">3U</option> 
+										<option value="4U">4U</option> 
+										<option value="5U">5U</option> 
+										<option value="6U">6U</option> 
+										</select> 
+										</div> 
+										</div> `.trim();
+									$('.modal-body2').html(content);
+									$('.daboule-modal').modal('show');
+									$('.edit-bt2').click(function() {
+										physical.AddPhyLightDistBox($("#lightBoxSel").val(), getPanelId, function(oks) {
+											if (oks.status) {
+												let newdata = [];
+												newdata.push({
+													name: oks.box_info.box_name,
+													type: oks.box_info.Type,
+													Guid: oks.box_info.box_idx,
+													children: getChildren(oks.box_info.odf_list)
+												});
+												zTree.addNodes(null, newdata);
+											} else {
+												GFC.showError(oks.err_msg);
+											}
+										});
+									});
+								});
+
 							} else {
 								console.log(err_msg);
 							}
@@ -1068,7 +1106,7 @@
 								<div class="plugselect-modal-left"> 
 								<div class="plugselect-pubtree-div"> 
 								<label style="margin-right:120px">光配列表：</label>
-								<button id="plugtreeSearch" class="btn btn-default" style=" float:right">添加光配箱</button> 
+								<button id="plugtreeSearch2" class="btn btn-default" style=" float:right">添加光配箱</button> 
 								</div> 
 								<ul class="plugselect-pubtree ztree" id="publicplugTree"></ul> 
 								</div> 
@@ -1145,6 +1183,43 @@
 											}
 										});
 									}
+								});
+								$('#plugtreeSearch2').off('click').on('click', function() {
+									$('.modal-body2').html('').css({
+										'padding-top': '5px'
+									});
+									$('.modal-title2').html('添加光配箱');
+									var content = `
+										<div class="modal-body" id="addLightBoxModal"> 
+										<div class="modal-item"><span class="modal-item-title">光配箱规格:</span> 
+										<select class="form-control" id="lightBoxSel"> 
+										<option value="1U">1U</option> 
+										<option value="2U">2U</option> 
+										<option value="3U" selected="true">3U</option> 
+										<option value="4U">4U</option> 
+										<option value="5U">5U</option> 
+										<option value="6U">6U</option> 
+										</select> 
+										</div> 
+										</div> `.trim();
+									$('.modal-body2').html(content);
+									$('.daboule-modal').modal('show');
+									$('.edit-bt2').click(function() {
+										physical.AddPhyLightDistBox($("#lightBoxSel").val(), getPanelId, function(oks) {
+											if (oks.status) {
+												let newdata = [];
+												newdata.push({
+													name: oks.box_info.box_name,
+													type: oks.box_info.Type,
+													Guid: oks.box_info.box_idx,
+													children: getChildren(oks.box_info.odf_list)
+												});
+												zTree.addNodes(null, newdata);
+											} else {
+												GFC.showError(oks.err_msg);
+											}
+										});
+									});
 								});
 							} else {
 								console.log(err_msg);
@@ -1894,7 +1969,7 @@
 					paper: this.attributes.paper,
 					panelData: $this.attributes.devDatas,
 					dsname: dsname,
-					porttts:dsname,
+					porttts: dsname,
 					portsname: portsname,
 					attrs: { //暂时无需改动
 						rect: {
@@ -2651,7 +2726,7 @@
 				}
 				ChildArray[n].addTo(window.tbgraph);
 				fdo = viewE(ChildArray[n].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
-				$this.chidpositons.parentWidth += fdo.height + 10;
+				$this.chidpositons.parentWidth += fdo.height + 15;
 				$this.chidpositons.y += fdo.height + 15; //内部各个端口svg的间距
 				// ChildArrays.push(ChildArray[j]);//此处为了下面this.runder(ChildArrays)展示，如果直接用ChildArray[i]则只能站址最后一个
 				ChildArray[n].remove();

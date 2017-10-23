@@ -1610,10 +1610,16 @@
 							if ($.trim($('.change-atr').val()) !== '') {
 								NewName = $('.change-atr').val();
 							}
-							renamePhydevice(ViewModel.attributes.id, NewName, function(obj) {
+							renamePhydevice(ViewModel.attributes.devDatas.Guid, NewName, function(obj) {
 								if (obj.status) {
-									cellView.model.attributes.dsname = NewName;
-									elementTitls.attr('title', NewName).text(NewName);
+									cellView.model.attributes.dsname = NewName+'('+ViewModel.attributes.devDatas.ShortName+')';
+									cellView.model.attributes.porttts = NewName+'('+ViewModel.attributes.devDatas.ShortName+')';
+									if (NewName.length > 14) {
+										NewName = NewName.slice(0, 14) + '...';
+										elementTitls.text(NewName);
+									} else {
+										elementTitls.text(NewName);
+									}
 									$('.main-modal').modal('hide');
 								} else {
 									ROOF.common.promptInformation('编辑失败:' + obj.err_msg);
@@ -1939,7 +1945,7 @@
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
-			var inprt, ouprt, dsname, idvs, portsname,jointname;
+			var inprt, ouprt, dsname, idvs, portsname, jointname;
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].DevId !== undefined) {
 					ChildArray = [];
@@ -1984,8 +1990,8 @@
 					paper: this.attributes.paper,
 					panelData: $this.attributes.devDatas,
 					dsname: dsname,
-					jointname:jointname,
-					porttts: dsname+'('+jointname+')',
+					jointname: jointname,
+					porttts: dsname + '(' + jointname + ')',
 					portsname: portsname,
 					attrs: { //暂时无需改动
 						rect: {
@@ -2178,8 +2184,14 @@
 							}
 							renamePhydevice(ViewModel.attributes.devDatas.Guid, NewName, function(obj) {
 								if (obj.status) {
-									cellView.model.attributes.dsname = NewName;
-									elementTitls.text(NewName);
+									cellView.model.attributes.dsname = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
+									cellView.model.attributes.porttts = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
+									if (NewName.length > 14) {
+										NewName = NewName.slice(0, 14) + '...';
+										elementTitls.text(NewName);
+									} else {
+										elementTitls.text(NewName);
+									}
 									$('.main-modal').modal('hide');
 								} else {
 									ROOF.common.promptInformation('编辑失败:' + obj.err_msg);
@@ -2515,7 +2527,7 @@
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
-			var inprt, ouprt, dsname, idvs, portsname, PanelId,jointname;
+			var inprt, ouprt, dsname, idvs, portsname, PanelId, jointname;
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;
 			}
@@ -2534,7 +2546,7 @@
 							"Name": data[j].DevPort[l].Name,
 							"Type": data[j].DevPort[l].Type,
 							"PanelId": data[j].DevPort[l].PanelId,
-							"JointType":data[j].DevPort[l].JointType
+							"JointType": data[j].DevPort[l].JointType
 						});
 					}
 				}
@@ -2650,8 +2662,8 @@
 						panelData: $this.attributes.devDatas,
 						allData: allData, //将所有的处理后的数据传给各个内部端口svg供其操作使用
 						dsname: dsname,
-						jointname:jointname,
-						porttts: dsname+'('+jointname+')',
+						jointname: jointname,
+						porttts: dsname + '(' + jointname + ')',
 						portsname: portsname,
 						attrs: { //暂时无需改动
 							rect: {

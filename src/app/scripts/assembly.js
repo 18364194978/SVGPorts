@@ -483,7 +483,6 @@
 					AllCentGportId.push(ittm.PortId);
 				});
 				console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
-				console.log(AllMainGportId, AllOthrGportId, AllCentGportId, '嘟嘟');
 				if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
 					$.each(newData.PhyLink, function(inds1, itms1) {
 						let getmenu = AllCentGportId.indexOf(itms1.Port1.PortId)

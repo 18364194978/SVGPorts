@@ -9,9 +9,14 @@
                 </g>
                 <rect class="body"/>
                 <text class="labels"/>
-                <foreignObject width="80" height="30" x="0" y="0" class="htIconOut">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:center;">
-                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: inherit;display:inline-block;width:80px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
+                <foreignObject width="50" height="30" x="0" y="0" class="htIconOut">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:left;">
+                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: inherit;display:inline-block;width:50px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
+                    </div>
+                </foreignObject>
+                <foreignObject width="50" height="30" x="50" y="0" class="htIconOut3">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:left;">
+                    <a title="rdgdfgd" class="content-xxx text-center" style="color:white;font-size: inherit;display:inline-block;width:50px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
                     </div>
                 </foreignObject>
                 <foreignObject width="30" height="30" x="102" y="0" class="htIconOut2">
@@ -952,9 +957,14 @@
                 </g>
                 <rect class="body"/>
                 <text class="labels"/>
-                <foreignObject width="80" height="30" x="30" y="0" class="htIconOut">
+                <foreignObject width="50" height="30" x="30" y="0" class="htIconOut">
                     <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:center;">
-                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: inherit;display:inline-block;width:80px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
+                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: inherit;display:inline-block;width:50px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
+                    </div>
+                </foreignObject>
+                <foreignObject width="50" height="30" x="80" y="0" class="htIconOut3">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:left;">
+                    <a title="rdgdfgd" class="content-xxx text-center" style="color:white;font-size: inherit;display:inline-block;width:50px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
                     </div>
                 </foreignObject>
                 <foreignObject width="30" height="30" x="0" y="0" class="htIconOut2">
@@ -1553,6 +1563,8 @@
 			}); //这一堆暂时不确定作用，但删除后不碍事
 			let elementTitls = this.$el.find('.content-x');
 			let elementTitls2 = this.$el.find('.content-xx');
+			let elementTitls3 = this.$el.find('.content-xxx');
+			elementTitls3.attr('title', this.model.attributes.jointname).text(this.model.attributes.jointname);
 			elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
 			elementTitls2.attr('title', this.model.attributes.portsname).text(this.model.attributes.portsname);
 			if (this.model.attributes.portsname === 'TX') {
@@ -1560,6 +1572,7 @@
 			}
 			if (this.model.attributes.portsname === 'Card') {
 				this.$el.find('.htIconOut2').addClass('hide');
+				this.$el.find('.htIconOut3').addClass('hide');
 				this.$el.find('.htIconOut').attr('x', '35');
 			}
 		}
@@ -1926,7 +1939,7 @@
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
-			var inprt, ouprt, dsname, idvs, portsname;
+			var inprt, ouprt, dsname, idvs, portsname,jointname;
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].DevId !== undefined) {
 					ChildArray = [];
@@ -1944,12 +1957,14 @@
 					dsname = data[i].Name;
 					portsname = data[i].Type;
 					idvs = data[i].Guid;
+					jointname = data[i].JointType;
 				} else {
 					inprt = data[i].ports !== null ? data[i].ports : [];
 					ouprt = [];
 					dsname = data[i].Name;
 					portsname = data[i].Type;
 					idvs = data[i].Guid;
+					jointname = data[i].JointType;
 				}
 				ChildArray[i] = new joint.shapes.devs.AtomicT({
 					id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
@@ -1969,7 +1984,8 @@
 					paper: this.attributes.paper,
 					panelData: $this.attributes.devDatas,
 					dsname: dsname,
-					porttts: dsname,
+					jointname:jointname,
+					porttts: dsname+'('+jointname+')',
 					portsname: portsname,
 					attrs: { //暂时无需改动
 						rect: {
@@ -2499,7 +2515,7 @@
 			var ChildArray = [];
 			//var ChildPort = [];
 			var fdo;
-			var inprt, ouprt, dsname, idvs, portsname, PanelId;
+			var inprt, ouprt, dsname, idvs, portsname, PanelId,jointname;
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;
 			}
@@ -2517,7 +2533,8 @@
 							"Guid": data[j].DevPort[l].Guid,
 							"Name": data[j].DevPort[l].Name,
 							"Type": data[j].DevPort[l].Type,
-							"PanelId": data[j].DevPort[l].PanelId
+							"PanelId": data[j].DevPort[l].PanelId,
+							"JointType":data[j].DevPort[l].JointType
 						});
 					}
 				}
@@ -2531,6 +2548,7 @@
 				dsname = portdata[n].Name;
 				portsname = portdata[n].Type;
 				idvs = portdata[n].Guid;
+				jointname = portdata[n].JointType;
 				PanelId = portdata[n].PanelId;
 				// }
 				if (portsname === "Card") {
@@ -2632,7 +2650,8 @@
 						panelData: $this.attributes.devDatas,
 						allData: allData, //将所有的处理后的数据传给各个内部端口svg供其操作使用
 						dsname: dsname,
-						porttts: dsname,
+						jointname:jointname,
+						porttts: dsname+'('+jointname+')',
 						portsname: portsname,
 						attrs: { //暂时无需改动
 							rect: {

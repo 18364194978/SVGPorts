@@ -489,7 +489,8 @@
 									'padding-top': '5px'
 								});
 								$('.modal-title').html($this.name);
-								EditStr = `<div class="ctrl-ist text-muted" style="position:absolute; left:18px;bottom:-40px;font-size: 14px;">按下ctrl键用鼠标点击可以批量选择端口.</div>
+								// EditStr = `<div class="ctrl-ist text-muted" style="position:absolute; left:18px;bottom:-40px;font-size: 14px;">按下ctrl键用鼠标点击可以批量选择端口.</div>
+								EditStr = `<div class="ctrl-ist text-muted" style="position:absolute; left:18px;bottom:-40px;font-size: 14px;"></div>
                                                 <div class="row" style="padding-top:inherit;padding-right:inherit;padding-left:inherit">
                                                     <div class="form-group" style="float:left;width:40%;margin-right:10%">
                                                     <label>对侧屏柜:</label>
@@ -1612,8 +1613,8 @@
 							}
 							renamePhydevice(ViewModel.attributes.devDatas.Guid, NewName, function(obj) {
 								if (obj.status) {
-									cellView.model.attributes.dsname = NewName+'('+ViewModel.attributes.devDatas.ShortName+')';
-									cellView.model.attributes.porttts = NewName+'('+ViewModel.attributes.devDatas.ShortName+')';
+									cellView.model.attributes.dsname = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
+									cellView.model.attributes.porttts = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
 									if (NewName.length > 14) {
 										NewName = NewName.slice(0, 14) + '...';
 										elementTitls.text(NewName);

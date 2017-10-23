@@ -617,7 +617,7 @@
 						} else {
 							getY = window.ppp.findViewByModel(its1.ForPort).model.attributes.position.y;
 						}
-						let getGport = new joint.shapes.basic.GPPort({
+						let getGport = new joint.shapes.basic.ZPPort({
 							portRemove: 1,
 							id: its1.PortId,
 							position: {

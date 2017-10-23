@@ -12,14 +12,6 @@
           name: '去光配', //释放光配
           fc: function(cellView) {
             var ViewModel = cellView.model;
-            if (ViewModel.attributes.projectOpticalcableGuid === undefined) {
-              GFC.showError('转接点不能被释放！');
-              return;
-            }
-            if (ViewModel.attributes.projectOpticalcableGuid !== '') {
-              GFC.showError('组缆端子不能被释放！');
-              return;
-            }
             $('.modal-body').text('确认释放光配?');
             $('.modal-title').html(this.name);
             $('.main-modal').modal();
@@ -28,6 +20,7 @@
             $('.edit-right').click(function() {
               var releaseLightDistribution = ROOF.physical.ReleaseLightDistribution;
               releaseLightDistribution(ViewModel.id, function(obj) {
+                console.log(obj)
                 if (obj.status) {
                   $('.main-modal').modal('hide');
                   GFC.reload();
@@ -106,6 +99,37 @@
       }
     }, joint.shapes.basic.Generic.prototype.defaults)
   });
+  joint.shapes.basic.ZPPort = joint.shapes.basic.Generic.extend({//组揽端点
+    markup: '<g class="rotatable" fill="none"><g class="scalable"></g><text class="port-label"/><circle /><rect /></g>',
+    defaults: joint.util.deepSupplement({
+      type: 'basic.GPPort',
+      // rightMenu: {
+      //   centerMenu: {
+      //   }
+      // },
+      attrs: {
+        circle: {
+          fill: 'none',
+          stroke: 'none',
+          cx: 5,
+          cy: 5,
+          r: 10
+        },
+        'text.port-label': {
+          text: 'dsfafdf',
+          fill: '#000000',
+          'font-size': 9,
+          'ref-x': 0,
+          'ref-y': -10,
+          'text-anchor': 'middle',
+          'y-alignment': 'middle',
+          'font-family': 'Arial, helvetica, sans-serif'
+
+        }
+
+      }
+    }, joint.shapes.basic.Generic.prototype.defaults)
+  });
   joint.shapes.basic.LPPort = joint.shapes.basic.Generic.extend({//光缆的port点
     markup: ['<g class="rotatable" fill="none">',
     '<g class="scalable"></g>',
@@ -115,82 +139,10 @@
     ].join(''),
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
-      rightMenu: {
-        centerMenu: {
-          name: '释放', //释放光配
-          fc: function(cellView) {
-            var ViewModel = cellView.model;
-            if (ViewModel.attributes.projectOpticalcableGuid === undefined) {
-              GFC.showError('转接点不能被释放！');
-              return;
-            }
-            if (ViewModel.attributes.projectOpticalcableGuid !== '') {
-              GFC.showError('组缆端子不能被释放！');
-              return;
-            }
-            $('.modal-body').text('确认释放光配?');
-            $('.modal-title').html(this.name);
-            $('.main-modal').modal();
-            cellView.update();
-            $('.edit-right').unbind('click');
-            $('.edit-right').click(function() {
-              var releaseLightDistribution = ROOF.physical.ReleaseLightDistribution;
-              releaseLightDistribution(ViewModel.id, function(obj) {
-                if (obj.status) {
-                  $('.main-modal').modal('hide');
-                  GFC.reload();
-                } else {
-                  GFC.showError(obj.err_msg);
-                }
-
-              });
-            });
-          }
-        },
-        otherMenu: [{
-          name: '上移',
-          fc: function(cellView) {
-            var ViewModel = cellView.model;
-            $('.modal-body').text('确认上移该光配?');
-            $('.modal-title').html(this.name);
-            $('.main-modal').modal();
-            cellView.update();
-            $('.edit-right').unbind('click');
-            $('.edit-right').click(function() {
-              var fiberDistFrameMove = ROOF.physical.FiberDistFrameMove;
-              fiberDistFrameMove(ViewModel.id, 'UP', function(obj) {
-                if (obj.status) {
-                  $('.main-modal').modal('hide');
-                  GFC.reload();
-                } else {
-                  GFC.showError(obj.err_msg);
-                }
-              });
-            });
-          }
-        }, {
-          name: '下移',
-          fc: function(cellView) {
-            var ViewModel = cellView.model;
-            $('.modal-body').text('确认下移该光配?');
-            $('.modal-title').html(this.name);
-            $('.main-modal').modal();
-            cellView.update();
-            $('.edit-right').unbind('click');
-            $('.edit-right').click(function() {
-              var fiberDistFrameMove = ROOF.physical.FiberDistFrameMove;
-              fiberDistFrameMove(ViewModel.id, 'DOWN', function(obj) {
-                if (obj.status) {
-                  $('.main-modal').modal('hide');
-                  GFC.reload();
-                } else {
-                  GFC.showError(obj.err_msg);
-                }
-              });
-            });
-          }
-        }]
-      },
+      // rightMenu: {
+      //   centerMenu: {  
+      //   },
+      // },
       attrs: {
         circle: {
           fill: 'none',

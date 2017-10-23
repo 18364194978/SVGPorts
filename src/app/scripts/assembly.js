@@ -13,7 +13,7 @@
 			var getPanelConnFiberMap = ROOF.physical.GetPanelConnFiberMap;
 			var getSvgInfoCentralDevice = ROOF.physical.GetSvgInfoCentralDevice;
 			let thbStr = `<div class="infosig-group btn-group">
-                        <button type="button" class="btn btn-default btn-sm">全局信息流向</button>
+                         <button type="button" class="btn btn-default btn-sm hide">全局信息流向</button>
                     </div>
                     <div id="thb" style="display: none;position: absolute; width:100%;height:100%;"></div>
                     <div id="cable-group" class="btn-group">

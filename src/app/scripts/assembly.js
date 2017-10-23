@@ -34,7 +34,7 @@
 				gridSize: 10,
 				model: window.tbgraph
 			});
-			
+
 			var newData;
 			// let panelIds = "8b3b9125-21fb-49ea-972f-7a5233bfbfed";
 			getSvgInfoCentralDevice(panelId, function(obj) {
@@ -108,6 +108,7 @@
 				var othrPortId = [];
 				var AllMainGportId = [];
 				var AllOthrGportId = [];
+				var AllCentGportId = [];
 				var newMainDevId = [];
 				var newOterDevId = [];
 				var newMainGp = [];
@@ -278,22 +279,6 @@
 									})
 								}
 							}
-							// if (itm1.Port1.DevType === "ODF" && itm1.Port2.DevType === "ODF") {
-							// 	if (newMainDevId.indexOf(itm1.Port1.DeviceId)!==-1) {
-							// 		let getExit = [];
-							// 		getExit = newMainGp.filter(x => x.PortId === itm1.Port1.PortId);
-							// 		if (getExit.length === 0) {
-							// 			newMainGp.push({
-							// 				"Type": "Main",
-							// 				"DeviceId": itm1.Port1.DeviceId,
-							// 				"PanelId": itm1.Port1.PanelId,
-							// 				"PortId": itm1.Port1.PortId,
-							// 				"PortName": itm1.Port1.PortName,
-							// 				"ForPort": itm1.Port2.PortId
-							// 			})
-							// 		}
-							// 	}
-							// }
 						}
 						if (itm1.Port1.PanelId !== itm1.Port2.PanelId) { //一个点：转接点时
 							if (itm1.Port1.DevType !== "ODF" && itm1.Port2.DevType === "ODF") {
@@ -488,8 +473,32 @@
 						newZLGpLink.push(arr);
 					})
 				}
+				$.each(newMainGp, function(indd, ittm) {
+					AllMainGportId.push(ittm.PortId);
+				});
+				$.each(newOthrGP, function(indd, ittm) {
+					AllOthrGportId.push(ittm.PortId);
+				});
+				$.each(newCentGp, function(indd, ittm) {
+					AllCentGportId.push(ittm.PortId);
+				});
 				console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
+				console.log(AllMainGportId, AllOthrGportId, AllCentGportId, '嘟嘟');
+				if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
+					$.each(newData.PhyLink, function(inds1, itms1) {
+						let getmenu = AllCentGportId.indexOf(itms1.Port1.PortId)
+						if (mainPortId.indexOf(itms1.Port1.PortId) !== -1 && AllMainGportId.indexOf(itms1.Port2.PortId) !== -1) {
+							itms1.menu = 'empy';
+						} else if (othrPortId.indexOf(itms1.Port2.PortId) !== -1 && AllOthrGportId.indexOf(itms1.Port1.PortId) !== -1) {
+							itms1.menu = 'empy';
+						} else if (AllCentGportId.indexOf(itms1.Port2.PortId) !== -1 || AllCentGportId.indexOf(itms1.Port1.PortId) !== -1) {
+							itms1.menu = 'centr';
+						} else {
+							itms1.menu = 'all';
+						}
 
+					})
+				}
 				var NewMainAndOthrGP = [];
 				NewMainAndOthrGP.push(newMainGp); //main_device GP
 				NewMainAndOthrGP.push(newOthrGP); //转接点

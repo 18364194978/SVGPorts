@@ -187,6 +187,7 @@
 											if (treeNode.level == 1) {
 												treeNode.hasLoad = true;
 												GetPortsByDeviceId(treeNode.Guid, function(obj) {
+													console.log(obj,treeNode.Guid)
 													if (obj.status) {
 														$.each(obj.slot_list[0].Port_List, function(i, child) {
 															child.name = child.ProportName;

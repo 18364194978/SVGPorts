@@ -364,6 +364,7 @@
         centerMenu: {
           name: '断开',
           fc: function(cellView) {
+            console.log(cellView)
             $('.modal-title').html(this.name);
             $('.modal-body').html('');
             $('.modal-body').text('确定断开该光纤吗?');
@@ -526,6 +527,33 @@
       }
     }
 
+  });
+  joint.shapes.devs.PhyLinkView = joint.dia.LinkView.extend({
+    update: function(model, attributes, opt) {
+      opt = opt || {};
+      if (!opt.updateConnectionOnly) {
+        // update SVG attributes defined by 'attrs/'.
+        this.updateAttributes();
+      }
+      // update the link path, label position etc.
+      this.updateConnection(opt);
+
+      this.updateLabelPositions();
+      this.updateToolsPosition();
+      this.updateArrowheadMarkers();
+      this.options.perpendicular = null;
+      // Mark that postponed update has been already executed.
+      this.updatePostponed = false;
+      let bdata = this.model.attributes.devDatas;
+      if (bdata.menu && bdata.menu === 'centr') {
+        this.model.set({ rightMenu: { centerMenu: this.model.attributes.rightMenu.centerMenu, otherMenu: [] } });
+        return;
+      }
+      if (bdata.menu && bdata.menu === 'empy') {
+        this.model.set('rightMenu',undefined);
+        return;
+      }
+    }
   });
   // joint.shapes.devs.PhyLinkView = joint.dia.LinkView.extend({
   //   update: function(model, attributes, opt) {

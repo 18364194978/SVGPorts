@@ -77,14 +77,21 @@
 							setPubPortInfo(slotObj, function(obj) {
 								if (obj.status) {
 									ViewModel.attributes.devDatas.ProportName = GFC.formValidation($('#ProportName'));
+									ViewModel.attributes.devDatas.Name = GFC.formValidation($('#ProportName'));
 									let cjname = cellView.model.attributes.devDatas.Name;
 									if (cellView.model.attributes.devDatas.Name === '') {
 										cjname = '';
 									}
-									let elementTitl = cellView.$el.find('.content-x');
-									elementTitl.text(slotObj.PortName);
 									cellView.model.attributes.dsname = slotObj.PortName;
-									cellView.model.attributes.porttts = slotObj.PortName;
+									// let elementTitl = cellView.$el.find('.content-x');
+									// if (GFC.formValidation($('#ProportName')).length > 6) {
+									// 	let name = GFC.formValidation($('#ProportName')).slice(0,6)+'...';
+									// 	console.log(name)
+									// 	elementTitl.text('234');
+									// } else {
+									// 	elementTitl.text(GFC.formValidation($('#ProportName')));
+									// }
+									cellView.model.attributes.porttts = slotObj.PortName + '(' + cellView.model.attributes.jointname + ')';
 									// cellView.model.attributes.attrs.text.text = cjname;
 									cellView.update();
 									//GFC.reload();
@@ -511,7 +518,7 @@
 								return oo2 === getExit[0].Port2.PortId;
 							});
 						}
-						console.log(ViewModel.attributes.gports,getExit,getExit2)
+						console.log(ViewModel.attributes.gports, getExit, getExit2)
 						if (getExit2.length === 0) {
 							GFC.showError('该端口已存在连接！');
 							return;
@@ -1604,8 +1611,12 @@
 			let elementTitls = this.$el.find('.content-x');
 			let elementTitls2 = this.$el.find('.content-xx');
 			let elementTitls3 = this.$el.find('.content-xxx');
+			if (this.model.attributes.dsname.length > 6) {
+				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname.slice(0, 6) + '...');
+			} else {
+				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
+			}
 			elementTitls3.attr('title', this.model.attributes.jointname).text(this.model.attributes.jointname);
-			elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
 			elementTitls2.attr('title', this.model.attributes.portsname).text(this.model.attributes.portsname);
 			if (this.model.attributes.portsname === 'TX') {
 				elementTitls2.css('background-color', '#F4B183');
@@ -2552,6 +2563,7 @@
 		childEquipments: function(data, gports, mainPortId, allData) { //此处的data实际使用的是rx、tx那些port
 			var $this = this;
 			var dataGuid = [];
+			console.log(data, 'data')
 			for (var m = 0; m < data.length; m++) {
 				dataGuid.push(data[m].Guid);
 			}

@@ -147,10 +147,16 @@
 											switchObj.before(spaceStr);
 										}
 									}
+
+									function getFont(treeId, node) {
+										return node.font ? node.font : {};
+									}
 									var defaultTreeSetting = {
 										view: {
 											showLine: false,
 											showIcon: false,
+											fontCss: getFont,//给节点添加html样式
+											nameIsHTML: true,//给节点添加html样式，需设置为true
 											dblClickExpand: false,
 											addDiyDom: addDiyDom,
 											dblClickExpand: true
@@ -187,26 +193,45 @@
 											if (treeNode.level == 1) {
 												treeNode.hasLoad = true;
 												GetPortsByOdfId(treeNode.Guid, function(obj) {
-													console.log(obj,treeNode.Guid)
+													console.log(obj, treeNode)
 													if (obj.status) {
+														let arr = [];
 														$.each(obj.slot_list[0].Port_List, function(i, child) {
-															child.name = child.ProportName;
-															// child.isParent = true;
-														})
-														$.fn.zTree.getZTreeObj("publicplugTree").addNodes(treeNode, 0, obj.slot_list[0].Port_List);
+															let font = {};
+															let c_pd_id = '';
+															if (child.c_pd_id!==undefined&&child.c_pd_id === 'link') {
+																font = {'font-weight':'bold','color':'#000','background-color':'#717171','cursor':'not-allowed'};
+																c_pd_id = 'link';
+															}
+															arr.push({
+																'name':child.ProportName,
+																'Guid':child.Guid,
+																'c_pd_id':c_pd_id,
+																'font':font,
+															});
+														});
+														$.fn.zTree.getZTreeObj("publicplugTree").addNodes(treeNode, 0, arr);
 													} else {
 														console.log("获取信息失败：" + obj.err_msg);
 													}
-												})
+												});
 											}
 											return true;
-										}
+										},
+										beforeClick:zTreeBeforClick
 									}
 								};
+								function zTreeBeforClick(treeId,treeNode){//禁止选用c_pd_id的节点
+									return (treeNode.c_pd_id!=='link');
+								}
 								var zTree = $.fn.zTree.init($("#publicplugTree"), $.extend(true, option, getDefaultTreeOption()));
 								zTree.addNodes(null, datas);
 								$('.edit-right').off('click').on('click', function() {
 									var selectnodes = $.fn.zTree.getZTreeObj("publicplugTree").getSelectedNodes();
+									if (selectnodes.length===0) {
+										GFC.showError('请选择一个节点！');
+										return;
+									}
 									if (selectnodes[0].level === 0 || selectnodes[0].level === 1) {
 										GFC.showError('请选择三级节点');
 										return;

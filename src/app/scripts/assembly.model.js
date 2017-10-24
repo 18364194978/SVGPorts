@@ -155,8 +155,8 @@
 										view: {
 											showLine: false,
 											showIcon: false,
-											fontCss: getFont,//给节点添加html样式
-											nameIsHTML: true,//给节点添加html样式，需设置为true
+											fontCss: getFont, //给节点添加html样式
+											nameIsHTML: true, //给节点添加html样式，需设置为true
 											dblClickExpand: false,
 											addDiyDom: addDiyDom,
 											dblClickExpand: true
@@ -199,15 +199,20 @@
 														$.each(obj.slot_list[0].Port_List, function(i, child) {
 															let font = {};
 															let c_pd_id = '';
-															if (child.c_pd_id!==undefined&&child.c_pd_id === 'link') {
-																font = {'font-weight':'bold','color':'#000','background-color':'#717171','cursor':'not-allowed'};
+															if (child.c_pd_id !== undefined && child.c_pd_id === 'link') {
+																font = {
+																	'font-weight': 'bold',
+																	'color': '#000',
+																	'background-color': '#717171',
+																	'cursor': 'not-allowed'
+																};
 																c_pd_id = 'link';
 															}
 															arr.push({
-																'name':child.ProportName,
-																'Guid':child.Guid,
-																'c_pd_id':c_pd_id,
-																'font':font,
+																'name': child.ProportName,
+																'Guid': child.Guid,
+																'c_pd_id': c_pd_id,
+																'font': font,
 															});
 														});
 														$.fn.zTree.getZTreeObj("publicplugTree").addNodes(treeNode, 0, arr);
@@ -218,17 +223,18 @@
 											}
 											return true;
 										},
-										beforeClick:zTreeBeforClick
+										beforeClick: zTreeBeforClick
 									}
 								};
-								function zTreeBeforClick(treeId,treeNode){//禁止选用c_pd_id的节点
-									return (treeNode.c_pd_id!=='link');
+
+								function zTreeBeforClick(treeId, treeNode) { //禁止选用c_pd_id的节点
+									return (treeNode.c_pd_id !== 'link');
 								}
 								var zTree = $.fn.zTree.init($("#publicplugTree"), $.extend(true, option, getDefaultTreeOption()));
 								zTree.addNodes(null, datas);
 								$('.edit-right').off('click').on('click', function() {
 									var selectnodes = $.fn.zTree.getZTreeObj("publicplugTree").getSelectedNodes();
-									if (selectnodes.length===0) {
+									if (selectnodes.length === 0) {
 										GFC.showError('请选择一个节点！');
 										return;
 									}
@@ -496,10 +502,17 @@
 						var ViewModel = cellView.model;
 						var getAllPhy = ViewModel.attributes.allData.rightLink;
 						let getExit = [];
+						let getExit2 = [];
 						getExit = _.filter(getAllPhy, function(oo1) {
 							return oo1.Port1.PortId === ViewModel.id;
 						});
 						if (getExit.length !== 0) {
+							getExit2 = _.filter(ViewModel.attributes.gports, function(oo2) {
+								return oo2 === getExit[0].Port2.PortId;
+							});
+						}
+						console.log(ViewModel.attributes.gports,getExit,getExit2)
+						if (getExit2.length === 0) {
 							GFC.showError('该端口已存在连接！');
 							return;
 						}
@@ -2689,6 +2702,7 @@
 						panelData: $this.attributes.devDatas,
 						allData: allData, //将所有的处理后的数据传给各个内部端口svg供其操作使用
 						dsname: dsname,
+						gports: gports[4],
 						jointname: jointname,
 						porttts: dsname + '(' + jointname + ')',
 						portsname: portsname,

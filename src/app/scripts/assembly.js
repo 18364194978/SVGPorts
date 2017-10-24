@@ -36,7 +36,6 @@
 			});
 
 			var newData;
-			// let panelIds = "8b3b9125-21fb-49ea-972f-7a5233bfbfed";
 			getSvgInfoCentralDevice(panelId, function(obj) {
 				if (obj.status) {
 					var data = $.parseJSON(obj.json_info);
@@ -104,21 +103,22 @@
 					}
 				}
 				console.log(other_devices, 'other_devices')
-				var mainPortId = [];
-				var othrPortId = [];
-				var AllMainGportId = [];
-				var AllOthrGportId = [];
-				var AllCentGportId = [];
-				var newMainDevId = [];
-				var newOterDevId = [];
-				var newMainGp = [];
-				var newOthrGP = [];
-				var newThidGP = [];
-				var newCentGp = [];
-				var newZLGpLink = [];
-				var newZLGpLinkId = [];
-				var newAllZLGp = [];
-				var newAllZLGpId = [];
+				var mainPortId = [];//main_device的端口
+				var othrPortId = [];//othr_device的端口
+				var AllMainGportId = [];//所有main_device的光配的id
+				var AllOthrGportId = [];//所有othr_device的光配的id
+				var AllCentGportId = [];//所有转接点的光配的id
+				var newMainDevId = [];//所有main_device的id
+				var newOterDevId = [];//所有othr_device的id
+				var newMainGp = [];//所有main_device的光配
+				var newOthrGP = [];//所有othr_device的光配
+				var newThidGP = [];//所有用来中转筛选转接点的光配
+				var newCentGp = [];//所有转接点的光配
+				var newZLGpLink = [];//所有组揽的连接线
+				var newZLGpLinkId = [];//所有组揽的连接线id
+				var newAllZLGp = [];//所有组揽的连接线端子
+				var newAllZLGpId = [];//所有组揽的连接线端子id
+				var newOnlyMainPortId = [];//所有只与端口连接的光配点，用来区分端口是否可建立连接
 				$.each(newData.main_device.Bcslot, function(in1, p1) {
 					mainPortId.push(p1.SlotId);
 					if (p1.DevPort !== null || p1.DevPort !== undefined) {
@@ -483,7 +483,7 @@
 					AllCentGportId.push(ittm.PortId);
 				});
 				console.log(newMainGp, newOthrGP, newCentGp, '点点点点');
-				if (newData.PhyLink !== null || newData.PhyLink !== undefined) {
+				if (newData.PhyLink !== null || newData.PhyLink !== undefined) {//处理连接线展示的操作端口展示
 					$.each(newData.PhyLink, function(inds1, itms1) {
 						let getmenu = AllCentGportId.indexOf(itms1.Port1.PortId)
 						if (mainPortId.indexOf(itms1.Port1.PortId) !== -1 && AllMainGportId.indexOf(itms1.Port2.PortId) !== -1) {
@@ -495,14 +495,17 @@
 						} else {
 							itms1.menu = 'all';
 						}
-
-					})
+						if(AllMainGportId.indexOf(itms1.Port1.PortId)!==-1&&itms1.Port2.PortId===''){
+							newOnlyMainPortId.push(itms1.Port1.PortId);
+						}
+					});
 				}
 				var NewMainAndOthrGP = [];
 				NewMainAndOthrGP.push(newMainGp); //main_device GP
 				NewMainAndOthrGP.push(newOthrGP); //转接点
 				NewMainAndOthrGP.push(newCentGp); //other_device Gp
 				NewMainAndOthrGP.push(newAllZLGp); //组揽端子
+				NewMainAndOthrGP.push(newOnlyMainPortId); //只与端口连接的main_device的光配点，用于判断端口是否可连接
 
 				window.zjlinkDate = [];
 				mainPanel.mainPortId = mainPortId;

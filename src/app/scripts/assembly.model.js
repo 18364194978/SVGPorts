@@ -1072,14 +1072,22 @@
 							setPubPortInfo(slotObj, function(obj) {
 								if (obj.status) {
 									ViewModel.attributes.devDatas.ProportName = GFC.formValidation($('#ProportName'));
+									ViewModel.attributes.devDatas.Name = GFC.formValidation($('#ProportName'));
 									let cjname = cellView.model.attributes.devDatas.Name;
-									if (cellView.model.attributes.devDatas.ProdevName === '') {
+									if (cellView.model.attributes.devDatas.Name === '') {
 										cjname = '';
 									}
-									let elementTitl = cellView.$el.find('.content-x');
-									elementTitl.text(slotObj.PortName);
 									cellView.model.attributes.dsname = slotObj.PortName;
-									cellView.model.attributes.porttts = slotObj.PortName;
+									// let elementTitl = cellView.$el.find('.content-x');
+									// if (GFC.formValidation($('#ProportName')).length > 6) {
+									// 	let name = GFC.formValidation($('#ProportName')).slice(0,6)+'...';
+									// 	console.log(name)
+									// 	elementTitl.text('234');
+									// } else {
+									// 	elementTitl.text(GFC.formValidation($('#ProportName')));
+									// }
+									cellView.model.attributes.porttts = slotObj.PortName + '(' + cellView.model.attributes.jointname + ')';
+									// cellView.model.attributes.attrs.text.text = cjname;
 									cellView.update();
 									//GFC.reload();
 									$('.main-modal').modal('hide');

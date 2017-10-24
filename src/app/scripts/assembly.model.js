@@ -582,8 +582,6 @@
 								var creatlistPanel = function(sdg, ts) {
 									sdg.html('');
 									var str = '';
-									var thispannel;
-									console.log(obj, 'obj')
 									$.each(obj.panel_list, function(indg, dgg) {
 										if (dgg.PanelId === '' || dgg.ProprName === '') {
 											return true;
@@ -1688,21 +1686,6 @@
 					}
 				},
 				otherMenu: [{
-					name: '移动至',
-					fc: function(cellView) {
-						var inport = cellView.model.attributes.inPorts;
-						var outport = cellView.model.attributes.outPorts;
-						if (inport.length !== 0 || outport.length !== 0) {
-							GFC.showError('包含硬接线，不可移动');
-							return;
-						}
-						var ViewModel = cellView.model;
-						var treeNote = ROOF.svgPortHardwireNote.getNodeByParam('guid', ViewModel.attributes.id);
-						ROOF.common.loadModalContent(ROOF.hardconnection.moveDeviceModal());
-						ROOF.hardconnection.loadMoveDeviceData(treeNote);
-						ROOF.hardconnection.initMoveDeviceHanlder(treeNote);
-					}
-				}, {
 					name: '端口',
 					fc: function(cellView) {
 						var ViewModel = cellView.model;
@@ -2260,19 +2243,468 @@
 					}
 				},
 				otherMenu: [{
-					name: '移动至',
+					name: '连接',
 					fc: function(cellView) {
-						var inport = cellView.model.attributes.inPorts;
-						var outport = cellView.model.attributes.outPorts;
-						if (inport.length !== 0 || outport.length !== 0) {
-							GFC.showError('包含硬接线，不可移动');
-							return;
-						}
-						var ViewModel = cellView.model;
-						var treeNote = ROOF.svgPortHardwireNote.getNodeByParam('guid', ViewModel.attributes.devDatas.Guid);
-						ROOF.common.loadModalContent(ROOF.hardconnection.moveDeviceModal());
-						ROOF.hardconnection.loadMoveDeviceData(treeNote);
-						ROOF.hardconnection.initMoveDeviceHanlder(treeNote);
+						let ViewModel = cellView.model.attributes;
+						var getAllPanelsAndDevs = ROOF.physical.GetAllPanelsAndDevs;
+						var getPortsByDeviceId = ROOF.physical.GetPortsByDeviceId;
+						var addPhyFiberEx = ROOF.physical.AddPhyFiberEx;
+						var addPhyFiber = ROOF.physical.AddPhyFiber;
+						var $this = this;
+						getAllPanelsAndDevs(function(obj) {
+							console.log(obj)
+							if (obj.status) {
+								var EditStr = '';
+								$('.modal-body').html('').css({
+									'padding-top': '5px'
+								});
+								$('.modal-title').html($this.name);
+								EditStr = `<div class="ctrl-ist text-muted" style="position:absolute; left:18px;bottom:-40px;font-size: 14px;">按下ctrl键用鼠标点击可以批量选择端口.</div>
+                                                <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="form-group">
+                                                    <label>本侧屏柜:</label>
+                                                        <select class="form-control start-panel-list"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="form-group">
+                                                    <label>本侧装置:</label>
+                                                        <select class="form-control start-pdevices-list"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="form-group">
+                                                    <label>对侧屏柜:</label>
+                                                        <select class="form-control end-panel-list"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="form-group">
+                                                    <label>对侧装置:</label>
+                                                        <select class="form-control end-pdevices-list"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p></p>
+                                            <div class="row">
+                                                <div class="col-xs-6">
+                                                    <label>本侧端口:</label>
+                                                    <div style="min-height: 300px;padding: 0;overflow-y: auto;" class="form-control">
+                                                        <div class="panel-group start-solt-list" id="start-solt-list">
+                                                        </div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                <label>对侧端口:</label>
+                                                    <div style="min-height: 300px;padding: 0;overflow-y: auto;" class="form-control">
+                                                            <div class="panel-group end-solt-list" id="end-solt-list">
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>`.trim();
+								$('.modal-body').html(EditStr);
+								$('.main-modal').find('.modal-dialog').addClass('inherit-width');
+								$('.main-modal').modal('show');
+								let isEdit = 0;
+								$('.main-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+									$('.main-modal').find('.modal-dialog').removeClass('inherit-width');
+									GFC.rmStorage('linkOpenListCollapse');
+									if (isEdit === 0) {
+										return;
+									}
+									GFC.reload();
+								});
+								$('.edit-right').unbind('click');
+								var IsCtrl = false;
+								var ispl = false;
+								let openPlC = function(event) {
+									if (event.ctrlKey === true) {
+										IsCtrl = true;
+										//$('.poitem-to').removeClass('active');
+										$('.ctrl-ist').removeClass('text-muted');
+										$('.ctrl-ist').addClass('text-danger').text('目前状态是批量选择端口.');
+									}
+								};
+								let closePlC = function(event) {
+									if (event.which === 17) {
+										IsCtrl = false;
+										//$('.poitem-to').removeClass('list-group-item-info');
+										$('.ctrl-ist').removeClass('text-danger');
+										$('.ctrl-ist').addClass('text-muted').text('按下ctrl键用鼠标点击可以批量选择端口.');
+									}
+								};
+								$(window).off('keyup').on('keyup', closePlC);
+								$(window).off('keydown').on('keydown', openPlC);
+								if (window.parent !== undefined) {
+									$(ROOF).off('keyup').on('keyup', closePlC);
+									$(ROOF).off('keydown').on('keydown', openPlC);
+								}
+								var creatlistPanel = function(sdg, ts) {
+									sdg.html('');
+									var str = '';
+									$.each(obj.panel_list, function(indg, dgg) {
+										if (dgg.PanelId === '' || dgg.ProprName === '') {
+											return true;
+										}
+										str += `
+                                                <option value="${dgg.PanelId}">${dgg.ProprName}</option>
+                                                `.trim();
+									});
+									sdg.html(str);
+									sdg.off('change').on('change', function() {
+										var dArray = _.findWhere(obj.panel_list, {
+											PanelId: $(this).val()
+										});
+										if (ts === 'l') {
+											creatlistDev($('.start-pdevices-list'), dArray.Children, ts);
+										} else {
+											creatlistDev($('.end-pdevices-list'), dArray.Children, ts);
+										}
+									});
+									if (ts === 'l') {
+										sdg.val(ViewModel.devDatas.PanelId);
+										sdg.trigger('change');
+										sdg.attr('disabled', 'disabled');
+									} else {
+										sdg.trigger('change');
+									}
+
+								};
+								var creatlistDev = function(dsdg, ddata, ts) {
+									dsdg.html('');
+									var str = '';
+									$.each(ddata, function(indg, dgg) {
+										if (dgg.Guid === '' || dgg.ProdevName === '') {
+											return true;
+										}
+										str += `
+                                                <option value="${dgg.Guid}">${dgg.ProdevName}</option>
+                                                `.trim();
+									});
+									dsdg.html(str);
+									dsdg.off('change').on('change', function() {
+										getPortsByDeviceId($(this).val(), function(portobj) {
+											if (portobj.status) {
+												var dArray = portobj.slot_list;
+												// if (dArray.length === 0) {
+												//   return;
+												// }
+												if (ts === 'l') {
+													$('.start-solt-list').html('');
+													creatlistSolt($('.start-solt-list'), dArray, ts);
+												} else {
+													$('.end-solt-list').html('');
+													creatlistSolt($('.end-solt-list'), dArray, ts);
+												}
+											} else {
+												console.log('ddd');
+											}
+										});
+
+									});
+									if (ts === 'l') {
+										dsdg.val(ViewModel.devDatas.Guid);
+										dsdg.trigger('change');
+										dsdg.attr('disabled', 'disabled');
+									} else {
+										dsdg.trigger('change');
+									}
+								};
+								var creatlistSolt = function(dsdg, ddata, ts) {
+
+									dsdg.html('');
+									var str = '';
+									var thislistid = '';
+									var thisclass = '';
+									if (ts === 'l') {
+										thislistid = '#start-solt-list';
+										thisclass = 'start-port-list';
+									} else {
+										thislistid = '#end-solt-list';
+										thisclass = 'end-port-list';
+									}
+									$.each(ddata, function(indg, dgg) {
+										var strc = '';
+										$.each(dgg.Port_List, function(index, item) {
+											var spanStr = '',
+												findStr = '',
+												isdisable = '';
+											//console.log(item.c_pd_id);
+											if (item.c_pd_id !== undefined || item.c_pd_id === '') {
+												let devname;
+												if (item.c_dev_name === undefined) {
+													devname = item.c_ns_name;
+												} else {
+													devname = item.c_dev_name;
+												}
+												findStr = `<span
+                                                     class="findSenRevs"
+                                                      data-toggle="popover"
+                                                       data-placement="bottom"
+                                                        data-content="对侧装置:${devname}">
+                                                        (${item.c_pd_name} [${item.c_pd_ftype}])
+                                                        </span>`.trim();
+												isdisable = 'disabled';
+											}
+											if (item.c_p1_id !== undefined) {
+												spanStr = `<span style="position:absolute;right:0;top:2px;color:#fd9a00" class="iconhard icon-gp"></span>`;
+											}
+											if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+												strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+											} else {
+												strc += `
+                                                <a class="list-group-item poitem-to ${isdisable}" data-port-name="${dgg.ProbsName}-${item.ProportName}" data-types="${item.ProportFunctiontype}" data-id="${item.Guid}">
+                                                ${dgg.ProbsName}-${item.ProportName}[${item.ProportFunctiontype}]-${item.ProportJointtype}-${item.ProportDesc}${findStr}${spanStr}
+                                                </a>
+                                                `.trim();
+											}
+
+
+											//ProbsDesc + '-' + ProbsName + '-' + ProportFunctiontype + '-' + ProportJointtype,
+										});
+										let isInNet = '';
+										if (dgg.BcslotId === '' || dgg.ProbsDesc === '') {
+											isInNet = 'in';
+										}
+										if (dgg.ProbsName === '') {
+											dgg.ProbsName = '交换机端口';
+										}
+										str += `<div class="panel">
+                                                <div class="panel-heading" role="tab" id="headingOne-${ts}${indg}">
+                                                    <a data-id="${dgg.BcslotId}" role="button" data-toggle="collapse" data-parent="${thislistid}" href="#collapseOne-${ts}${indg}" aria-expanded="true" aria-controls="collapseOne-${ts}${indg}">
+                                                     ${dgg.ProbsName}
+                                                    </a>
+                                                </div>
+                                                <div id="collapseOne-${ts}${indg}" class="panel-collapse collapse ${isInNet}" role="tabpanel" aria-labelledby="headingOne-${ts}${indg}">
+                                                  <div class="panel-body">
+                                                    <div class="list-group ${thisclass}">
+                                                    ${strc}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                                `.trim();
+									});
+									dsdg.html(str);
+									if (ts === 'l') {
+										creatlistPort($('.start-port-list'));
+									} else {
+										creatlistPort($('.end-port-list'));
+									}
+									if (GFC.getStorage('linkOpenListCollapse') !== undefined) {
+										$.each(GFC.getStorage('linkOpenListCollapse'), function(opindex, opids) {
+											$('#' + opids).addClass('in');
+										});
+									}
+								};
+								var creatlistPort = function(sgt) {
+									//sgt.html('');
+
+									$('.findSenRevs').popover({
+										trigger: 'hover'
+									});
+									sgt.find('.poitem-to').off('click').on('click', function() {
+										if ($(this).hasClass('disabled')) {
+											return;
+										}
+										if (IsCtrl) {
+											ispl = true;
+											$('.poitem-to.active').addClass('list-group-item-info');
+											$('.poitem-to').removeClass('active');
+											if ($(this).hasClass('list-group-item-info')) {
+												$(this).removeClass('list-group-item-info');
+											} else {
+												$(this).addClass('list-group-item-info');
+											}
+
+										} else {
+											ispl = false;
+											$('.poitem-to').removeClass('list-group-item-info');
+											if ($(this).hasClass('active')) {
+												$(this).removeClass('active');
+												sgt.find('.poitem-to').removeClass('active');
+												return;
+											}
+											sgt.find('.poitem-to').removeClass('active');
+											$(this).addClass('active');
+										}
+
+									}).off('dblclick').on('dblclick', function() {
+										ispl = false;
+										$('.poitem-to').removeClass('list-group-item-info');
+										if ($(this).hasClass('active')) {
+											$(this).removeClass('active');
+											sgt.find('.poitem-to').removeClass('active');
+											return;
+										}
+										sgt.find('.poitem-to').removeClass('active');
+										$(this).addClass('active');
+										if ($('.list-group-item.active').length === 2) {
+											$('.edit-right').trigger('click');
+										}
+									});
+
+									//GFC.showError(portobj.err_msg);
+								};
+								creatlistPanel($('.start-panel-list'), 'l');
+								creatlistPanel($('.end-panel-list'), 'r');
+								$('.edit-right').off('click').on('click', function() {
+									var sendPortArray = [];
+									var recvPortArray = [];
+									let sendportname = [];
+									let recvportname = [];
+									let sendporttpye = [];
+									let recvporttpye = [];
+									var startAr = $('.start-port-list').find('.list-group-item-info');
+									if (startAr.length !== 0) {
+										$.each(startAr, function(stinx) {
+											sendPortArray.push({
+												type: startAr.eq(stinx).attr('data-types'),
+												id: startAr.eq(stinx).attr('data-id')
+											});
+											sendportname.push(startAr.eq(stinx).attr('data-port-name'));
+											sendporttpye.push(startAr.eq(stinx).attr('data-types'));
+										});
+									}
+									var endAr = $('.end-port-list').find('.list-group-item-info');
+									if (endAr.length !== 0) {
+										$.each(endAr, function(endinx) {
+											recvPortArray.push({
+												type: endAr.eq(endinx).attr('data-types'),
+												id: endAr.eq(endinx).attr('data-id')
+											});
+											recvportname.push(endAr.eq(endinx).attr('data-port-name'));
+											recvporttpye.push(endAr.eq(endinx).attr('data-types'));
+										});
+									}
+									var startAt = $('.start-port-list').find('.active').attr('data-id');
+									var endAt = $('.end-port-list').find('.active').attr('data-id');
+									if (ispl) {
+										if (_.uniq(sendportname).length !== _.uniq(recvportname).length) {
+											GFC.showError('请确保两侧批量选择的数量一致');
+											return;
+										}
+										if (_.where(sendporttpye, 'DX').length !== 0 || _.where(recvporttpye, 'DX').length !== 0) {
+											if (sendPortArray.length !== recvPortArray.length || _.where(sendporttpye, 'DX').length !== _.where(recvporttpye, 'DX').length) {
+												GFC.showError('电口不能与光口连接');
+												return;
+											}
+
+										} else {
+											if (sendPortArray.length !== recvPortArray.length || _.where(sendporttpye, 'TX').length !== _.where(recvporttpye, 'RX').length) {
+												GFC.showError('请确保两侧收发类型一致');
+												return;
+											}
+											//var s = [1, 1, 1, 0, 1, 0, 0];
+											if (_.findWhere(sendPortArray, {
+													type: 'TX'
+												}) !== undefined && _.findWhere(sendPortArray, {
+													type: 'RX'
+												}) !== undefined) {
+												let senda = 0;
+												let sendb = 1;
+												let sendt = [];
+												$.each(sendPortArray, function(indexsend, ss) {
+													if (ss.type === 'TX') {
+														sendt[senda] = ss;
+														senda += 2;
+													} else {
+														sendt[sendb] = ss;
+														sendb += 2;
+													}
+												});
+												let recva = 1;
+												let recvb = 0;
+												let recvt = [];
+												$.each(recvPortArray, function(indexrecv, rr) {
+													if (rr.type === 'TX') {
+														recvt[recva] = rr;
+														recva += 2;
+													} else {
+														recvt[recvb] = rr;
+														recvb += 2;
+													}
+												});
+												sendPortArray = sendt;
+												recvPortArray = recvt;
+											}
+										}
+										var fiberlist = [];
+										$.each(sendPortArray, function(sendindex, senditem) {
+											fiberlist.push({
+												SrcPortId: senditem.id
+											});
+										});
+										$.each(recvPortArray, function(recvindex, recvitem) {
+											fiberlist[recvindex].DstPortId = recvitem.id;
+										});
+										addPhyFiberEx(fiberlist, function(plstj) {
+											if (plstj.status) {
+												$('.poitem-to').removeClass('list-group-item-info');
+												$('.poitem-to').removeClass('active');
+												let arrOpen = [];
+												$.each($('.panel-collapse.collapse.in'), function(epl, epd) {
+													arrOpen.push(epd.id);
+												});
+												GFC.setStorage('linkOpenListCollapse', arrOpen);
+												let endval = $('.end-pdevices-list').val();
+												$('.start-pdevices-list').trigger('change');
+												$('.end-pdevices-list').val(endval).trigger('change');
+												isEdit = 1;
+											} else {
+												GFC.showError(plstj.err_msg);
+											}
+										});
+
+									} else {
+										var portinfo = {};
+										if (startAt === undefined || endAt === undefined) {
+											GFC.showError('请确保两侧各有一个端口被选中');
+											return;
+										}
+										portinfo.SrcPortId = startAt;
+										portinfo.DstPortId = endAt;
+										let sr = $('[data-id=' + portinfo.SrcPortId + ']').attr('data-types');
+										let ds = $('[data-id=' + portinfo.DstPortId + ']').attr('data-types');
+										if (sr === 'DX' || ds === 'DX') {
+											if (sr !== ds) {
+												GFC.showError('电口不能与光口连接');
+												return;
+											}
+										} else {
+											if (sr === ds) {
+												GFC.showError('相同收发类型的端口不能相连');
+												return;
+											}
+										}
+										addPhyFiber(portinfo, function(dlstj) {
+											if (dlstj.status) {
+												$('.poitem-to').removeClass('list-group-item-info');
+												$('.poitem-to').removeClass('active');
+												let arrOpen = [];
+												$.each($('.panel-collapse.collapse.in'), function(epl, epd) {
+													arrOpen.push(epd.id);
+												});
+												GFC.setStorage('linkOpenListCollapse', arrOpen);
+												let endval = $('.end-pdevices-list').val();
+												$('.start-pdevices-list').trigger('change');
+												$('.end-pdevices-list').val(endval).trigger('change');
+												isEdit = 1;
+											} else {
+												GFC.showError(dlstj.err_msg);
+											}
+										});
+									}
+								});
+							} else {
+								GFC.showError(obj.err_msg);
+							}
+						});
 					}
 				}, {
 					name: '端口',
@@ -2571,7 +3003,6 @@
 		childEquipments: function(data, gports, mainPortId, allData) { //此处的data实际使用的是rx、tx那些port
 			var $this = this;
 			var dataGuid = [];
-			console.log(data, 'data')
 			for (var m = 0; m < data.length; m++) {
 				dataGuid.push(data[m].Guid);
 			}

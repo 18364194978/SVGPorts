@@ -519,7 +519,7 @@
 							});
 						}
 						console.log(ViewModel.attributes.gports, getExit, getExit2)
-						if (getExit2.length === 0&&getExit.length!==0) {
+						if (getExit2.length === 0 && getExit.length !== 0) {
 							GFC.showError('该端口已存在连接！');
 							return;
 						}
@@ -1632,6 +1632,7 @@
 				this.$el.find('.htIconOut2').addClass('hide');
 				this.$el.find('.htIconOut3').addClass('hide');
 				this.$el.find('.htIconOut').attr('x', '35');
+				this.model.set('rightMenu', undefined);
 			}
 		}
 	});
@@ -1672,6 +1673,7 @@
 								if (obj.status) {
 									cellView.model.attributes.dsname = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
 									cellView.model.attributes.porttts = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
+									cellView.model.attributes.devDatas.Name = NewName;
 									if (NewName.length > 14) {
 										NewName = NewName.slice(0, 14) + '...';
 										elementTitls.text(NewName);
@@ -2229,6 +2231,7 @@
 								if (obj.status) {
 									cellView.model.attributes.dsname = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
 									cellView.model.attributes.porttts = NewName + '(' + ViewModel.attributes.devDatas.ShortName + ')';
+									cellView.model.attributes.devDatas.Name = NewName;
 									if (NewName.length > 14) {
 										NewName = NewName.slice(0, 14) + '...';
 										elementTitls.text(NewName);

@@ -559,7 +559,7 @@
                                                             </div>
                                                     </div>
                                             </div>
-                                            <div class="row" style="padding-top:inherit;padding-right:inherit;padding-left:inherit">
+                                            <div class="row hide" style="padding-top:inherit;padding-right:inherit;padding-left:inherit">
                                                     <div class="form-group" style="float:left;width:20%;margin-right:5%">
                                                     <input class="" type="checkbox" checked="true">
                                                     <label>收发联动</label>

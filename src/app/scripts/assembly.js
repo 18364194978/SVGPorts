@@ -17,7 +17,7 @@
                     </div>
                     <div id="thb" style="display: none;position: absolute; width:100%;height:100%;"></div>
                     <div id="cable-group" class="btn-group">
-                        <button id="cable-line-status-btn" type="button" class="btn btn-primary btn-sm">组缆</button>
+                        <button id="cable-line-status-btn" type="button" class="btn btn-primary btn-sm hide">组缆</button>
                         <button id="cable-line-status-cancel" type="button" class="btn btn-default btn-sm hide">取消</button>
                         <button id="cable-line-btn" type="button" class="btn btn-success btn-sm hide">组缆</button>
                     </div>`;

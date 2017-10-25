@@ -7,7 +7,7 @@ import { stream as wiredep } from 'wiredep';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
-var buidurls = '../../svgport';
+var buidurls = '../../Newsvgport';
 //var buidurls = 'dist';
 gulp.task('styles', () => {
     return gulp.src('app/styles/*.less')

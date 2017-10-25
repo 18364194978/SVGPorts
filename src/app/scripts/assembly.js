@@ -210,8 +210,9 @@
 											"PanelId": itm1.Port2.PanelId,
 											"PortId": itm1.Port2.PortId,
 											"PortName": itm1.Port2.PortName,
+											"PanelName":itm1.Port2.PanelName,
 											"ForPort": itm1.Port1.PortId
-										})
+										});
 									}
 								}
 								if (newOterDevId.indexOf(itm1.Port2.DeviceId) !== -1) {
@@ -224,6 +225,7 @@
 											"PanelId": itm1.Port2.PanelId,
 											"PortId": itm1.Port2.PortId,
 											"PortName": itm1.Port2.PortName,
+											"PanelName":itm1.Port2.PanelName,
 											"ForPort": itm1.Port1.PortId
 										})
 									}
@@ -240,6 +242,7 @@
 											"PanelId": itm1.Port1.PanelId,
 											"PortId": itm1.Port1.PortId,
 											"PortName": itm1.Port1.PortName,
+											"PanelName":itm1.Port1.PanelName,
 											"ForPort": itm1.Port2.PortId
 										})
 									}
@@ -254,6 +257,7 @@
 											"PanelId": itm1.Port1.PanelId,
 											"PortId": itm1.Port1.PortId,
 											"PortName": itm1.Port1.PortName,
+											"PanelName":itm1.Port1.PanelName,
 											"ForPort": itm1.Port2.PortId
 										})
 									}
@@ -273,6 +277,7 @@
 												"PanelId": tt1.PanelId,
 												"PortId": tt1.PortId,
 												"PortName": tt1.PortName,
+												"PanelName":tt1.PanelName,
 												"ForPort": tt1.ForPort
 											});
 										}
@@ -295,6 +300,7 @@
 											"DeviceId": itm1.Port2.DeviceId,
 											"PanelId": itm1.Port2.PanelId,
 											"PortId": itm1.Port2.PortId,
+											"PanelName":itm1.Port2.PanelName,
 											"PortName": itm1.Port2.PortName,
 											"ForPort": itm1.Port1.PortId
 										})
@@ -313,6 +319,7 @@
 											"DeviceId": itm1.Port2.DeviceId,
 											"PanelId": itm1.Port2.PanelId,
 											"PortId": itm1.Port2.PortId,
+											"PanelName":itm1.Port2.PanelName,
 											"PortName": itm1.Port2.PortName,
 											"ForPort": itm1.Port1.PortId
 										})
@@ -333,6 +340,7 @@
 											"DeviceId": itm1.Port1.DeviceId,
 											"PanelId": itm1.Port1.PanelId,
 											"PortId": itm1.Port1.PortId,
+											"PanelName":itm1.Port1.PanelName,
 											"PortName": itm1.Port1.PortName,
 											"ForPort": itm1.Port2.PortId
 										})
@@ -353,6 +361,7 @@
 												"DeviceId": tt1.DeviceId,
 												"PanelId": tt1.PanelId,
 												"PortId": tt1.PortId,
+												"PanelName":tt1.PanelName,
 												"PortName": tt1.PortName,
 												"ForPort": tt1.ForPort
 											});
@@ -367,6 +376,7 @@
 										"DeviceId": itm1.Port1.DeviceId,
 										"PanelId": itm1.Port1.PanelId,
 										"PortId": itm1.Port1.PortId,
+										"PanelName":itm1.Port1.PanelName,
 										"PortName": itm1.Port1.PortName,
 										"ForPort": ''
 									})
@@ -377,6 +387,7 @@
 										"DeviceId": itm1.Port2.DeviceId,
 										"PanelId": itm1.Port2.PanelId,
 										"PortId": itm1.Port2.PortId,
+										"PanelName":itm1.Port2.PanelName,
 										"PortName": itm1.Port2.PortName,
 										"ForPort": ''
 									})
@@ -593,6 +604,7 @@
 						let getGport = new joint.shapes.basic.GPPort({
 							portRemove: 1,
 							id: its1.PortId,
+							porttts:its1.PortName +'-'+ its1.PanelName,
 							position: {
 								x: getX,
 								y: getY
@@ -634,6 +646,7 @@
 						let getGport = new joint.shapes.basic.ZPPort({
 							portRemove: 1,
 							id: its1.PortId,
+							porttts:its1.PortName +'-'+its1.PanelName,
 							position: {
 								x: getX,
 								y: getY
@@ -674,6 +687,7 @@
 						}
 						let getGport = new joint.shapes.basic.GPPort({
 							portRemove: 1,
+							porttts:item2.PortName +'-'+item2.PanelName,
 							id: item2.PortId,
 							position: {
 								x: getX,

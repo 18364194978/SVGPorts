@@ -519,7 +519,7 @@
 							});
 						}
 						console.log(ViewModel.attributes.gports, getExit, getExit2)
-						if (getExit2.length === 0) {
+						if (getExit2.length === 0&&getExit.length!==0) {
 							GFC.showError('该端口已存在连接！');
 							return;
 						}
@@ -832,6 +832,7 @@
 											$('.end-pdevices-list').val(endval).trigger('change');
 											isEdit = 1;
 										} else {
+											console.log(dlstj.err_msg)
 											GFC.showError(dlstj.err_msg);
 										}
 									});

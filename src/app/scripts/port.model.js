@@ -139,10 +139,34 @@
     ].join(''),
     defaults: joint.util.deepSupplement({
       type: 'basic.GPPort',
-      // rightMenu: {
-      //   centerMenu: {  
-      //   },
-      // },
+      rightMenu: {
+        centerMenu: {
+          name: '删除', //释放光配
+          fc: function(cellView) {
+            console.log(cellView)
+            var ViewModel = cellView.model;
+            $('.modal-body').text('确认删除?');
+            $('.modal-title').html(this.name);
+            $('.main-modal').modal();
+            cellView.update();
+            $('.edit-right').unbind('click');
+            $('.edit-right').click(function() {
+              var DeletePhyOpticalCable = ROOF.physical.DeletePhyOpticalCable;
+              DeletePhyOpticalCable(ViewModel.attributes.ZLLink, function(obj) {
+                console.log(obj)
+                if (obj.status) {
+                  $('.main-modal').modal('hide');
+                  GFC.reload();
+                } else {
+                  GFC.showError(obj.err_msg);
+                }
+
+              });
+            });
+          }
+        },
+        otherMenu: []
+      },
       attrs: {
         circle: {
           fill: 'none',

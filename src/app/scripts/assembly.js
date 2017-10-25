@@ -428,6 +428,7 @@
 							arr.push(itt2.PhyLinkId);
 							newAllZLGpId.push({
 								"Guid": itt2.PhyLinkId,
+								"ZLLink":itt1.OpCableId,
 								"Index": iis1
 							});
 						});
@@ -446,6 +447,7 @@
 							newAllZLGp.push({
 								"PortId": itt1.Guid,
 								"Index": itt1.Index,
+								"ZLLink":itt1.ZLLink,
 								"ForPort": getExit5[0].Port1.PortId,
 								"PosiType": true
 							});
@@ -453,6 +455,7 @@
 							newAllZLGp.push({
 								"PortId": itt1.Guid,
 								"Index": itt1.Index,
+								"ZLLink":itt1.ZLLink,
 								"ForPort": getExit5[0].Port1.PortId,
 								"PosiType": false
 							});
@@ -807,6 +810,7 @@
 					var LinePorts = new joint.shapes.basic.LPPort({
 						portRemove: 1,
 						id: iid,
+						ZLLink:item2.ZLLink,
 						// projectOpticalcableGuid: projectOpticalcableGuid,
 						position: {
 							x: getX,

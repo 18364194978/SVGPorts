@@ -108,6 +108,18 @@
 					name: '上光配',
 					fc: function(cellView) {
 						var $this = this;
+						let getAllMainPortId = cellView.model.attributes.allData.mainPortId;
+						let getAllGp = cellView.model.attributes.allData.GPorts; //0:mainGp 1:centGp 2:othrGp
+						let getPortId = cellView.model.attributes.id;
+						let getExit2 = [];
+						getExit2 = _.filter(getAllGp[0], function(o) {
+							return o.ForPort === getPortId;
+						});
+						if (getExit2.length !== 0) {
+							GFC.showError("该端口已上光配！");
+							$('.main-modal').modal('hide');
+							return;
+						}
 						let getPanelId = cellView.model.attributes.panelData.PanelId;
 						let GetPanelOdfList = ROOF.physical.GetPanelOdfList;
 						let GetPortsByOdfId = ROOF.physical.GetPortsByOdfId;
@@ -251,10 +263,10 @@
 									}
 									let getExit = [];
 									let getAllData = cellView.model.attributes.allData;
-									let getPortId = cellView.model.attributes.id;
-									let getAllMainPortId = cellView.model.attributes.allData.mainPortId;
+									
+
 									let getAllOthrDev = cellView.model.attributes.allData.other_deivce;
-									let getAllGp = cellView.model.attributes.allData.GPorts; //0:mainGp 1:centGp 2:othrGp
+
 									console.log(cellView, 'cellView');
 									getExit = _.filter(getAllData.rightLink, function(x) {
 										return x.Port1.PortId === getPortId || x.Port2.PortId === getPortId;
@@ -281,37 +293,29 @@
 										});
 									} else {
 										if (_.indexOf(getAllMainPortId, getPortId) !== -1) { //端口为已有连接线且为mainPort
-											let getExit2 = [];
-											getExit2 = _.filter(getAllGp[0], function(o) {
-												return o.ForPort === getPortId
+
+											//转接
+											let getExit4 = [];
+											getExit4 = _.filter(getAllData.rightLink, function(p) {
+												return p.Port1.PortId === getPortId;
 											});
-											if (getExit2.length !== 0) {
-												GFC.showError("该端口已上光配！");
-												$('.main-modal').modal('hide');
+											let linkId = getExit4[0].PhylinkId;
+											let endid = selectnodes[0].Guid;
+											if (linkId === undefined || endid == undefined) {
+												GFC.showError('请确保至少有一个端口被选中');
 												return;
-											} else {
-												//转接
-												let getExit4 = [];
-												getExit4 = _.filter(getAllData.rightLink, function(p) {
-													return p.Port1.PortId === getPortId;
-												});
-												let linkId = getExit4[0].PhylinkId;
-												let endid = selectnodes[0].Guid;
-												if (linkId === undefined || endid == undefined) {
-													GFC.showError('请确保至少有一个端口被选中');
-													return;
-												}
-												AddOdfPortInLink(linkId, endid, function(obd) {
-													if (obd.status) {
-														console.log(obd, 'obd')
-														GFC.reload();
-														$('.main-modal').modal('hide');
-													} else {
-														GFC.showError(obd.err_msg);
-														console.log(obd.err_msg, linkId, endid);
-													}
-												});
 											}
+											AddOdfPortInLink(linkId, endid, function(obd) {
+												if (obd.status) {
+													console.log(obd, 'obd')
+													GFC.reload();
+													$('.main-modal').modal('hide');
+												} else {
+													GFC.showError(obd.err_msg);
+													console.log(obd.err_msg, linkId, endid);
+												}
+											});
+
 										}
 									}
 								});
@@ -1102,6 +1106,24 @@
 					name: '上光配',
 					fc: function(cellView) {
 						var $this = this;
+						let getAllData = cellView.model.attributes.allData;
+						let getPortId = cellView.model.attributes.id;
+						let getPhyLink = cellView.model.attributes.allData.rightLink;
+						let getAllGp = cellView.model.attributes.allData.GPorts; //0:mainGp 1:centGp 2:othrGp
+						console.log(cellView, 'cellView');
+						let getExit3 = [];
+						let getExit6 = [];
+						getExit3 = _.filter(getPhyLink, function(o) {
+							return o.Port2.PortId === getPortId;
+						});
+						getExit6 = _.filter(getAllGp[1], function(m) {
+							return m.PortId === getExit3[0].Port1.PortId;
+						});
+						console.log(getExit6, getPortId, getExit3, getAllGp[1], ']]]]]]')
+						if (getExit6.length !== 0) {
+							GFC.showError("该端口已上光配！");
+							return;
+						}
 						let getPanelId = cellView.model.attributes.panelData.PanelId;
 						let GetPanelOdfList = ROOF.physical.GetPanelOdfList;
 						let GetPortsByOdfId = ROOF.physical.GetPortsByOdfId;
@@ -1211,42 +1233,29 @@
 										GFC.showError('请选择三级节点');
 										return;
 									}
-									let getAllData = cellView.model.attributes.allData;
-									let getPortId = cellView.model.attributes.id;
-									let getAllOthrDev = cellView.model.attributes.allData.other_deivce;
-									let getAllGp = cellView.model.attributes.allData.GPorts; //0:mainGp 1:centGp 2:othrGp
-									console.log(cellView, 'cellView');
-									let getExit3 = [];
-									getExit3 = _.filter(getAllGp[1], function(o) {
-										return o.PortId === (_.filter(getAllOthrDev, function(p) {
-											return p.Guid === getPortId
-										}))[0].ForPort;
+
+									//转接
+									let getExit4 = [];
+									getExit4 = _.filter(getAllData.rightLink, function(p) {
+										return p.Port2.PortId === getPortId;
 									});
-									if (getExit3.length !== 0) {
-										GFC.showError("该端口已上光配！");
-									} else {
-										//转接
-										let getExit4 = [];
-										getExit4 = _.filter(getAllData.rightLink, function(p) {
-											return p.Port2.PortId === getPortId;
-										});
-										let linkId = getExit4[0].PhylinkId;
-										let endid = selectnodes[0].Guid;
-										if (linkId === undefined || endid == undefined) {
-											GFC.showError('请确保至少有一个端口被选中');
-											return;
-										}
-										AddOdfPortInLink(linkId, endid, function(obd) {
-											if (obd.status) {
-												console.log(obd, 'obd')
-												GFC.reload();
-												$('.main-modal').modal('hide');
-											} else {
-												GFC.showError(obd.err_msg);
-												console.log(obd.err_msg, linkId, endid);
-											}
-										});
+									let linkId = getExit4[0].PhylinkId;
+									let endid = selectnodes[0].Guid;
+									if (linkId === undefined || endid == undefined) {
+										GFC.showError('请确保至少有一个端口被选中');
+										return;
 									}
+									AddOdfPortInLink(linkId, endid, function(obd) {
+										if (obd.status) {
+											console.log(obd, 'obd')
+											GFC.reload();
+											$('.main-modal').modal('hide');
+										} else {
+											GFC.showError(obd.err_msg);
+											console.log(obd.err_msg, linkId, endid);
+										}
+									});
+
 								});
 								$('#plugtreeSearch2').off('click').on('click', function() {
 									$('.modal-body2').html('').css({

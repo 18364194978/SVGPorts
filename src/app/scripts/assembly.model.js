@@ -9,19 +9,19 @@
                 </g>
                 <rect class="body"/>
                 <text class="labels"/>
-                <foreignObject width="50" height="30" x="0" y="0" class="htIconOut">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:left;">
-                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: inherit;display:inline-block;width:50px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
+                <foreignObject width="50" height="25" x="0" y="0" class="htIconOut">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="" style="text-align:left;">
+                    <a title="rdgdfgd" class="content-x text-center" style="color:white;font-size: 14px;display:inline-block;width:50px;height:25px;line-height: 25px;text-decoration: none;">jijkkjkj</a>
                     </div>
                 </foreignObject>
-                <foreignObject width="50" height="30" x="50" y="0" class="htIconOut3">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="text-align:left;">
-                    <a title="rdgdfgd" class="content-xxx text-center" style="color:white;font-size: inherit;display:inline-block;width:50px;height:30px;line-height: 30px;text-decoration: none;">jijkkjkj</a>
+                <foreignObject width="50" height="25" x="50" y="0" class="htIconOut3">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="" style="text-align:left;">
+                    <a title="rdgdfgd" class="content-xxx text-center" style="color:white;font-size: 14px;display:inline-block;width:50px;height:25px;line-height: 25px;text-decoration: none;">jijkkjkj</a>
                     </div>
                 </foreignObject>
-                <foreignObject width="30" height="30" x="102" y="0" class="htIconOut2">
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="iconBody" style="background-color:#00B0F0;text-align:center;">
-                    <a title="" class="content-xx text-center" style="color:white;display:inline-block;width:30px;height:30px;line-height: 30px;text-decoration: none;"></a>
+                <foreignObject width="30" height="25" x="102" y="0" class="htIconOut2">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="" style="background-color:#00B0F0;text-align:center;">
+                    <a title="" class="content-xx text-center" style="color:white;display:inline-block;width:30px;height:25px;line-height: 25px;text-decoration: none;"></a>
                     </div>
                 </foreignObject>
                 </g>`.trim(),
@@ -263,7 +263,7 @@
 									}
 									let getExit = [];
 									let getAllData = cellView.model.attributes.allData;
-									
+
 
 									let getAllOthrDev = cellView.model.attributes.allData.other_deivce;
 
@@ -1627,8 +1627,8 @@
 			let elementTitls = this.$el.find('.content-x');
 			let elementTitls2 = this.$el.find('.content-xx');
 			let elementTitls3 = this.$el.find('.content-xxx');
-			if (this.model.attributes.dsname.length > 6) {
-				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname.slice(0, 6) + '...');
+			if (this.model.attributes.dsname.length > 5) {
+				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname.slice(0, 5) + '...');
 			} else {
 				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
 			}
@@ -1666,7 +1666,7 @@
 						var elementTitls = cellView.$el.find('.content-x');
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
-							'<label for="exampleInputEmail1">装置名称:</label>' +
+							'<label for="exampleInputEmail1">装置描述:</label>' +
 							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.Name + '" id="exampleInputEmail1" placeholder="">' +
 							'</div>';
 						$('.modal-body').html(EditStr);
@@ -1901,8 +1901,8 @@
 					'font-family': 'Arial, helvetica, sans-serif'
 				},
 				'rect.parent-class': {
-					fill: '#CBFFFF',
-					stroke: '#CBFFFF',
+					fill: '#DCDADA',
+					stroke: '#DCDADA',
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
@@ -1910,8 +1910,8 @@
 					height: 515
 				},
 				'.body': {
-					fill: '#CBFFFF',
-					stroke: '#CBFFFF',
+					fill: '#F2F2F2',
+					stroke: '#F2F2F2',
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
@@ -2201,14 +2201,20 @@
 	});
 	joint.shapes.devs.Cabinet2 = joint.shapes.devs.Model.extend({ //main_device
 		markup: '<g class="rotatable">' +
-			'<g class="scalable">' +
-			'</g>' +
+			// '<g class="scalable">' +
+			// '</g>' +
+			// '<g class="form">' +
+			// '<foreignObject class="gooseOut">' +
+			// '<div xmlns="http://www.w3.org/1999/xhtml" class="goosebody">' +
 			'<rect class="body parent-class"/>' +
 			'<g class="title-class">' +
 			'<rect class="title-class" />' +
 			'<text class="labels title-class" />' +
 			'<text class="labels title-class2" />' +
 			'</g>' +
+			// '</div>' +
+			// '</foreignObject>' +
+			// '</g>' +
 			'</g>',
 		defaults: joint.util.deepSupplement({
 			paper: null,
@@ -2224,7 +2230,7 @@
 						let elementTitls = cellView.$el.find('text.title-class');
 						$('.modal-title').html(this.name);
 						EditStr += '<div class="form-group">' +
-							'<label for="exampleInputEmail1">装置名称:</label>' +
+							'<label for="exampleInputEmail1">装置描述:</label>' +
 							'<input type="text" class="form-control change-atr" value="' + cellView.model.attributes.devDatas.Name + '" id="exampleInputEmail1" placeholder="">' +
 							'</div>';
 						$('.modal-body').html(EditStr);
@@ -2912,9 +2918,21 @@
 					'font-family': 'Arial, helvetica, sans-serif'
 				},
 				'rect.parent-class': {
-					fill: '#CBFFFF',
-					stroke: '#CBFFFF',
+					fill: 'rgb(204, 241, 255)',
+					stroke: 'rgb(204, 241, 255)',
 					'stroke-width': '0',
+					'box-shadow': 'inset 0 1px 1px rgb(194, 217, 233), 0 0 8px rgba(0,0,0,0.5)',
+					x: 0,
+					y: 0,
+					width: 393,
+					height: 515
+
+				},
+				'.gooseOut': {
+					fill: 'rgb(204, 241, 255)',
+					stroke: 'rgb(204, 241, 255)',
+					'stroke-width': '0',
+					'box-shadow': 'inset 0 1px 1px rgb(194, 217, 233), 0 0 8px rgba(0,0,0,0.5)',
 					x: 0,
 					y: 0,
 					width: 393,
@@ -2922,9 +2940,10 @@
 
 				},
 				'.body': {
-					fill: '#CBFFFF',
-					stroke: '#CBFFFF',
+					fill: 'rgb(204, 241, 255)',
+					stroke: 'rgb(204, 241, 255)',
 					'stroke-width': '0',
+					'box-shadow': 'inset 0 1px 1px rgb(194, 217, 233), 0 0 8px rgba(0,0,0,0.5)',
 					x: 0,
 					y: 0,
 					width: 233,
@@ -2938,14 +2957,14 @@
 
 				},
 				'rect.title-class': {
-					fill: '#5B9BD5',
-					stroke: '#5B9BD5',
+					fill: '#4283bb',
+					stroke: '#4283bb',
 					width: 233,
 					height: 54
 
 				},
 				'text.title-class': { //此处控制外部svg的title的相对位置等
-					fill: '#ffffff',
+					fill: '#c2d9e9',
 					text: 'jigui',
 					'font-size': 16,
 					'ref-x': .3,
@@ -2956,7 +2975,7 @@
 
 				},
 				'text.title-class2': {
-					fill: '#ffffff',
+					fill: '#c2d9e9',
 					text: 'jigui',
 					'font-size': 15,
 					'ref-x': .3,
@@ -3038,6 +3057,7 @@
 			this.runder(ChildArrays); //调用了上面的runder方法
 			var portdata = [];
 			for (var j = 0; j < data.length; j++) {
+				console.log(data, '1')
 				portdata.push({
 					"Guid": data[j].SlotId,
 					"Name": data[j].SlotName,
@@ -3072,10 +3092,10 @@
 						id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 						size: { //此处定义的是内部svg的size
 							width: 152,
-							height: 35
+							height: 30
 						},
 						position: { //根据上文准备的外部svg的位置定义内部svg的位置
-							x: $this.chidpositons.x + 40,
+							x: $this.chidpositons.x + 30,
 							y: $this.chidpositons.y + 70
 						},
 						z: window.assemblyz += 1, //暂时不知道什么用，删除后无碍
@@ -3088,8 +3108,8 @@
 						portsname: portsname,
 						attrs: { //暂时无需改动
 							rect: {
-								fill: '#CC6600',
-								stroke: '#CC6600',
+								fill: '#007F7F',
+								stroke: '#007F7F',
 								x: 0,
 								y: 0,
 								width: 152,
@@ -3098,7 +3118,7 @@
 							'.labels': {
 								text: '',
 								fill: '#306796',
-								'font-size': 12,
+								'font-size': 14,
 								'text-anchor': 'middle',
 								'y-alignment': 'middle',
 								'font-family': 'Arial, helvetica, sans-serif',
@@ -3152,7 +3172,7 @@
 						id: idvs, //赋值id是在上面那一堆if中，屏蔽时注意下
 						size: { //此处定义的是内部svg的size
 							width: 132,
-							height: 30
+							height: 25
 						},
 						position: { //根据上文准备的外部svg的位置定义内部svg的位置
 							x: $this.chidpositons.x + 50,
@@ -3177,7 +3197,7 @@
 								x: 0,
 								y: 0,
 								width: 132,
-								height: 30
+								height: 25
 							},
 							'.labels': {
 								text: '',
@@ -3263,12 +3283,13 @@
 				ChildArray[n].addTo(window.tbgraph);
 				fdo = viewE(ChildArray[n].findView(window.tbpaper).$el[0]).bbox(true); //以下7行是定义外部svg的高根据内部svg的个数自适应
 				$this.chidpositons.parentWidth += fdo.height + 15;
-				$this.chidpositons.y += fdo.height + 15; //内部各个端口svg的间距
+				$this.chidpositons.y += fdo.height + 13; //内部各个端口svg的间距
 				// ChildArrays.push(ChildArray[j]);//此处为了下面this.runder(ChildArrays)展示，如果直接用ChildArray[i]则只能站址最后一个
 				ChildArray[n].remove();
 				this.embed(ChildArray[n]);
 				this.attributes.size.height = $this.chidpositons.parentWidth;
 				this.attributes.attrs['.body'].height = $this.chidpositons.parentWidth;
+				// this.attributes.attrs['.gooseOut'].height = $this.chidpositons.parentWidth;
 			}
 			if (data.length === 1) {
 				this.attributes.size.height -= 20;

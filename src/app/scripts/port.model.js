@@ -87,9 +87,9 @@
         'text.port-label': {
           text: 'dsfafdf',
           fill: '#000000',
-          'font-size': 9,
+          'font-size': '14px',
           'ref-x': 0,
-          'ref-y': -10,
+          'ref-y': -15,
           'text-anchor': 'middle',
           'y-alignment': 'middle',
           'font-family': 'Arial, helvetica, sans-serif'
@@ -118,7 +118,7 @@
         'text.port-label': {
           text: 'dsfafdf',
           fill: '#000000',
-          'font-size': 9,
+          'font-size': '14px',
           'ref-x': 0,
           'ref-y': -10,
           'text-anchor': 'middle',
@@ -178,7 +178,7 @@
         'text.port-label': {
           text: 'dsfafdf',
           fill: '#000000',
-          'font-size': 9,
+          'font-size': '14px',
           'ref-x': 0,
           'ref-y': -10,
           'text-anchor': 'middle',

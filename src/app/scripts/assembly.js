@@ -617,10 +617,10 @@
 								text: {
 									// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
 									text: its1.PortName,
-									'font-size': 9,
+									'font-size': '12px',
 									stroke: '',
 									fill: '#306796',
-									'ref-y': -10
+									'ref-y': -15
 								},
 								rect: {
 									width: 13,
@@ -659,10 +659,10 @@
 								text: {
 									// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
 									text: its1.PortName,
-									'font-size': 9,
+									'font-size': '12px',
 									stroke: '',
 									fill: 'red',
-									'ref-y': -10
+									'ref-y': -15
 								},
 								rect: {
 									width: 13,
@@ -701,10 +701,10 @@
 								text: {
 									// text: `${gppdata.OdfboxName}-${gppdata.ProodfName}-${gppdata.ProportName}`,
 									text: item2.PortName,
-									'font-size': 9,
+									'font-size': '12px',
 									stroke: '',
 									fill: '#306796',
-									'ref-y': -10
+									'ref-y': -15
 								},
 								rect: {
 									width: 13,
@@ -837,7 +837,7 @@
 						attrs: {
 							text: {
 								// text: item2.Guid,
-								'font-size': 9,
+								'font-size': '12px',
 								stroke: '',
 								fill: '#306796',
 								'ref-y': -10

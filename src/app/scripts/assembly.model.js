@@ -1627,9 +1627,13 @@
 			let elementTitls = this.$el.find('.content-x');
 			let elementTitls2 = this.$el.find('.content-xx');
 			let elementTitls3 = this.$el.find('.content-xxx');
-			if (this.model.attributes.dsname.length > 5) {
-				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname.slice(0, 5) + '...');
-			} else {
+			if (this.model.attributes.portsname !== 'Card') {
+				if (this.model.attributes.dsname.length > 5) {
+					elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname.slice(0, 5) + '...');
+				} else {
+					elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
+				}
+			}else{	
 				elementTitls.attr('title', this.model.attributes.dsname).text(this.model.attributes.dsname);
 			}
 			elementTitls3.attr('title', this.model.attributes.jointname).text(this.model.attributes.jointname);
@@ -1910,8 +1914,8 @@
 					height: 515
 				},
 				'.body': {
-					fill: '#F2F2F2',
-					stroke: '#F2F2F2',
+					fill: '#E6E6E6',
+					stroke: '#E6E6E6',
 					'stroke-width': '0',
 					x: 0,
 					y: 0,
@@ -2200,12 +2204,13 @@
 		}
 	});
 	joint.shapes.devs.Cabinet2 = joint.shapes.devs.Model.extend({ //main_device
-		markup: '<g class="rotatable">' +
-			// '<g class="scalable">' +
-			// '</g>' +
+		markup: '<g class="rotatable abs">' +
+			'<g class="scalable">' +
+			'</g>' +
 			// '<g class="form">' +
 			// '<foreignObject class="gooseOut">' +
 			// '<div xmlns="http://www.w3.org/1999/xhtml" class="goosebody">' +
+			// '<div class="lefts labels title-class">智能装置</div>' +
 			'<rect class="body parent-class"/>' +
 			'<g class="title-class">' +
 			'<rect class="title-class" />' +
@@ -3057,7 +3062,6 @@
 			this.runder(ChildArrays); //调用了上面的runder方法
 			var portdata = [];
 			for (var j = 0; j < data.length; j++) {
-				console.log(data, '1')
 				portdata.push({
 					"Guid": data[j].SlotId,
 					"Name": data[j].SlotName,

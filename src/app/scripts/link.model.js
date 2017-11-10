@@ -302,7 +302,7 @@
             let getZLLinkId = cellView.model.attributes.ZLLinkId;
             $('.modal-title').html(this.name);
             $('.modal-body').html('');
-            $('.modal-body').text('确定删除该光纤吗?');
+            $('.modal-body').text('确定删除该光缆吗?');
             $('.main-modal').modal();
             $('.edit-right').unbind('click');
             $('.edit-right').click(function() {
